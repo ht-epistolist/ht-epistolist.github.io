@@ -3,14 +3,35 @@ import Layout from '../layouts/Layout.astro';
 import pubData from '../data/publications.json';
 import artData from '../data/art.json';
 
-type ArtItem = typeof artData[number] & { content?: string };
+interface ArtItem {
+    id: string;
+    category: string;
+    title: string;
+    imageUrl?: string;
+    description?: string;
+    featured?: boolean;
+    content?: string;
+    date?: string;
+}
+
 const typedArtData = artData as ArtItem[];
 
+// Tech Data
 const featuredTech = pubData.filter(p => p.featured).slice(0, 3);
 const archiveTech = pubData.filter(p => !p.featured || !featuredTech.includes(p));
 
-const featuredArt = typedArtData.filter(a => a.featured).slice(0, 3);
-const archiveArt = typedArtData.filter(a => !a.featured || !featuredArt.includes(a));
+// Art Categories: 5 of each under foldable headers
+const poetryArt = typedArtData.filter(a => a.category === 'poetry').slice(0, 5);
+const photoArt = typedArtData.filter(a => a.category === 'photo').slice(0, 5);
+const visualArt = typedArtData.filter(a => a.category === 'visual' || a.category === 'graphic' || a.category === 'cad').slice(0, 5);
+
+// Archive contains remaining art works
+const displayedArtIds = new Set([
+    ...poetryArt.map(a => a.id),
+    ...photoArt.map(a => a.id),
+    ...visualArt.map(a => a.id)
+]);
+const archiveArt = typedArtData.filter(a => !displayedArtIds.has(a.id));
 ---
 
 <Layout title="Portfolio | Olena Teslia">
@@ -40,25 +61,40 @@ const archiveArt = typedArtData.filter(a => !a.featured || !featuredArt.includes
                     </div>
                     <h3 class="text-xl font-bold mb-2">{p.title}</h3>
                     <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">{p.authors} - {p.venue} ({p.year})</p>
-                    <p class="text-sm mb-4 line-clamp-3">{p.abstract}</p>
+                    <p class="text-sm mb-4 line-clamp-3 leading-relaxed">{p.abstract}</p>
                     <div class="flex gap-3 text-sm font-bold">
-                        {p.pdfUrl && <a href={p.pdfUrl} class="text-accent-green dark:text-accent-green-dark hover:underline">PDF</a>}
-                        {p.codeUrl && <a href={p.codeUrl} class="text-accent-green dark:text-accent-green-dark hover:underline">Code</a>}
+                        {p.pdfUrl && <a href={p.pdfUrl} target="_blank" rel="noopener noreferrer" class="text-accent-green dark:text-accent-green-dark hover:underline">PDF</a>}
+                        {p.codeUrl && <a href={p.codeUrl} target="_blank" rel="noopener noreferrer" class="text-accent-green dark:text-accent-green-dark hover:underline">Code</a>}
                     </div>
                 </div>
             ))}
         </div>
         
+        <!-- Tech Archive with full descriptions -->
         <details class="group bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
             <summary class="p-4 font-bold cursor-pointer bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex justify-between items-center">
-                Archive ({archiveTech.length})
+                <span class="flex items-center gap-2">
+                    <span>Archive</span>
+                    <span class="text-xs px-2.5 py-0.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full font-medium">{archiveTech.length} projects</span>
+                </span>
                 <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </summary>
-            <div class="p-6 space-y-4">
+            <div class="p-6 space-y-6">
                 {archiveTech.map(p => (
-                    <div class="border-b border-slate-200 dark:border-slate-700 pb-4 last:border-0 last:pb-0">
-                        <h4 class="font-bold">{p.title}</h4>
-                        <p class="text-xs text-slate-500 mb-2">{p.authors} - {p.year}</p>
+                    <div class="border-b border-slate-200 dark:border-slate-700 pb-5 last:border-0 last:pb-0">
+                        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1">
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white">{p.title}</h4>
+                            <span class="text-xs font-mono text-slate-400">{p.year}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">{p.authors} · {p.venue}</p>
+                        <p class="text-sm text-slate-700 dark:text-slate-300 mb-3 leading-relaxed">{p.abstract}</p>
+                        <div class="flex flex-wrap items-center gap-2">
+                            {p.tags.map(tag => (
+                                <span class="text-[10px] px-2 py-0.5 bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded font-medium">{tag}</span>
+                            ))}
+                            {p.pdfUrl && <a href={p.pdfUrl} target="_blank" rel="noopener noreferrer" class="ml-auto text-xs font-bold text-accent-green dark:text-accent-green-dark hover:underline">PDF →</a>}
+                            {p.codeUrl && <a href={p.codeUrl} target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-accent-green dark:text-accent-green-dark hover:underline">Code →</a>}
+                        </div>
                     </div>
                 ))}
             </div>
@@ -67,36 +103,115 @@ const archiveArt = typedArtData.filter(a => !a.featured || !featuredArt.includes
 
     <!-- Art Tab -->
     <div id="content-art" class="space-y-8 hidden">
-        <h2 class="text-2xl font-heading font-bold mb-4 text-accent-orange dark:text-accent-orange-dark">Featured Art</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {featuredArt.map(a => (
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <span class="text-[10px] px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded uppercase font-bold tracking-wider mb-3 inline-block">{a.category}</span>
-                    <h3 class="text-xl font-bold mb-3">{a.title}</h3>
-                    {a.imageUrl && (
-                        <div class="w-full h-48 mb-4 rounded overflow-hidden">
-                            <img src={a.imageUrl} alt={a.title} class="w-full h-full object-cover" />
-                        </div>
-                    )}
-                    {a.content && (
-                        <div class="mb-4 text-sm whitespace-pre-wrap font-body italic border-l-2 border-slate-200 dark:border-slate-700 pl-4">{a.content}</div>
-                    )}
-                    <p class="text-sm">{a.description}</p>
+
+        <!-- 1. Foldable Header: Poetry -->
+        <details open class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm">
+            <summary class="p-5 font-bold cursor-pointer bg-slate-50/70 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex justify-between items-center select-none">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">📜</span>
+                    <span class="font-heading font-bold text-xl text-slate-900 dark:text-white">Poetry</span>
+                    <span class="text-xs px-2.5 py-0.5 bg-orange-100 dark:bg-orange-950/40 text-accent-orange dark:text-accent-orange-dark font-bold rounded-full">{poetryArt.length} works</span>
                 </div>
-            ))}
-        </div>
+                <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </summary>
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {poetryArt.map(poem => (
+                    <div class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-6 rounded-xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="text-[10px] px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded uppercase font-bold tracking-wider">Poetry</span>
+                                {poem.description && <span class="text-xs text-slate-400 font-mono">{poem.description}</span>}
+                            </div>
+                            <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">{poem.title}</h3>
+                            {poem.content && (
+                                <div class="text-sm whitespace-pre-wrap font-serif italic text-slate-700 dark:text-slate-300 border-l-2 border-accent-orange/70 pl-4 py-1 leading-relaxed">
+                                    {poem.content}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </details>
+
+        <!-- 2. Foldable Header: Photography -->
+        <details open class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm">
+            <summary class="p-5 font-bold cursor-pointer bg-slate-50/70 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex justify-between items-center select-none">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">📷</span>
+                    <span class="font-heading font-bold text-xl text-slate-900 dark:text-white">Photography</span>
+                    <span class="text-xs px-2.5 py-0.5 bg-orange-100 dark:bg-orange-950/40 text-accent-orange dark:text-accent-orange-dark font-bold rounded-full">{photoArt.length} works</span>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </summary>
+            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {photoArt.map(photo => (
+                    <div class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group/card">
+                        <div class="w-full h-52 overflow-hidden bg-slate-200 dark:bg-slate-800">
+                            <img src={photo.imageUrl} alt={photo.title} class="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-300" />
+                        </div>
+                        <div class="p-4">
+                            <span class="text-[10px] px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded uppercase font-bold tracking-wider inline-block mb-2">Photo</span>
+                            <h4 class="font-bold text-base line-clamp-2 text-slate-900 dark:text-white">{photo.title}</h4>
+                            {photo.description && <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{photo.description}</p>}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </details>
+
+        <!-- 3. Foldable Header: Visuals -->
+        <details open class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm">
+            <summary class="p-5 font-bold cursor-pointer bg-slate-50/70 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex justify-between items-center select-none">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">🎨</span>
+                    <span class="font-heading font-bold text-xl text-slate-900 dark:text-white">Visuals</span>
+                    <span class="text-xs px-2.5 py-0.5 bg-orange-100 dark:bg-orange-950/40 text-accent-orange dark:text-accent-orange-dark font-bold rounded-full">{visualArt.length} works</span>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </summary>
+            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {visualArt.map(art => (
+                    <div class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group/card flex flex-col justify-between">
+                        <div>
+                            <div class="w-full h-52 overflow-hidden bg-slate-200 dark:bg-slate-800">
+                                <img src={art.imageUrl} alt={art.title} class="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-300" />
+                            </div>
+                            <div class="p-4">
+                                <span class="text-[10px] px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded uppercase font-bold tracking-wider inline-block mb-2 capitalize">{art.category}</span>
+                                <h4 class="font-bold text-base mb-1.5 text-slate-900 dark:text-white">{art.title}</h4>
+                                {art.description && <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{art.description}</p>}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </details>
         
-        <details class="group bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+        <!-- Art Archive with full descriptions and previews -->
+        <details class="group bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden mt-8">
             <summary class="p-4 font-bold cursor-pointer bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex justify-between items-center">
-                Archive ({archiveArt.length})
+                <span class="flex items-center gap-2">
+                    <span>Archive</span>
+                    <span class="text-xs px-2.5 py-0.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full font-medium">{archiveArt.length} works</span>
+                </span>
                 <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </summary>
-            <div class="p-6 space-y-4">
+            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {archiveArt.map(a => (
-                    <div class="border-b border-slate-200 dark:border-slate-700 pb-4 last:border-0 last:pb-0 flex justify-between items-center">
-                        <div>
-                            <h4 class="font-bold">{a.title}</h4>
-                            <p class="text-xs text-slate-500 capitalize">{a.category}</p>
+                    <div class="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden p-4 flex gap-4 items-start shadow-sm">
+                        {a.imageUrl && (
+                            <div class="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <img src={a.imageUrl} alt={a.title} class="w-full h-full object-cover" />
+                            </div>
+                        )}
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[10px] px-2 py-0.5 bg-orange-100 dark:bg-orange-950/40 text-accent-orange dark:text-accent-orange-dark uppercase font-bold tracking-wider rounded capitalize">{a.category}</span>
+                            </div>
+                            <h4 class="font-bold text-base mb-1 text-slate-900 dark:text-white">{a.title}</h4>
+                            {a.description && <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{a.description}</p>}
+                            {a.content && <p class="text-xs text-slate-500 italic line-clamp-3 mt-1 font-serif">{a.content}</p>}
                         </div>
                     </div>
                 ))}
