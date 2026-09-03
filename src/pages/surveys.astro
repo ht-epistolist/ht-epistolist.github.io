@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import PollComponent from '../components/PollComponent.astro';
 ---
 
-<Layout title="Surveys & Contact | Heliot">
+<Layout title="Surveys & Contact | Olena Teslia">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         
         <div>
@@ -14,7 +14,7 @@ import PollComponent from '../components/PollComponent.astro';
             
             <form action="https://api.web3forms.com/submit" method="POST" class="space-y-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-6 rounded-xl shadow-sm">
                 <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY_PLACEHOLDER">
-                <input type="hidden" name="redirect" value="https://heliot.github.io/surveys?success=true">
+                <input type="hidden" name="redirect" value="https://ht-epistolist.github.io/surveys?success=true">
                 
                 <div>
                     <label for="name" class="block text-sm font-bold mb-1">Name</label>
@@ -35,7 +35,7 @@ import PollComponent from '../components/PollComponent.astro';
         </div>
 
         <div>
-            <h2 class="text-3xl font-heading font-bold mb-4">Community Polls</h2>
+            <h2 class="text-3xl font-heading font-bold mb-4">Community Polls <span class="text-sm font-normal text-slate-400 block sm:inline">(TBD: yet Claude-generated slope)</span></h2>
             <p class="mb-6 text-slate-600 dark:text-slate-300">
                 I'm always curious about what others think regarding the future of tech and design. Vote below!
             </p>

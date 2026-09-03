@@ -1,11 +1,9 @@
 ---
-title: "My Journey in Generative AI"
+title: "My Journey in Generative AI (TBD: yet Claude-generated slope)"
 date: 2025-03-10
 description: "A look back at how I got started in AI research."
 tags: ["AI", "Research", "Career"]
 ---
-# My Journey in Generative AI
-
 Generative AI has taken the world by storm, but my journey started much earlier. 
 
 ## The Early Days

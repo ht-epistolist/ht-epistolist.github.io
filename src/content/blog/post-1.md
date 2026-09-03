@@ -1,11 +1,9 @@
 ---
-title: "The Intersection of Art and Engineering"
+title: "The Intersection of Art and Engineering (TBD: yet Claude-generated slope)"
 date: 2025-01-15
 description: "Why engineering needs artists and artists need engineering."
 tags: ["Art", "Engineering", "Thoughts"]
 ---
-# The Intersection of Art and Engineering
-
 It is often said that art and engineering are two sides of the same coin. I have spent the last few years exploring this boundary.
 
 ## Technical creativity
