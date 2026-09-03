@@ -53,9 +53,9 @@ const getWidthPct = (start: number, end: number) => {
 // - Engagement names aligned on the left (never cropped)
 // - Only colored blocks on the timeline
 // - CSX and CUTE on ONE line, everything else separately
+// - Collapsible Volunteering group with single-line folded view
 // -------------------------------------------------------------
-const timelineTracks: TimelineTrack[] = [
-  // 1. Research
+const researchTracks: TimelineTrack[] = [
   {
     id: 'track-fusion',
     label: 'Columbia Fusion Center (CSX & CUTE)',
@@ -112,9 +112,10 @@ const timelineTracks: TimelineTrack[] = [
         dateStr: 'Jun 2020 – Nov 2022'
       }
     ]
-  },
+  }
+];
 
-  // 2. Volunteering & Leadership (From LinkedIn + active engagements)
+const volunteeringTracks: TimelineTrack[] = [
   {
     id: 'track-tfu',
     label: 'Teach For Ukraine — StudMentor',
@@ -325,9 +326,12 @@ const timelineTracks: TimelineTrack[] = [
         dateStr: 'Jul 2021 – Present'
       }
     ]
-  },
+  }
+];
 
-  // 3. Industry & Engineering
+const allVolunteeringBars = volunteeringTracks.flatMap(t => t.bars);
+
+const industryTracks: TimelineTrack[] = [
   {
     id: 'track-brave1',
     label: 'Brave1 — Components Intern',
@@ -377,7 +381,6 @@ const timelineTracks: TimelineTrack[] = [
     ]
   }
 ];
-
 // -------------------------------------------------------------
 // Detailed Experience Cards Data
 // -------------------------------------------------------------
@@ -756,16 +759,17 @@ const allExperienceCards: ExperienceCard[] = [
       <!-- Gantt Chart Wrapper (Left uncropped labels + Right horizontally scrollable timeline) -->
       <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex">
         
-        <!-- Left Column: Engagement Names (Pinned/Aligned on the left, uncropped!) -->
-        <div class="w-56 sm:w-64 md:w-72 shrink-0 border-r border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/90 z-20 flex flex-col select-none">
+        <!-- Left Column: Engagement Names (No background, uncropped!) -->
+        <div class="w-60 sm:w-68 md:w-72 shrink-0 border-r border-slate-200 dark:border-slate-800 z-20 flex flex-col select-none">
           <!-- Column Header matching timeline Year Axis Header height -->
-          <div class="h-8 border-b border-slate-200 dark:border-slate-800 px-3.5 flex items-center text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+          <div class="h-9 border-b border-slate-200 dark:border-slate-800 px-3.5 flex items-center text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
             Engagement / Role
           </div>
-          <!-- Rows with uncropped, clean labels -->
-          <div class="divide-y divide-slate-100 dark:divide-slate-800/60 py-1">
-            {timelineTracks.map(track => (
-              <div class="h-7 px-3.5 flex items-center">
+
+          <!-- Research Rows (Left) -->
+          <div class="divide-y divide-slate-100 dark:divide-slate-800/60">
+            {researchTracks.map(track => (
+              <div class="h-8 px-3.5 flex items-center">
                 <a
                   href={`#${track.primaryId}`}
                   data-target={track.primaryId}
@@ -777,14 +781,58 @@ const allExperienceCards: ExperienceCard[] = [
               </div>
             ))}
           </div>
+
+          <!-- Collapsible Volunteering Header (Left) -->
+          <div
+            id="volunteering-toggle"
+            class="h-8 px-3.5 flex items-center justify-between border-y border-orange-200/70 dark:border-orange-950/70 bg-orange-50/50 dark:bg-orange-950/20 cursor-pointer hover:bg-orange-100/60 dark:hover:bg-orange-900/40 transition-colors"
+          >
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span id="vol-chevron" class="text-[10px] text-orange-600 dark:text-orange-400 font-bold transition-transform duration-200">▶</span>
+              <span class="text-[11px] font-heading font-bold text-orange-700 dark:text-orange-300 truncate">Volunteering (13 roles)</span>
+            </div>
+            <span id="vol-toggle-text" class="text-[10px] font-mono font-semibold text-orange-600 dark:text-orange-400 shrink-0">Unfold</span>
+          </div>
+
+          <!-- Unfolded Volunteering Rows (Left) -->
+          <div id="volunteering-unfolded-left" class="hidden divide-y divide-slate-100 dark:divide-slate-800/60 border-b border-orange-200/50 dark:border-orange-950/50">
+            {volunteeringTracks.map(track => (
+              <div class="h-8 px-3.5 pl-6 flex items-center">
+                <a
+                  href={`#${track.primaryId}`}
+                  data-target={track.primaryId}
+                  class="gantt-label-link text-[11.5px] font-heading font-medium text-slate-700 dark:text-slate-300 hover:text-accent-orange dark:hover:text-accent-orange transition-colors truncate block w-full"
+                  title={track.label}
+                >
+                  {track.label}
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <!-- Industry Rows (Left) -->
+          <div class="divide-y divide-slate-100 dark:divide-slate-800/60">
+            {industryTracks.map(track => (
+              <div class="h-8 px-3.5 flex items-center">
+                <a
+                  href={`#${track.primaryId}`}
+                  data-target={track.primaryId}
+                  class="gantt-label-link text-[11.5px] font-heading font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors truncate block w-full"
+                  title={track.label}
+                >
+                  {track.label}
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <!-- Right Column: Horizontally Scrollable Timeline with ONLY Colored Blocks -->
+        <!-- Right Column: Horizontally Scrollable Timeline with ONLY Colored Blocks (Fits 3 years in view) -->
         <div id="gantt-timeline-scroll" class="flex-1 overflow-x-auto">
-          <div class="min-w-[760px] relative">
+          <div class="w-[233.33%] min-w-[1600px] relative">
             
             <!-- Year Axis Header -->
-            <div class="relative h-8 border-b border-slate-200 dark:border-slate-800 text-[11px] font-mono text-slate-400 font-bold select-none">
+            <div class="relative h-9 border-b border-slate-200 dark:border-slate-800 text-[11px] font-mono text-slate-400 font-bold select-none">
               {years.map(y => (
                 <div
                   class="absolute -translate-x-1/2 flex flex-col items-center h-full justify-between pt-1.5 pb-0.5"
@@ -797,7 +845,7 @@ const allExperienceCards: ExperienceCard[] = [
             </div>
 
             <!-- Vertical Year Grid Lines (Background) -->
-            <div class="absolute inset-0 top-8 pointer-events-none z-0">
+            <div class="absolute inset-0 top-9 pointer-events-none z-0">
               {years.map(y => (
                 <div
                   class="absolute top-0 bottom-0 w-px border-r border-dashed border-slate-100 dark:border-slate-800/80"
@@ -806,39 +854,104 @@ const allExperienceCards: ExperienceCard[] = [
               ))}
             </div>
 
-            <!-- Timeline Rows: Only Colored Blocks! -->
-            <div class="relative z-10 divide-y divide-slate-100 dark:divide-slate-800/60 py-1">
-              {timelineTracks.map(track => {
-                let blockColor = "bg-emerald-500 hover:bg-emerald-400 border-emerald-400/40 shadow-emerald-500/20";
-                if (track.category === 'volunteering') {
-                  blockColor = "bg-orange-500 hover:bg-orange-400 border-orange-400/40 shadow-orange-500/20";
-                } else if (track.category === 'industry') {
-                  blockColor = "bg-slate-500 hover:bg-slate-400 border-slate-400/40 shadow-slate-500/20";
-                }
+            <!-- Research Timeline Rows (CSX and CUTE on ONE line, maximum thickness bars) -->
+            <div class="relative z-10 divide-y divide-slate-100 dark:divide-slate-800/60">
+              {researchTracks.map(track => (
+                <div class="relative h-8 flex items-center group/track">
+                  {track.bars.map(bar => {
+                    const left = getPct(bar.start);
+                    const width = getWidthPct(bar.start, bar.end);
+
+                    return (
+                      <a
+                        href={`#${bar.id}`}
+                        data-target={bar.id}
+                        class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-emerald-500 hover:bg-emerald-400 border-emerald-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1.5"
+                        style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
+                        title={`${bar.title} (${bar.dateStr})`}
+                      >
+                        {bar.ongoing && (
+                          <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                        )}
+                      </a>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+
+            <!-- Folded Volunteering Row (ALL 13 volunteering blocks on a SINGLE line!) -->
+            <div id="volunteering-folded-row" class="relative z-10 h-8 flex items-center border-y border-orange-200/70 dark:border-orange-950/70 bg-orange-50/20 dark:bg-orange-950/10">
+              {allVolunteeringBars.map(bar => {
+                const left = getPct(bar.start);
+                const width = getWidthPct(bar.start, bar.end);
 
                 return (
-                  <div class="relative h-7 flex items-center group/track">
-                    {track.bars.map(bar => {
-                      const left = getPct(bar.start);
-                      const width = getWidthPct(bar.start, bar.end);
-
-                      return (
-                        <a
-                          href={`#${bar.id}`}
-                          data-target={bar.id}
-                          class={`gantt-bar absolute h-4.5 rounded-sm shadow-sm transition-all duration-200 cursor-pointer border ${blockColor} hover:scale-y-125 hover:shadow-md hover:z-20 flex items-center justify-end px-1`}
-                          style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
-                          title={`${bar.title} (${bar.dateStr})`}
-                        >
-                          {bar.ongoing && (
-                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
-                          )}
-                        </a>
-                      );
-                    })}
-                  </div>
+                  <a
+                    href={`#${bar.id}`}
+                    data-target={bar.id}
+                    class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-orange-500 hover:bg-orange-400 border-orange-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1"
+                    style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
+                    title={`${bar.title} (${bar.dateStr})`}
+                  >
+                    {bar.ongoing && (
+                      <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                    )}
+                  </a>
                 );
               })}
+            </div>
+
+            <!-- Unfolded Volunteering Rows (Each role on its own separate line) -->
+            <div id="volunteering-unfolded-timeline" class="relative z-10 hidden divide-y divide-slate-100 dark:divide-slate-800/60 border-b border-orange-200/50 dark:border-orange-950/50">
+              {volunteeringTracks.map(track => (
+                <div class="relative h-8 flex items-center group/track">
+                  {track.bars.map(bar => {
+                    const left = getPct(bar.start);
+                    const width = getWidthPct(bar.start, bar.end);
+
+                    return (
+                      <a
+                        href={`#${bar.id}`}
+                        data-target={bar.id}
+                        class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-orange-500 hover:bg-orange-400 border-orange-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1"
+                        style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
+                        title={`${bar.title} (${bar.dateStr})`}
+                      >
+                        {bar.ongoing && (
+                          <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                        )}
+                      </a>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+
+            <!-- Industry Timeline Rows (Maximum thickness bars) -->
+            <div class="relative z-10 divide-y divide-slate-100 dark:divide-slate-800/60">
+              {industryTracks.map(track => (
+                <div class="relative h-8 flex items-center group/track">
+                  {track.bars.map(bar => {
+                    const left = getPct(bar.start);
+                    const width = getWidthPct(bar.start, bar.end);
+
+                    return (
+                      <a
+                        href={`#${bar.id}`}
+                        data-target={bar.id}
+                        class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-slate-500 hover:bg-slate-400 border-slate-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1"
+                        style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
+                        title={`${bar.title} (${bar.dateStr})`}
+                      >
+                        {bar.ongoing && (
+                          <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                        )}
+                      </a>
+                    );
+                  })}
+                </div>
+              ))}
             </div>
 
           </div>
@@ -1048,6 +1161,34 @@ const allExperienceCards: ExperienceCard[] = [
           }
         });
       });
+
+      // Volunteering Fold / Unfold toggle
+      const volToggle = document.getElementById('volunteering-toggle');
+      const volFoldedRow = document.getElementById('volunteering-folded-row');
+      const volUnfoldedLeft = document.getElementById('volunteering-unfolded-left');
+      const volUnfoldedTimeline = document.getElementById('volunteering-unfolded-timeline');
+      const volChevron = document.getElementById('vol-chevron');
+      const volToggleText = document.getElementById('vol-toggle-text');
+
+      if (volToggle && volFoldedRow && volUnfoldedLeft && volUnfoldedTimeline && volChevron && volToggleText) {
+        let isFolded = true;
+        volToggle.onclick = () => {
+          isFolded = !isFolded;
+          if (isFolded) {
+            volFoldedRow.classList.remove('hidden');
+            volUnfoldedLeft.classList.add('hidden');
+            volUnfoldedTimeline.classList.add('hidden');
+            volChevron.textContent = '▶';
+            volToggleText.textContent = 'Unfold';
+          } else {
+            volFoldedRow.classList.add('hidden');
+            volUnfoldedLeft.classList.remove('hidden');
+            volUnfoldedTimeline.classList.remove('hidden');
+            volChevron.textContent = '▼';
+            volToggleText.textContent = 'Fold';
+          }
+        };
+      }
 
       // Initialize timeline scroll to present/recent engagements, allowing user to scroll left for earlier history
       const scrollContainer = document.getElementById('gantt-timeline-scroll');
