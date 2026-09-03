@@ -285,7 +285,7 @@
     }
 
     .tape-top {
-      top: 24vh;
+      top: 36vh;
       transform: rotate(-4.5deg);
     }
 
@@ -446,7 +446,7 @@
       position: fixed;
       bottom: 1.5rem;
       left: 1.5rem;
-      z-index: 45;
+      z-index: 20;
       background: rgba(8, 13, 10, 0.92);
       border: 1px solid rgba(52, 211, 153, 0.4);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
@@ -648,7 +648,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.6));
       transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
       opacity: 1;
       transform-origin: center center;
@@ -660,13 +660,37 @@
       pointer-events: none;
     }
 
+    /* Glowing Signboard Frame */
     .billboard-frame {
       width: 100%;
-      background: #0f172a;
-      border: 2px solid #ca8a04;
+      background: #090e17;
+      border: 2px solid #facc15;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 0 15px rgba(250, 204, 21, 0.75),
+                  0 0 35px rgba(250, 204, 21, 0.45),
+                  0 0 65px rgba(52, 211, 153, 0.35),
+                  inset 0 0 12px rgba(250, 204, 21, 0.25);
+      animation: billboardGlowPulse 2.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes billboardGlowPulse {
+      0% {
+        box-shadow: 0 0 12px rgba(250, 204, 21, 0.65),
+                    0 0 25px rgba(250, 204, 21, 0.35),
+                    0 0 45px rgba(52, 211, 153, 0.2),
+                    inset 0 0 8px rgba(250, 204, 21, 0.2);
+        border-color: #facc15;
+      }
+      100% {
+        box-shadow: 0 0 24px rgba(250, 204, 21, 0.9),
+                    0 0 48px rgba(250, 204, 21, 0.6),
+                    0 0 85px rgba(52, 211, 153, 0.5),
+                    inset 0 0 16px rgba(250, 204, 21, 0.35);
+        border-color: #fef08a;
+      }
     }
 
     .billboard-header {
@@ -708,10 +732,11 @@
       font-family: 'Work Sans', sans-serif;
       font-size: 0.78rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     .dispatch-input:focus {
       border-color: #34d399;
+      box-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
     }
 
     .dispatch-btn {
@@ -725,11 +750,12 @@
       font-weight: 700;
       letter-spacing: 0.05em;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
       white-space: nowrap;
     }
     .dispatch-btn:hover {
       background: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
     }
     .dispatch-btn:active {
       transform: scale(0.96);
@@ -739,18 +765,54 @@
       cursor: not-allowed;
     }
 
+    /* Billboard Posts extending to very top or very bottom of screen */
     .billboard-posts {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
       width: 75%;
       display: flex;
       justify-content: space-between;
-      height: 16px;
+      pointer-events: none;
+      z-index: 1;
     }
+
+    .posts-bottom {
+      top: calc(100% - 2px);
+      height: var(--post-height, 140px);
+      display: flex;
+    }
+
+    .posts-top {
+      bottom: calc(100% - 2px);
+      height: var(--post-height, 140px);
+      display: none;
+    }
+
+    /* Shown when anchored to top half */
+    .dispatch-billboard.anchored-top .posts-top {
+      display: flex;
+    }
+    .dispatch-billboard.anchored-top .posts-bottom {
+      display: none;
+    }
+
+    /* Shown when anchored to bottom half */
+    .dispatch-billboard.anchored-bottom .posts-top {
+      display: none;
+    }
+    .dispatch-billboard.anchored-bottom .posts-bottom {
+      display: flex;
+    }
+
     .post {
-      width: 7px;
+      width: 8px;
       height: 100%;
       background: #78350f;
       border-left: 1px solid #92400e;
       border-right: 1px solid #451a03;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
     }
 
     @media (max-width: 768px) {
@@ -1091,7 +1153,13 @@
   <!-- ------------------------------------------------------------- -->
   <!-- CONSTRUCTION SITE DISPATCH BILLBOARD (TELEGRAM RECORDER)      -->
   <!-- ------------------------------------------------------------- -->
-  <div class="dispatch-billboard" id="dispatch-billboard">
+  <div class="dispatch-billboard anchored-bottom" id="dispatch-billboard">
+    <!-- Support posts extending to the very top (when in top half) -->
+    <div class="billboard-posts posts-top" id="posts-top" aria-hidden="true">
+      <div class="post post-left"></div>
+      <div class="post post-right"></div>
+    </div>
+
     <div class="billboard-frame">
       <div class="billboard-header">
         <span class="hazard-stripe">///</span>
@@ -1114,8 +1182,9 @@
         </div>
       </form>
     </div>
-    <!-- Wooden support posts into the earth -->
-    <div class="billboard-posts">
+
+    <!-- Support posts extending to the very bottom (when in bottom half) -->
+    <div class="billboard-posts posts-bottom" id="posts-bottom" aria-hidden="true">
       <div class="post post-left"></div>
       <div class="post post-right"></div>
     </div>
@@ -1536,6 +1605,18 @@
     const billboard = document.getElementById('dispatch-billboard');
     if (billboard) {
       const boardEl = billboard;
+
+      function updateInitialLegs() {
+        const winH = window.innerHeight;
+        const rect = boardEl.getBoundingClientRect();
+        const legHeight = Math.max(20, winH - rect.bottom);
+        boardEl.classList.add('anchored-bottom');
+        boardEl.classList.remove('anchored-top');
+        boardEl.style.setProperty('--post-height', `${legHeight}px`);
+      }
+      updateInitialLegs();
+      window.addEventListener('resize', updateInitialLegs);
+
       function scheduleBillboardTeleport() {
         // Teleports once in a while: random interval between 6 and 14 seconds
         const delay = Math.floor(Math.random() * (14000 - 6000 + 1)) + 6000;
@@ -1558,6 +1639,22 @@
             // Random coordinates across the screen
             const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
             const randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+
+            // Check if billboard is on top or bottom half of the screen
+            const isTopHalf = randomY < (winH / 2);
+            if (isTopHalf) {
+              // Legs start from the very top of the screen (0) down to the billboard
+              const legHeight = Math.max(20, randomY);
+              boardEl.classList.add('anchored-top');
+              boardEl.classList.remove('anchored-bottom');
+              boardEl.style.setProperty('--post-height', `${legHeight}px`);
+            } else {
+              // Legs start from the billboard down to the very bottom of the screen (winH)
+              const legHeight = Math.max(20, winH - (randomY + bHeight));
+              boardEl.classList.add('anchored-bottom');
+              boardEl.classList.remove('anchored-top');
+              boardEl.style.setProperty('--post-height', `${legHeight}px`);
+            }
 
             // Relocate while hidden
             boardEl.style.left = `${randomX}px`;
