@@ -1,1 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><circle fill="#E1E8ED" cx="18" cy="26" r="10"/><path fill="#E1E8ED" d="M12 11c0-3.314 2.686-6 6-6 3.313 0 6 2.686 6 6s-2.687 6-6 6c-3.314 0-6-2.686-6-6z"/><path fill="#414042" d="M23 6c0 1.104-.896 2-2 2h-6c-1.104 0-2-.896-2-2V2c0-1.104.896-2 2-2h6c1.104 0 2 .896 2 2v4z"/><path fill="#231F20" d="M25 7c0 .552-.447 1-1 1H12c-.552 0-1-.448-1-1s.448-1 1-1h12c.553 0 1 .448 1 1z"/><path fill="#DD2E44" d="M22.5 15h-9c-.829 0-1.5.671-1.5 1.5 0 .652.419 1.202 1 1.408V25c0 .553.448 1 1 1h1c.552 0 1-.447 1-1v-7h6.5c.828 0 1.5-.671 1.5-1.5s-.672-1.5-1.5-1.5z"/><path fill="#414042" d="M19 24c0 .553-.447 1-1 1-.552 0-1-.447-1-1 0-.553.448-1 1-1 .553 0 1 .447 1 1zm0 5c0 .553-.447 1-1 1-.552 0-1-.447-1-1 0-.553.448-1 1-1 .553 0 1 .447 1 1z"/><path fill="#F4900C" d="M19 12c0 .553-.447 1-1 1-.552 0-1-.447-1-1 0-.553.448-1 1-1 .553 0 1 .447 1 1z"/><path fill="#414042" d="M16 10c0 .553-.448 1-1 1s-1-.447-1-1c0-.553.448-1 1-1s1 .447 1 1zm6 0c0 .553-.447 1-1 1-.553 0-1-.447-1-1 0-.553.447-1 1-1 .553 0 1 .447 1 1z"/><path fill="#FFAC33" d="M10.394 20.081l-3.452-1.479-.547-2.866c-.104-.542-.624-.897-1.17-.795-.542.104-.898.627-.795 1.17l.294 1.54-1.33-.57c-.508-.219-1.096.018-1.313.525-.218.508.018 1.096.525 1.313l.743.318-1.056 1.056c-.391.391-.391 1.023 0 1.414.195.195.451.293.707.293s.512-.098.707-.293l1.621-1.621 4.278 1.833c.128.056.262.081.394.081.388 0 .757-.227.919-.606.218-.508-.018-1.095-.525-1.313zm22.922-3.03l-1.465-.488.855-.855c.391-.391.391-1.023 0-1.414s-1.023-.391-1.414 0l-.751.751-.572-2.287c-.134-.535-.678-.865-1.212-.727-.536.134-.862.677-.727 1.213l.862 3.45-3.6 3.6c-.391.391-.391 1.023 0 1.414.196.194.452.292.708.292s.512-.098.707-.293l3.563-3.563 2.413.805c.106.035.213.051.317.051.419 0 .809-.265.948-.684.175-.524-.108-1.09-.632-1.265z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Sky blue background circle (Discord-style emoji bg) -->
+  <circle cx="50" cy="50" r="50" fill="#5865F2"/>
+
+  <!-- Snowman body - bottom large ball -->
+  <circle cx="50" cy="72" r="18" fill="#E8F4FD" stroke="#C8DFF0" stroke-width="1.5"/>
+  <!-- Snowman body - top smaller ball (head) -->
+  <circle cx="50" cy="42" r="13" fill="#E8F4FD" stroke="#C8DFF0" stroke-width="1.5"/>
+
+  <!-- Hat brim -->
+  <rect x="33" y="28" width="34" height="4" rx="2" fill="#1a1a2e"/>
+  <!-- Hat top -->
+  <rect x="37" y="12" width="26" height="18" rx="3" fill="#1a1a2e"/>
+  <!-- Hat band -->
+  <rect x="37" y="23" width="26" height="4" fill="#DD2E44"/>
+
+  <!-- Eyes -->
+  <circle cx="44" cy="40" r="2.2" fill="#1a1a2e"/>
+  <circle cx="56" cy="40" r="2.2" fill="#1a1a2e"/>
+
+  <!-- Smile dots -->
+  <circle cx="43" cy="47" r="1.5" fill="#1a1a2e"/>
+  <circle cx="47" cy="50" r="1.5" fill="#1a1a2e"/>
+  <circle cx="50" cy="51" r="1.5" fill="#1a1a2e"/>
+  <circle cx="53" cy="50" r="1.5" fill="#1a1a2e"/>
+  <circle cx="57" cy="47" r="1.5" fill="#1a1a2e"/>
+
+  <!-- Carrot nose -->
+  <polygon points="50,43 58,45 50,47" fill="#F4900C"/>
+
+  <!-- Buttons on body -->
+  <circle cx="50" cy="62" r="2.2" fill="#1a1a2e"/>
+  <circle cx="50" cy="70" r="2.2" fill="#1a1a2e"/>
+  <circle cx="50" cy="78" r="2.2" fill="#1a1a2e"/>
+
+  <!-- Left arm (twig) -->
+  <line x1="32" y1="65" x2="20" y2="55" stroke="#8B4513" stroke-width="3" stroke-linecap="round"/>
+  <line x1="20" y1="55" x2="14" y2="50" stroke="#8B4513" stroke-width="2" stroke-linecap="round"/>
+  <line x1="20" y1="55" x2="15" y2="58" stroke="#8B4513" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Right arm (twig) -->
+  <line x1="68" y1="65" x2="80" y2="55" stroke="#8B4513" stroke-width="3" stroke-linecap="round"/>
+  <line x1="80" y1="55" x2="86" y2="50" stroke="#8B4513" stroke-width="2" stroke-linecap="round"/>
+  <line x1="80" y1="55" x2="85" y2="58" stroke="#8B4513" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Scarf -->
+  <path d="M 37 54 Q 50 58 63 54" stroke="#DD2E44" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M 37 54 Q 35 60 38 65" stroke="#DD2E44" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>

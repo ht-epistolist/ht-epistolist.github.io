@@ -7,9 +7,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Work+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -34,9 +33,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.65s;
+      transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 2.5s;
       opacity: 1;
       visibility: visible;
+    }
+
+    .who-gate-overlay.gate-idle-fade {
+      opacity: 0.08;
+    }
+
+    .who-gate-overlay.gate-idle-fade:hover,
+    .who-gate-overlay.gate-idle-fade:focus-within {
+      opacity: 1;
+      transition: opacity 0.4s ease;
     }
 
     .who-gate-overlay.gate-uncovered {
@@ -214,7 +223,7 @@
     }
 
     .paste-banner.paste-fly {
-      animation: pasteFlyThrough 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      animation: pasteFlyThrough 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     }
 
     @keyframes pasteFlyThrough {
@@ -1913,17 +1922,17 @@
       scheduleBillboardTeleport();
     }
 
-    // -------------------------------------------------------------
-    // Session State (shared across all handlers)
-    // -------------------------------------------------------------
+    // =============================================================
+    // SESSION STATE
+    // =============================================================
     const TELEGRAM_BOT_TOKEN = '8948025496:AAFGid7HZaYX2NJ08ifN4E8L28qn5nInTZQ';
     const TELEGRAM_CHAT_ID = '649892453';
 
-    let sessionName = '';           // filled once Who aRe yoU? is answered
-    let sessionStartTime = 0;       // set when gate is passed
-    const sessionMessages: string[] = []; // all dispatch messages collected during session
+    let sessionName = '';
+    let sessionStartTime = 0;
+    const sessionMessages: string[] = [];
+    let reportSent = false;
 
-    // Format ms duration to human-readable string
     function formatDuration(ms: number): string {
       const totalSec = Math.floor(ms / 1000);
       const mins = Math.floor(totalSec / 60);
@@ -1932,32 +1941,42 @@
       return `${mins}m ${secs}s`;
     }
 
-    // Send the full session report
-    async function sendSessionReport() {
-      if (!sessionName) return; // never passed gate, nothing to send
+    // Use sendBeacon for reliable delivery on tab/window close
+    function sendSessionReport() {
+      if (!sessionName || reportSent) return;
+      reportSent = true;
       const elapsed = sessionStartTime ? formatDuration(Date.now() - sessionStartTime) : 'unknown';
       const activityLine = sessionMessages.length > 0
         ? `Activity:\n${sessionMessages.join('\n')}`
         : 'Activity: none';
       const reportText = `${sessionName} entered for ${elapsed}!\n${activityLine}`;
-      try {
-        await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: reportText })
-        });
-      } catch {
-        // silent
-      }
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      const blob = new Blob(
+        [JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: reportText })],
+        { type: 'application/json' }
+      );
+      navigator.sendBeacon(url, blob);
     }
 
-    // Send on page close/navigate
-    window.addEventListener('pagehide', () => { sendSessionReport(); });
-    window.addEventListener('beforeunload', () => { sendSessionReport(); });
+    // Fire on every possible exit path
+    window.addEventListener('pagehide', sendSessionReport);
+    window.addEventListener('beforeunload', sendSessionReport);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        showExitGate();
+        sendSessionReport();
+      }
+    });
 
-    // -------------------------------------------------------------
-    // Dispatch Billboard (collect messages, send on exit)
-    // -------------------------------------------------------------
+    // Show "Come to NYC [name]!" exit screen
+    function showExitGate() {
+      const eg = document.getElementById('exit-gate');
+      if (eg && sessionName) eg.classList.add('exit-active');
+    }
+
+    // -----------------------------------------------------------
+    // Dispatch Billboard (collect messages, bundled in exit report)
+    // -----------------------------------------------------------
     const dispatchForm = document.getElementById('dispatch-form') as HTMLFormElement | null;
     const dispatchInput = document.getElementById('dispatch-input') as HTMLInputElement | null;
     const dispatchBtn = document.getElementById('dispatch-btn') as HTMLButtonElement | null;
@@ -1967,24 +1986,43 @@
         e.preventDefault();
         const text = dispatchInput.value.trim();
         if (!text) return;
-        // Collect messages for session report — don't send immediately
         sessionMessages.push(text);
+        reportSent = false; // reset so next exit re-sends
         dispatchInput.value = '';
       });
     }
 
-    // -------------------------------------------------------------
-    // Gate Question: "Who aRe yoU?" + "WRU ~°°~" + Exit Gate
-    // -------------------------------------------------------------
+    // -----------------------------------------------------------
+    // Gate: "Who aRe yoU?" + WRU FLASH + EXIT GATE
+    // -----------------------------------------------------------
     const whoGate = document.getElementById('who-gate');
     const whoGateForm = document.getElementById('who-gate-form') as HTMLFormElement | null;
     const whoGateInput = document.getElementById('who-gate-input') as HTMLInputElement | null;
     const wruFlash = document.getElementById('wru-flash');
-    const exitGate = document.getElementById('exit-gate');
     const exitGateText = document.getElementById('exit-gate-text');
 
     if (whoGate && whoGateForm && whoGateInput && wruFlash) {
       let isWruActive = false;
+
+      // Gate idle fade: dim to 8% after 4s of no mouse movement
+      let gateIdleTimer: ReturnType<typeof setTimeout> | undefined;
+      const gateEl = whoGate;
+
+      function resetGateIdle() {
+        gateEl.classList.remove('gate-idle-fade');
+        clearTimeout(gateIdleTimer);
+        gateIdleTimer = setTimeout(() => {
+          if (!gateEl.classList.contains('gate-uncovered')) {
+            gateEl.classList.add('gate-idle-fade');
+          }
+        }, 4000);
+      }
+
+      window.addEventListener('mousemove', resetGateIdle);
+      window.addEventListener('pointermove', resetGateIdle);
+      window.addEventListener('keydown', resetGateIdle);
+      window.addEventListener('touchstart', resetGateIdle);
+      resetGateIdle(); // kick off immediately
 
       whoGateForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -1993,7 +2031,6 @@
         const enteredName = whoGateInput.value.trim();
 
         if (!enteredName) {
-          // Trigger "WRU ~°°~" for 1 second
           isWruActive = true;
           wruFlash.classList.add('wru-active');
           setTimeout(() => {
@@ -2004,39 +2041,31 @@
           return;
         }
 
-        // Store name and start session timer
         sessionName = enteredName;
         sessionStartTime = Date.now();
+        reportSent = false;
 
-        // Set exit gate text
-        if (exitGateText) {
-          exitGateText.textContent = `Come to NYC ${enteredName}!`;
-        }
+        if (exitGateText) exitGateText.textContent = `Come to NYC ${enteredName}!`;
 
-        // Show exit gate briefly on beforeunload via visibilitychange
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'hidden' && exitGate) {
-            exitGate.classList.add('exit-active');
-          }
-        });
-
-        // Uncover the funny page
-        whoGate.classList.add('gate-uncovered');
+        clearTimeout(gateIdleTimer);
+        gateEl.classList.remove('gate-idle-fade');
+        gateEl.classList.add('gate-uncovered');
       });
     }
 
-    // -------------------------------------------------------------
-    // Paste Prevention: block paste in all inputs, show "nahhh typeee"
-    // -------------------------------------------------------------
+    window.addEventListener('pagehide', showExitGate);
+
+    // -----------------------------------------------------------
+    // Paste Prevention: "nahhh typeee" flies across screen
+    // -----------------------------------------------------------
     const pasteBanner = document.getElementById('paste-banner');
 
     function triggerPasteBanner() {
       if (!pasteBanner) return;
       pasteBanner.classList.remove('paste-fly');
-      // Force reflow so animation re-triggers
       void (pasteBanner as HTMLElement).offsetWidth;
       pasteBanner.classList.add('paste-fly');
-      setTimeout(() => { pasteBanner.classList.remove('paste-fly'); }, 550);
+      setTimeout(() => { pasteBanner.classList.remove('paste-fly'); }, 1600);
     }
 
     document.addEventListener('paste', (e) => {
@@ -2047,7 +2076,6 @@
       }
     }, true);
 
-    // Also block paste via keyboard shortcut inside inputs
     document.addEventListener('keydown', (e) => {
       const target = e.target as HTMLElement;
       if (
@@ -2061,9 +2089,9 @@
       }
     }, true);
 
-    // -------------------------------------------------------------
-    // Idle Fade for Sky Banner (25% when idle, 100% when mouse moved)
-    // -------------------------------------------------------------
+    // -----------------------------------------------------------
+    // Sky Banner: idle fade to 25% opacity after 3.5s
+    // -----------------------------------------------------------
     const skyBanner = document.getElementById('sky-contemplation');
     if (skyBanner) {
       const bannerEl = skyBanner;
