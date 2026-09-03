@@ -1,130 +1,268 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-interface TimelineItem {
+interface TimelineBar {
   id: string;
   title: string;
   shortTitle: string;
-  role: string;
-  org: string;
-  category: 'research-edu' | 'leadership' | 'industry';
-  categoryLabel: string;
-  dateStr: string;
   start: number;
   end: number;
+  ongoing?: boolean;
+  dateStr: string;
+}
+
+interface TimelineTrack {
+  id: string;
+  category: 'research' | 'volunteering' | 'industry';
+  categoryLabel: string;
+  bars: TimelineBar[];
+}
+
+interface ExperienceCard {
+  id: string;
+  title: string;
+  role: string;
+  org: string;
+  category: 'research' | 'volunteering' | 'industry' | 'education';
+  categoryLabel: string;
+  dateStr: string;
   ongoing?: boolean;
   overlapNotes?: string;
   description: string;
   location?: string;
 }
 
-const timelineData: TimelineItem[] = [
-  // 1. Research & Education
+// -------------------------------------------------------------
+// Zoomed Time Axis: 2023 to 2026 (4-year high-resolution view)
+// -------------------------------------------------------------
+const minTime = 2023.0;
+const maxTime = 2027.0;
+const totalSpan = maxTime - minTime; // 4.0 years span
+const years = [2023, 2024, 2025, 2026, 2027];
+
+const getPct = (time: number) => Math.max(0, Math.min(100, ((time - minTime) / totalSpan) * 100));
+const getWidthPct = (start: number, end: number) => {
+  const s = Math.max(start, minTime);
+  const e = Math.min(end, maxTime);
+  return (Math.max(0.08, e - s) / totalSpan) * 100;
+};
+
+// -------------------------------------------------------------
+// Timeline Tracks (Condensed Gantt rows — Education removed, Research only)
+// -------------------------------------------------------------
+const timelineTracks: TimelineTrack[] = [
+  // 1. Research: Both Columbia Fusion Center positions on ONE single horizontal line!
   {
-    id: 'exp-columbia-ee',
-    org: 'Columbia University, SEAS',
-    role: 'BS in Electrical Engineering, Minors in Applied Math & CS',
-    title: 'Columbia University, SEAS — BS Electrical Engineering',
-    shortTitle: 'Columbia BS EE (Full Degree)',
-    category: 'research-edu',
-    categoryLabel: 'Research & Education',
-    dateStr: 'Sep 2024 – May 2028',
-    start: 2024.67,
-    end: 2028.37,
-    ongoing: true,
-    overlapNotes: 'Concurrent with CUTE, CSX, Brave1, Lab Assistant & Leadership roles',
-    description: 'GPA: 3.81/4.00. Minors in Applied Mathematics and Computer Science. Coursework: Quantum Computing Lab, Signals and Systems, Electronic Circuits, Electromagnetics, Solid State Devices, Probability Theory. Extracurriculars: NeurotechX, FormulaSAE, Pi Mu Epsilon, Hackhouse, AI Safety.'
+    id: 'track-fusion',
+    category: 'research',
+    categoryLabel: 'Research',
+    bars: [
+      {
+        id: 'exp-csx',
+        shortTitle: 'CSX Stellarator Magnetics',
+        title: 'Columbia Fusion Research Center — CSX Stellarator',
+        start: 2025.67,
+        end: 2026.37,
+        dateStr: 'Sep 2025 – May 2026'
+      },
+      {
+        id: 'exp-cute',
+        shortTitle: 'CUTE Tokamak (Power & Control)',
+        title: 'Columbia Fusion Research Center — CUTE Tokamak',
+        start: 2026.42,
+        end: 2026.75,
+        ongoing: true,
+        dateStr: 'Jun 2026 – Present'
+      }
+    ]
   },
+  {
+    id: 'track-columbia-lab',
+    category: 'research',
+    categoryLabel: 'Research',
+    bars: [
+      {
+        id: 'exp-columbia-lab',
+        shortTitle: 'Signals & Systems Lab Assistant',
+        title: 'Columbia Engineering — Laboratory Assistant',
+        start: 2026.67,
+        end: 2026.75,
+        ongoing: true,
+        dateStr: 'Sep 2026 – Present'
+      }
+    ]
+  },
+
+  // 2. Volunteering & Leadership
+  {
+    id: 'track-ugs',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-ugs',
+        shortTitle: '◀ UGS Mentorship & Admissions (Since 2021)',
+        title: 'Ukraine Global Scholars — Mentor & Admission Officer',
+        start: 2021.50,
+        end: 2026.75,
+        ongoing: true,
+        dateStr: 'Jul 2021 – Present'
+      }
+    ]
+  },
+  {
+    id: 'track-pair',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-pair',
+        shortTitle: 'AI & Reasoning Counselor (2023)',
+        title: 'Program on AI and Reasoning — Junior Counselor',
+        start: 2023.60,
+        end: 2023.70,
+        dateStr: 'Aug 2023'
+      },
+      {
+        id: 'exp-pair-2025',
+        shortTitle: 'AI & Reasoning Counselor (2025)',
+        title: 'Program on AI and Reasoning — Junior Counselor',
+        start: 2025.60,
+        end: 2025.70,
+        dateStr: 'Aug 2025'
+      }
+    ]
+  },
+  {
+    id: 'track-imo-ewb',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-imo',
+        shortTitle: 'IMO 2024 Guide',
+        title: 'International Mathematics Olympiad — Volunteer & Guide',
+        start: 2024.50,
+        end: 2024.58,
+        dateStr: 'Jul 2024'
+      },
+      {
+        id: 'exp-ewb',
+        shortTitle: 'Engineers Without Borders Co-Lead',
+        title: 'Engineering Without Borders — Fundraising Co-Lead',
+        start: 2024.67,
+        end: 2026.04,
+        dateStr: 'Sep 2024 – Jan 2026'
+      }
+    ]
+  },
+  {
+    id: 'track-cmi',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-cmi',
+        shortTitle: 'Columbia Mentorship Chair',
+        title: 'Columbia Mentorship Initiative — Mentor Chair',
+        start: 2024.75,
+        end: 2025.75,
+        dateStr: 'Sep 2024 – May 2025'
+      }
+    ]
+  },
+
+  // 3. Industry & Engineering
+  {
+    id: 'track-industry',
+    category: 'industry',
+    categoryLabel: 'Industry & Engineering',
+    bars: [
+      {
+        id: 'exp-reunion',
+        shortTitle: 'Columbia Reunion Staff',
+        title: 'Columbia University — Student Reunion Worker',
+        start: 2026.33,
+        end: 2026.42,
+        dateStr: 'May 2026'
+      },
+      {
+        id: 'exp-brave1',
+        shortTitle: 'Brave1 Supply Chain Intern',
+        title: 'Brave1 — Components Intern',
+        start: 2026.42,
+        end: 2026.67,
+        dateStr: 'Jun – Sep 2026'
+      }
+    ]
+  }
+];
+
+// -------------------------------------------------------------
+// Detailed Experience Cards Data
+// -------------------------------------------------------------
+const allExperienceCards: ExperienceCard[] = [
+  // 1. Research
   {
     id: 'exp-cute',
     org: 'Columbia Fusion Research Center',
     role: 'Undergraduate Research Assistant (CUTE)',
     title: 'Columbia Fusion Research Center — Research Assistant (CUTE)',
-    shortTitle: 'CUTE Tokamak Power & Control',
-    category: 'research-edu',
-    categoryLabel: 'Research & Education',
+    category: 'research',
+    categoryLabel: 'Research',
     dateStr: 'Jun 2026 – Present',
-    start: 2026.42,
-    end: 2026.70,
     ongoing: true,
-    overlapNotes: 'Concurrent with Columbia BS EE, Signals & Systems Lab, and Brave1',
+    overlapNotes: 'Concurrent with Signals & Systems Lab, Brave1, and Columbia BS EE',
     description: 'Designing, wiring, and testing power, control, and safety systems for the Columbia University Tokamak for Education (20+ hrs/week). Wired high-voltage power supply and capacitor banks; tested control system modifications and established network connection with oscilloscope.'
-  },
-  {
-    id: 'exp-columbia-lab',
-    org: 'Columbia Engineering',
-    role: 'Laboratory Assistant',
-    title: 'Columbia Engineering — Laboratory Assistant',
-    shortTitle: 'Signals & Systems Lab Assistant',
-    category: 'research-edu',
-    categoryLabel: 'Research & Education',
-    dateStr: 'Sep 2026 – Present',
-    start: 2026.67,
-    end: 2026.70,
-    ongoing: true,
-    overlapNotes: 'Concurrent with Columbia BS EE & CUTE Tokamak',
-    description: 'Signals and Systems lab assistant, supporting laboratory demonstrations, hardware testing, and coursework experiments.'
   },
   {
     id: 'exp-csx',
     org: 'Columbia Fusion Research Center',
     role: 'Undergraduate Research Assistant (CSX)',
     title: 'Columbia Fusion Research Center — Research Assistant (CSX)',
-    shortTitle: 'CSX Stellarator Magnetics',
-    category: 'research-edu',
-    categoryLabel: 'Research & Education',
+    category: 'research',
+    categoryLabel: 'Research',
     dateStr: 'Sep 2025 – May 2026',
-    start: 2025.67,
-    end: 2026.37,
     ongoing: false,
-    overlapNotes: 'Concurrent with Columbia BS EE and Engineering Without Borders',
+    overlapNotes: 'Preceded CUTE Tokamak; concurrent with Engineering Without Borders',
     description: 'Columbia Stellarator eXperiment: modeled a rotating winding stand for full-scale interlocked coils, developed a Hall probe-based magnetic field sensor, and collaborated in vacuum chamber setup assembly and precision CAD modeling.'
   },
   {
-    id: 'exp-berkhamsted',
-    org: 'Berkhamsted School',
-    role: 'A-Levels',
-    title: 'Berkhamsted School — A-Levels',
-    shortTitle: 'Berkhamsted School A-Levels',
-    category: 'research-edu',
-    categoryLabel: 'Research & Education',
-    dateStr: 'Sep 2022 – Jun 2024 · UK',
-    start: 2022.67,
-    end: 2024.46,
-    ongoing: false,
-    location: 'Berkhamsted, UK',
-    description: 'Further Maths (A), Physics (A), Computer Science (A), Maths (A*).'
+    id: 'exp-columbia-lab',
+    org: 'Columbia Engineering',
+    role: 'Laboratory Assistant',
+    title: 'Columbia Engineering — Laboratory Assistant',
+    category: 'research',
+    categoryLabel: 'Research',
+    dateStr: 'Sep 2026 – Present',
+    ongoing: true,
+    overlapNotes: 'Concurrent with CUTE Tokamak research',
+    description: 'Signals and Systems lab assistant, supporting laboratory demonstrations, hardware testing, and coursework experiments.'
   },
   {
     id: 'exp-jas',
     org: 'Junior Academy of Sciences',
     role: 'Member & Researcher',
     title: 'Junior Academy of Sciences — Member',
-    shortTitle: 'Junior Academy Research',
-    category: 'research-edu',
-    categoryLabel: 'Research & Education',
+    category: 'research',
+    categoryLabel: 'Research',
     dateStr: 'Jun 2020 – Nov 2022 · Ukraine',
-    start: 2020.42,
-    end: 2022.88,
     ongoing: false,
     location: 'Dnipro, Ukraine',
     description: 'Regional winner in Ukraine’s national research competition. Finalist at ISEF, GENIUS Olympiad, and InventorUA. Focus: non-wood pulp production and plant environmental monitoring systems for micro-farms.'
   },
 
-  // 2. Leadership & Community
+  // 2. Volunteering & Leadership
   {
     id: 'exp-ugs',
     org: 'Ukraine Global Scholars',
     role: 'Mentor & Admission Officer',
     title: 'Ukraine Global Scholars — Mentor & Admission Officer',
-    shortTitle: 'Ukraine Global Scholars Mentorship',
-    category: 'leadership',
-    categoryLabel: 'Leadership & Community',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
     dateStr: 'Jul 2021 – Present',
-    start: 2021.50,
-    end: 2026.70,
     ongoing: true,
-    overlapNotes: 'Concurrent with Berkhamsted A-levels, Columbia BS EE, and research commitments',
+    overlapNotes: 'Concurrent with Columbia research and academic commitments',
     description: 'Screened 90+ applicants across 3 admission stages. Co-led 10-day intensive boot camp for 50+ students. Mentored and advised 15+ applicants through college applications, essays, CV refinement, and mock interviews.'
   },
   {
@@ -132,14 +270,11 @@ const timelineData: TimelineItem[] = [
     org: 'Engineering Without Borders',
     role: 'Fundraising Co-Lead',
     title: 'Engineering Without Borders — Fundraising Co-Lead',
-    shortTitle: 'Engineers Without Borders Co-Lead',
-    category: 'leadership',
-    categoryLabel: 'Leadership & Community',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
     dateStr: 'Sep 2024 – Jan 2026',
-    start: 2024.67,
-    end: 2026.04,
     ongoing: false,
-    overlapNotes: 'Concurrent with Columbia BS EE and CSX Stellarator',
+    overlapNotes: 'Concurrent with CSX Stellarator research and coursework',
     description: 'Reached out to corporate partners, co-organized fundraisers, applied for development grants, and directed weekly operational meetings.'
   },
   {
@@ -147,12 +282,9 @@ const timelineData: TimelineItem[] = [
     org: 'Program on AI and Reasoning',
     role: 'Junior Counselor',
     title: 'Program on AI and Reasoning — Junior Counselor',
-    shortTitle: 'AI & Reasoning Counselor',
-    category: 'leadership',
-    categoryLabel: 'Leadership & Community',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
     dateStr: 'Aug 2023 & Aug 2025',
-    start: 2023.60,
-    end: 2025.65,
     ongoing: false,
     description: 'Assisted 10-day workshop studying math, cognition, and AI/ML for 25 participants selected from 1,200+ applicants. Delivered an interactive lecture on neural architecture and led 7+ cognitive activities in a 15-person team.'
   },
@@ -160,16 +292,24 @@ const timelineData: TimelineItem[] = [
     id: 'exp-imo',
     org: 'International Mathematics Olympiad',
     role: 'Volunteer & Guide',
-    title: 'International Mathematics Olympiad — Volunteer',
-    shortTitle: 'IMO 2024 Guide',
-    category: 'leadership',
-    categoryLabel: 'Leadership & Community',
+    title: 'International Mathematics Olympiad — Volunteer & Guide',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
     dateStr: 'Jul 2024 · Bath, UK',
-    start: 2024.50,
-    end: 2024.58,
     ongoing: false,
     location: 'Bath, UK',
     description: 'Guided a delegation of 6 international contestants throughout the 10-day competition. Organized excursions for 100+ attendees and assisted reception for 80+ national teams totaling 500+ participants.'
+  },
+  {
+    id: 'exp-cmi',
+    org: 'Columbia Mentorship Initiative',
+    role: 'Mentor Chair',
+    title: 'Columbia Mentorship Initiative — Mentor Chair',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Sep 2024 – May 2025',
+    ongoing: false,
+    description: 'Coordinated student mentorship pairings, peer study workshops, and orientation circles for incoming engineering students.'
   },
 
   // 3. Industry & Engineering
@@ -178,14 +318,11 @@ const timelineData: TimelineItem[] = [
     org: 'Brave1',
     role: 'Components Intern',
     title: 'Brave1 — Components Intern',
-    shortTitle: 'Brave1 Supply Chain Research',
     category: 'industry',
     categoryLabel: 'Industry & Engineering',
     dateStr: 'Jun – Sep 2026',
-    start: 2026.42,
-    end: 2026.67,
     ongoing: false,
-    overlapNotes: 'Concurrent with CUTE Tokamak research & Columbia BS EE',
+    overlapNotes: 'Concurrent with CUTE Tokamak research',
     description: 'Interviewed 10+ hardware companies and component distributors; conducted extensive supply chain analysis across 40+ responses; compiled component databases and organized a defense-tech webinar for 30+ participants.'
   },
   {
@@ -193,12 +330,9 @@ const timelineData: TimelineItem[] = [
     org: 'Columbia University',
     role: 'Student Reunion Worker',
     title: 'Columbia University — Student Reunion Worker',
-    shortTitle: 'Columbia Reunion Event Staff',
     category: 'industry',
     categoryLabel: 'Industry & Engineering',
     dateStr: 'May 2026',
-    start: 2026.33,
-    end: 2026.42,
     ongoing: false,
     description: 'Campus event logistics, guest relations, and scheduling coordination for Columbia University’s annual alumni reunion.'
   },
@@ -207,28 +341,14 @@ const timelineData: TimelineItem[] = [
     org: 'FIRST Robotics Team 8504',
     role: 'Mechanical Engineer',
     title: 'FIRST Robotics Team 8504 — Engineer',
-    shortTitle: 'FIRST Robotics 8504 Transmission',
     category: 'industry',
     categoryLabel: 'Industry & Engineering',
     dateStr: 'Oct 2020 – Mar 2022 · Ukraine',
-    start: 2020.75,
-    end: 2022.17,
     ongoing: false,
     location: 'Ukraine',
     description: 'Spearheaded engineering for the Rookie Game Changer Award among 10,000+ international squads. Engineered the competition robot’s multi-gear transmission and modeled the primary 650+ part SolidWorks assembly.'
   }
 ];
-
-// Timeline time axis constants (2020.0 to 2028.5 = 8.5 years total span)
-const minTime = 2020.0;
-const totalSpan = 8.5;
-const years = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028];
-
-const getPct = (time: number) => ((time - minTime) / totalSpan) * 100;
-const getWidthPct = (start: number, end: number) => {
-  const span = Math.max(0.18, end - start);
-  return (span / totalSpan) * 100;
-};
 ---
 
 <Layout title="Olena Teslia | Career">
@@ -258,7 +378,7 @@ const getWidthPct = (start: number, end: number) => {
           Download CV
         </a>
         <a
-          href="/surveys#feedback"
+          href="/surveys#contact"
           class="inline-flex items-center gap-2 px-5 py-2.5 border border-accent-orange text-accent-orange hover:bg-accent-orange hover:text-white font-heading font-semibold rounded-lg transition-colors"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -336,49 +456,65 @@ const getWidthPct = (start: number, end: number) => {
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <!-- INTERACTIVE GANTT-STYLE CHRONOLOGICAL TIMELINE (OVERLAPS)    -->
+    <!-- INTERACTIVE GANTT-STYLE CHRONOLOGICAL TIMELINE (2023–2026)   -->
     <!-- ------------------------------------------------------------- -->
     <div class="mb-14">
-      <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
+      <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
         <div>
-          <h2 class="font-heading font-bold text-2xl text-slate-900 dark:text-white">Commitments & Timeline</h2>
+          <h2 class="font-heading font-bold text-2xl text-slate-900 dark:text-white">Commitments Timeline (2023–2026)</h2>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Visualizing simultaneous & concurrent commitments across engineering, research, and leadership. Click any bar to jump to its details below.
+            Zoomed high-resolution view of concurrent research, volunteering, and industry engagements.
           </p>
         </div>
-        <!-- Category Legend -->
-        <div class="flex flex-wrap items-center gap-3 text-xs font-medium">
-          <span class="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-            <span class="w-3 h-3 rounded-sm bg-emerald-600"></span> Research & Education
-          </span>
-          <span class="inline-flex items-center gap-1.5 text-orange-600 dark:text-orange-400">
-            <span class="w-3 h-3 rounded-sm bg-orange-600"></span> Leadership & Community
-          </span>
-          <span class="inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
-            <span class="w-3 h-3 rounded-sm bg-slate-500"></span> Industry & Engineering
-          </span>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <!-- Category Legend -->
+          <div class="flex flex-wrap items-center gap-3 text-xs font-medium">
+            <span class="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+              <span class="w-2.5 h-2.5 rounded-sm bg-emerald-600"></span> Research
+            </span>
+            <span class="inline-flex items-center gap-1.5 text-orange-600 dark:text-orange-400">
+              <span class="w-2.5 h-2.5 rounded-sm bg-orange-600"></span> Volunteering & Leadership
+            </span>
+            <span class="inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+              <span class="w-2.5 h-2.5 rounded-sm bg-slate-500"></span> Industry
+            </span>
+          </div>
+
+          <!-- Height Toggle Button -->
+          <button
+            id="toggle-timeline-height"
+            type="button"
+            class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-md border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors flex items-center gap-1 cursor-pointer"
+            title="Expand or condense vertical timeline height"
+          >
+            <span id="toggle-timeline-label">Expand Rows ↕</span>
+          </button>
         </div>
       </div>
 
-      <!-- Gantt Chart Container (Scrollable on small mobile) -->
-      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm overflow-x-auto">
-        <div class="min-w-[680px] relative">
+      <!-- Gantt Chart Container (Condensed rows, zoomed 2023-2026, scrollable with expandable height) -->
+      <div
+        id="gantt-scroll-container"
+        class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm overflow-x-auto overflow-y-auto max-h-[290px] transition-[max-height] duration-300"
+      >
+        <div class="min-w-[720px] relative">
           
           <!-- Year Axis Header -->
-          <div class="relative h-7 border-b border-slate-200 dark:border-slate-800 mb-4 text-xs font-mono text-slate-400 font-bold select-none">
+          <div class="relative h-6 border-b border-slate-200 dark:border-slate-800 mb-3 text-xs font-mono text-slate-400 font-bold select-none">
             {years.map(y => (
               <div
                 class="absolute -translate-x-1/2 flex flex-col items-center"
                 style={`left: ${getPct(y)}%;`}
               >
                 <span>{y}</span>
-                <span class="w-px h-1.5 bg-slate-300 dark:bg-slate-700 mt-1"></span>
+                <span class="w-px h-1.5 bg-slate-300 dark:bg-slate-700 mt-0.5"></span>
               </div>
             ))}
           </div>
 
           <!-- Vertical Year Grid Lines (Background) -->
-          <div class="absolute inset-0 top-7 pointer-events-none z-0">
+          <div class="absolute inset-0 top-6 pointer-events-none z-0">
             {years.map(y => (
               <div
                 class="absolute top-0 bottom-0 w-px border-r border-dashed border-slate-100 dark:border-slate-800/80"
@@ -387,58 +523,56 @@ const getWidthPct = (start: number, end: number) => {
             ))}
           </div>
 
-          <!-- Timeline Bars Section -->
-          <div class="relative z-10 space-y-2.5 pt-1 pb-2">
-            {timelineData.map(item => {
-              const left = getPct(item.start);
-              const width = getWidthPct(item.start, item.end);
-              
-              let barStyle = "bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-400/30";
-              if (item.category === 'leadership') {
-                barStyle = "bg-orange-600 hover:bg-orange-500 text-white border-orange-400/30";
-              } else if (item.category === 'industry') {
-                barStyle = "bg-slate-600 hover:bg-slate-500 text-white border-slate-400/30";
+          <!-- Timeline Condensed Tracks Section -->
+          <div class="relative z-10 space-y-1.5 pt-0.5 pb-1.5">
+            {timelineTracks.map(track => {
+              let defaultStyle = "bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-400/30";
+              if (track.category === 'volunteering') {
+                defaultStyle = "bg-orange-600 hover:bg-orange-500 text-white border-orange-400/30";
+              } else if (track.category === 'industry') {
+                defaultStyle = "bg-slate-600 hover:bg-slate-500 text-white border-slate-400/30";
               }
 
               return (
-                <div class="relative h-8 flex items-center group/track">
-                  <!-- Bar Link / Button -->
-                  <a
-                    href={`#${item.id}`}
-                    data-target={item.id}
-                    class={`gantt-bar absolute h-7 rounded-md px-2.5 flex items-center justify-between text-xs font-heading font-semibold shadow-sm transition-all duration-200 cursor-pointer overflow-hidden border ${barStyle} hover:scale-[1.01] hover:shadow-md hover:z-20`}
-                    style={`left: ${left}%; width: ${width}%; min-width: 60px;`}
-                    title={`${item.title} (${item.dateStr})`}
-                  >
-                    <span class="truncate font-medium">{item.shortTitle}</span>
-                    
-                    {item.ongoing && (
-                      <span class="shrink-0 ml-1.5 w-2 h-2 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
-                    )}
-                  </a>
+                <div class="relative h-6 flex items-center group/track">
+                  {track.bars.map(bar => {
+                    const left = getPct(bar.start);
+                    const width = getWidthPct(bar.start, bar.end);
+
+                    return (
+                      <a
+                        href={`#${bar.id}`}
+                        data-target={bar.id}
+                        class={`gantt-bar absolute h-5.5 rounded px-2 flex items-center justify-between text-[11px] font-heading font-semibold shadow-sm transition-all duration-200 cursor-pointer overflow-hidden border ${defaultStyle} hover:scale-[1.01] hover:shadow-md hover:z-20`}
+                        style={`left: ${left}%; width: ${width}%; min-width: 52px;`}
+                        title={`${bar.title} (${bar.dateStr})`}
+                      >
+                        <span class="truncate font-medium">{bar.shortTitle}</span>
+                        {bar.ongoing && (
+                          <span class="shrink-0 ml-1 w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                        )}
+                      </a>
+                    );
+                  })}
                 </div>
               );
             })}
           </div>
 
         </div>
-
-        <p class="text-[11px] text-slate-400 dark:text-slate-500 text-right mt-3 font-mono">
-          Tip: Click any bar to jump & highlight its detailed section below
-        </p>
       </div>
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <!-- DETAILED COMMITMENT CARDS (CHRONOLOGICAL WITH OVERLAPS)       -->
+    <!-- DETAILED EXPERIENCE CARDS                                     -->
     <!-- ------------------------------------------------------------- -->
     <h2 class="font-heading font-bold text-2xl mb-6">Experience & Roles</h2>
     
     <div class="space-y-6 mb-16">
-      {timelineData.map(item => {
+      {allExperienceCards.map(item => {
         let badgeColor = "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800";
         let borderAccent = "border-l-accent-green";
-        if (item.category === 'leadership') {
+        if (item.category === 'volunteering') {
           badgeColor = "bg-orange-100 dark:bg-orange-950/50 text-orange-800 dark:text-orange-300 border-orange-300 dark:border-orange-800";
           borderAccent = "border-l-accent-orange";
         } else if (item.category === 'industry') {
@@ -489,8 +623,73 @@ const getWidthPct = (start: number, end: number) => {
           </div>
         );
       })}
+    </div>
 
-      <!-- Foundation: Dnipro Art School -->
+    <!-- ------------------------------------------------------------- -->
+    <!-- EDUCATION & FOUNDATION                                        -->
+    <!-- ------------------------------------------------------------- -->
+    <h2 class="font-heading font-bold text-2xl mb-6">Education & Foundation</h2>
+    <div class="space-y-6 mb-16">
+      <!-- Columbia University BS EE -->
+      <div
+        id="exp-columbia-ee"
+        class="exp-card scroll-mt-24 bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 border-l-4 border-l-emerald-500 transition-all duration-300"
+      >
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-2">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider border bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800">
+                Higher Education
+              </span>
+              <span class="text-[10px] px-2 py-0.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full font-semibold flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                In Progress
+              </span>
+              <span class="text-xs text-slate-400 font-medium">· New York, NY</span>
+            </div>
+            <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white">
+              Columbia University, School of Engineering & Applied Science
+            </h3>
+            <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+              BS in Electrical Engineering · Minors in Applied Mathematics & Computer Science
+            </p>
+          </div>
+          <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-100 dark:border-slate-700">
+            Sep 2024 – May 2028
+          </span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mt-2">
+          GPA: 3.81/4.00. Coursework: Quantum Computing Lab, Signals and Systems, Electronic Circuits, Electromagnetics, Solid State Devices, Probability Theory. Extracurriculars: NeurotechX, FormulaSAE, Pi Mu Epsilon, Hackhouse, AI Safety.
+        </p>
+      </div>
+
+      <!-- Berkhamsted School A-Levels -->
+      <div
+        id="exp-berkhamsted"
+        class="exp-card scroll-mt-24 bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 border-l-4 border-l-blue-500 transition-all duration-300"
+      >
+        <div class="flex flex-wrap items-start justify-between gap-3 mb-2">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider border bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-300 border-blue-300 dark:border-blue-800">
+                Secondary Education
+              </span>
+              <span class="text-xs text-slate-400 font-medium">· Berkhamsted, UK</span>
+            </div>
+            <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white">
+              Berkhamsted School — A-Levels
+            </h3>
+          </div>
+          <span class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-100 dark:border-slate-700">
+            Sep 2022 – Jun 2024
+          </span>
+        </div>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+          Mathematics (A*), Further Mathematics (A), Physics (A), Computer Science (A).
+        </p>
+      </div>
+
+      <!-- Dnipro Art School -->
       <div
         id="exp-dnipro-art"
         class="exp-card scroll-mt-24 bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 border-l-4 border-l-accent-orange transition-all duration-300"
@@ -545,6 +744,7 @@ const getWidthPct = (start: number, end: number) => {
   <!-- Smooth Scroll and Interactive Highlight Script -->
   <script>
     function initCareerTimeline() {
+      // Gantt bar click to card jump & highlight
       const bars = document.querySelectorAll('.gantt-bar');
       bars.forEach(bar => {
         bar.addEventListener('click', (e) => {
@@ -564,6 +764,23 @@ const getWidthPct = (start: number, end: number) => {
           }
         });
       });
+
+      // Expand / Collapse height toggle
+      const toggleBtn = document.getElementById('toggle-timeline-height');
+      const ganttContainer = document.getElementById('gantt-scroll-container');
+      const toggleLabel = document.getElementById('toggle-timeline-label');
+
+      if (toggleBtn && ganttContainer && toggleLabel) {
+        toggleBtn.addEventListener('click', () => {
+          if (ganttContainer.classList.contains('max-h-[290px]')) {
+            ganttContainer.classList.remove('max-h-[290px]');
+            toggleLabel.textContent = 'Collapse Rows ↕';
+          } else {
+            ganttContainer.classList.add('max-h-[290px]');
+            toggleLabel.textContent = 'Expand Rows ↕';
+          }
+        });
+      }
     }
 
     initCareerTimeline();
