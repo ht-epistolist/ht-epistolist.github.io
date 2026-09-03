@@ -125,6 +125,21 @@
       .choices { flex-direction: column; gap: 1rem; }
       .btn { width: 220px; }
     }
+
+    .footer {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      color: #64748b;
+      font-family: 'Work Sans', sans-serif;
+      text-transform: uppercase;
+      z-index: 1;
+      user-select: none;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -135,6 +150,9 @@
       <a href="/playful" class="btn btn-funny"><span>funny</span></a>
     </div>
   </div>
+  <footer class="footer">
+    (c) Leucauge Venusta
+  </footer>
   <script>
     const container = document.getElementById('stars');
     if (container) {
