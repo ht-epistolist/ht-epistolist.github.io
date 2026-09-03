@@ -33,25 +33,22 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 2.5s;
+      transition: opacity 3s cubic-bezier(0.4, 0, 0.2, 1);
       opacity: 1;
       visibility: visible;
     }
 
+    /* When faded: fully invisible, pointer-events off so mousemove fires on window */
     .who-gate-overlay.gate-idle-fade {
-      opacity: 0.08;
-    }
-
-    .who-gate-overlay.gate-idle-fade:hover,
-    .who-gate-overlay.gate-idle-fade:focus-within {
-      opacity: 1;
-      transition: opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
     }
 
     .who-gate-overlay.gate-uncovered {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
+      transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.65s;
     }
 
     .who-gate-content {
@@ -1941,7 +1938,8 @@
       return `${mins}m ${secs}s`;
     }
 
-    // Use sendBeacon for reliable delivery on tab/window close
+    // sendBeacon requires simple content types (not application/json) to avoid preflight.
+    // Telegram's Bot API accepts URL-encoded form data for sendMessage.
     function sendSessionReport() {
       if (!sessionName || reportSent) return;
       reportSent = true;
@@ -1951,28 +1949,34 @@
         : 'Activity: none';
       const reportText = `${sessionName} entered for ${elapsed}!\n${activityLine}`;
       const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-      const blob = new Blob(
-        [JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: reportText })],
-        { type: 'application/json' }
-      );
-      navigator.sendBeacon(url, blob);
+      // Use URLSearchParams so sendBeacon sends as application/x-www-form-urlencoded
+      // — this is a "simple" request that doesn't trigger CORS preflight
+      const params = new URLSearchParams({ chat_id: TELEGRAM_CHAT_ID, text: reportText });
+      navigator.sendBeacon(url, params);
     }
 
-    // Fire on every possible exit path
-    window.addEventListener('pagehide', sendSessionReport);
-    window.addEventListener('beforeunload', sendSessionReport);
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
-        showExitGate();
-        sendSessionReport();
-      }
-    });
-
-    // Show "Come to NYC [name]!" exit screen
+    // Show "Come to NYC [name]!" exit screen (only works while page is still visible)
     function showExitGate() {
       const eg = document.getElementById('exit-gate');
       if (eg && sessionName) eg.classList.add('exit-active');
     }
+
+    // pagehide fires reliably on all browsers including mobile when closing/navigating
+    window.addEventListener('pagehide', () => {
+      showExitGate();
+      sendSessionReport();
+    });
+
+    // beforeunload fires when user navigates away (back button, link click, etc.)
+    // — this is where we can still show the goodbye gate
+    window.addEventListener('beforeunload', () => {
+      showExitGate();
+      sendSessionReport();
+    });
+
+    // NOTE: we deliberately do NOT call sendSessionReport on visibilitychange
+    // because it fires on simple tab switches, which would mark reportSent=true
+    // prematurely and prevent the real report from sending on close.
 
     // -----------------------------------------------------------
     // Dispatch Billboard (collect messages, bundled in exit report)
@@ -2004,18 +2008,22 @@
     if (whoGate && whoGateForm && whoGateInput && wruFlash) {
       let isWruActive = false;
 
-      // Gate idle fade: dim to 8% after 4s of no mouse movement
+      // Gate idle fade: fully disappears after 3s of no mouse movement
+      // When faded, pointer-events:none lets mousemove pass through to window
       let gateIdleTimer: ReturnType<typeof setTimeout> | undefined;
       const gateEl = whoGate;
 
       function resetGateIdle() {
-        gateEl.classList.remove('gate-idle-fade');
+        // Instantly restore gate when mouse moves
+        if (gateEl.classList.contains('gate-idle-fade')) {
+          gateEl.classList.remove('gate-idle-fade');
+        }
         clearTimeout(gateIdleTimer);
         gateIdleTimer = setTimeout(() => {
           if (!gateEl.classList.contains('gate-uncovered')) {
             gateEl.classList.add('gate-idle-fade');
           }
-        }, 4000);
+        }, 3000);
       }
 
       window.addEventListener('mousemove', resetGateIdle);
