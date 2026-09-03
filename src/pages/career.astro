@@ -47,15 +47,37 @@ const getWidthPct = (start: number, end: number) => {
   const e = Math.min(end, maxTime);
   return (Math.max(0.09, e - s) / totalSpan) * 100;
 };
+const getTrackRange = (track: TimelineTrack) => {
+  const start = Math.min(...track.bars.map(b => b.start));
+  const end = Math.max(...track.bars.map(b => b.end));
+  return { start, end };
+};
 
 // -------------------------------------------------------------
 // Timeline Tracks
 // - Engagement names aligned on the left (never cropped)
 // - Only colored blocks on the timeline
 // - CSX and CUTE on ONE line, everything else separately
-// - Collapsible Volunteering group with single-line folded view
+// - Chronological order: Research → Industry → Mentorship (CMI, UGS) → Volunteering (at end)
 // -------------------------------------------------------------
 const researchTracks: TimelineTrack[] = [
+  {
+    id: 'track-columbia-lab',
+    label: 'Columbia Engineering — Lab Assistant',
+    primaryId: 'exp-columbia-lab',
+    category: 'research',
+    categoryLabel: 'Research',
+    bars: [
+      {
+        id: 'exp-columbia-lab',
+        title: 'Signals & Systems Lab Assistant',
+        start: 2026.67,
+        end: 2026.85,
+        ongoing: true,
+        dateStr: 'Sep 2026 – Present'
+      }
+    ]
+  },
   {
     id: 'track-fusion',
     label: 'Columbia Fusion Center (CSX & CUTE)',
@@ -81,23 +103,6 @@ const researchTracks: TimelineTrack[] = [
     ]
   },
   {
-    id: 'track-columbia-lab',
-    label: 'Columbia Engineering — Lab Assistant',
-    primaryId: 'exp-columbia-lab',
-    category: 'research',
-    categoryLabel: 'Research',
-    bars: [
-      {
-        id: 'exp-columbia-lab',
-        title: 'Signals & Systems Lab Assistant',
-        start: 2026.67,
-        end: 2026.85,
-        ongoing: true,
-        dateStr: 'Sep 2026 – Present'
-      }
-    ]
-  },
-  {
     id: 'track-jas',
     label: 'Junior Academy of Sciences — Researcher',
     primaryId: 'exp-jas',
@@ -115,6 +120,95 @@ const researchTracks: TimelineTrack[] = [
   }
 ];
 
+const industryTracks: TimelineTrack[] = [
+  {
+    id: 'track-brave1',
+    label: 'Brave1 — Components Intern',
+    primaryId: 'exp-brave1',
+    category: 'industry',
+    categoryLabel: 'Industry & Engineering',
+    bars: [
+      {
+        id: 'exp-brave1',
+        title: 'Brave1 — Components Intern',
+        start: 2026.42,
+        end: 2026.67,
+        dateStr: 'Jun – Sep 2026'
+      }
+    ]
+  },
+  {
+    id: 'track-reunion',
+    label: 'Columbia University — Reunion Staff',
+    primaryId: 'exp-reunion',
+    category: 'industry',
+    categoryLabel: 'Industry & Engineering',
+    bars: [
+      {
+        id: 'exp-reunion',
+        title: 'Columbia University — Student Reunion Worker',
+        start: 2026.33,
+        end: 2026.42,
+        dateStr: 'May 2026'
+      }
+    ]
+  },
+  {
+    id: 'track-first',
+    label: 'FIRST Robotics Team 8504 — Engineer',
+    primaryId: 'exp-first',
+    category: 'industry',
+    categoryLabel: 'Industry & Engineering',
+    bars: [
+      {
+        id: 'exp-first',
+        title: 'FIRST Robotics Team 8504 — Mechanical Engineer',
+        start: 2020.75,
+        end: 2022.17,
+        dateStr: 'Oct 2020 – Mar 2022'
+      }
+    ]
+  }
+];
+
+// Mentorship & Leadership: Standalone permanent tracks outside the collapsible fold (separate rows)
+const mentorshipTracks: TimelineTrack[] = [
+  {
+    id: 'track-cmi',
+    label: 'Columbia Mentorship Initiative — Chair',
+    primaryId: 'exp-cmi',
+    category: 'volunteering',
+    categoryLabel: 'Mentorship & Leadership',
+    bars: [
+      {
+        id: 'exp-cmi',
+        title: 'Columbia Mentorship Initiative — Mentor Chair',
+        start: 2024.75,
+        end: 2025.42,
+        dateStr: 'Sep 2024 – May 2025'
+      }
+    ]
+  },
+  {
+    id: 'track-ugs',
+    label: 'Ukraine Global Scholars — Mentor & Admissions',
+    primaryId: 'exp-ugs',
+    category: 'volunteering',
+    categoryLabel: 'Mentorship & Leadership',
+    bars: [
+      {
+        id: 'exp-ugs',
+        title: 'Ukraine Global Scholars — Mentor & Admission Officer',
+        start: 2021.50,
+        end: 2026.85,
+        ongoing: true,
+        dateStr: 'Jul 2021 – Present'
+      }
+    ]
+  }
+];
+
+// Collapsible Volunteering Tracks (11 roles ordered newest-first)
 const volunteeringTracks: TimelineTrack[] = [
   {
     id: 'track-tfu',
@@ -130,6 +224,22 @@ const volunteeringTracks: TimelineTrack[] = [
         end: 2026.85,
         ongoing: true,
         dateStr: 'Jun 2025 – Present'
+      }
+    ]
+  },
+  {
+    id: 'track-pair-2025',
+    label: 'Program on AI & Reasoning — Counselor (2025)',
+    primaryId: 'exp-pair-2025',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-pair-2025',
+        title: 'Program on AI & Reasoning — Junior Counselor (2025)',
+        start: 2025.60,
+        end: 2025.68,
+        dateStr: 'Aug 2025'
       }
     ]
   },
@@ -183,22 +293,6 @@ const volunteeringTracks: TimelineTrack[] = [
     ]
   },
   {
-    id: 'track-cmi',
-    label: 'Columbia Mentorship Initiative — Chair',
-    primaryId: 'exp-cmi',
-    category: 'volunteering',
-    categoryLabel: 'Volunteering & Leadership',
-    bars: [
-      {
-        id: 'exp-cmi',
-        title: 'Columbia Mentorship Initiative — Mentor Chair',
-        start: 2024.75,
-        end: 2025.42,
-        dateStr: 'Sep 2024 – May 2025'
-      }
-    ]
-  },
-  {
     id: 'track-imo',
     label: 'International Math Olympiad — Team Guide',
     primaryId: 'exp-imo',
@@ -211,22 +305,6 @@ const volunteeringTracks: TimelineTrack[] = [
         start: 2024.50,
         end: 2024.58,
         dateStr: 'Jul 2024'
-      }
-    ]
-  },
-  {
-    id: 'track-pair-2025',
-    label: 'Program on AI & Reasoning — Counselor (2025)',
-    primaryId: 'exp-pair-2025',
-    category: 'volunteering',
-    categoryLabel: 'Volunteering & Leadership',
-    bars: [
-      {
-        id: 'exp-pair-2025',
-        title: 'Program on AI & Reasoning — Junior Counselor (2025)',
-        start: 2025.60,
-        end: 2025.68,
-        dateStr: 'Aug 2025'
       }
     ]
   },
@@ -309,83 +387,29 @@ const volunteeringTracks: TimelineTrack[] = [
         dateStr: 'Sep 2021 – Oct 2021'
       }
     ]
-  },
-  {
-    id: 'track-ugs',
-    label: 'Ukraine Global Scholars — Mentor & Admissions',
-    primaryId: 'exp-ugs',
-    category: 'volunteering',
-    categoryLabel: 'Volunteering & Leadership',
-    bars: [
-      {
-        id: 'exp-ugs',
-        title: 'Ukraine Global Scholars — Mentor & Admission Officer',
-        start: 2021.50,
-        end: 2026.85,
-        ongoing: true,
-        dateStr: 'Jul 2021 – Present'
-      }
-    ]
   }
 ];
 
 const allVolunteeringBars = volunteeringTracks.flatMap(t => t.bars);
-
-const industryTracks: TimelineTrack[] = [
-  {
-    id: 'track-brave1',
-    label: 'Brave1 — Components Intern',
-    primaryId: 'exp-brave1',
-    category: 'industry',
-    categoryLabel: 'Industry & Engineering',
-    bars: [
-      {
-        id: 'exp-brave1',
-        title: 'Brave1 — Components Intern',
-        start: 2026.42,
-        end: 2026.67,
-        dateStr: 'Jun – Sep 2026'
-      }
-    ]
-  },
-  {
-    id: 'track-reunion',
-    label: 'Columbia University — Reunion Staff',
-    primaryId: 'exp-reunion',
-    category: 'industry',
-    categoryLabel: 'Industry & Engineering',
-    bars: [
-      {
-        id: 'exp-reunion',
-        title: 'Columbia University — Student Reunion Worker',
-        start: 2026.33,
-        end: 2026.42,
-        dateStr: 'May 2026'
-      }
-    ]
-  },
-  {
-    id: 'track-first',
-    label: 'FIRST Robotics Team 8504 — Engineer',
-    primaryId: 'exp-first',
-    category: 'industry',
-    categoryLabel: 'Industry & Engineering',
-    bars: [
-      {
-        id: 'exp-first',
-        title: 'FIRST Robotics Team 8504 — Mechanical Engineer',
-        start: 2020.75,
-        end: 2022.17,
-        dateStr: 'Oct 2020 – Mar 2022'
-      }
-    ]
-  }
-];
+// -------------------------------------------------------------
 // -------------------------------------------------------------
 // Detailed Experience Cards Data
+// Ordered: Research → Industry → UGS → Volunteering (Newest-first)
 // -------------------------------------------------------------
 const allExperienceCards: ExperienceCard[] = [
   // 1. Research
+  {
+    id: 'exp-columbia-lab',
+    org: 'Columbia Engineering',
+    role: 'Laboratory Assistant',
+    title: 'Columbia Engineering — Laboratory Assistant',
+    category: 'research',
+    categoryLabel: 'Research',
+    dateStr: 'Sep 2026 – Present',
+    ongoing: true,
+    overlapNotes: 'Concurrent with CUTE Tokamak research',
+    description: 'Signals and Systems lab assistant, supporting laboratory demonstrations, hardware testing, and coursework experiments.'
+  },
   {
     id: 'exp-cute',
     org: 'Columbia Fusion Research Center',
@@ -411,18 +435,6 @@ const allExperienceCards: ExperienceCard[] = [
     description: 'Columbia Stellarator eXperiment: modeled a rotating winding stand for full-scale interlocked coils, developed a Hall probe-based magnetic field sensor, and collaborated in vacuum chamber setup assembly and precision CAD modeling.'
   },
   {
-    id: 'exp-columbia-lab',
-    org: 'Columbia Engineering',
-    role: 'Laboratory Assistant',
-    title: 'Columbia Engineering — Laboratory Assistant',
-    category: 'research',
-    categoryLabel: 'Research',
-    dateStr: 'Sep 2026 – Present',
-    ongoing: true,
-    overlapNotes: 'Concurrent with CUTE Tokamak research',
-    description: 'Signals and Systems lab assistant, supporting laboratory demonstrations, hardware testing, and coursework experiments.'
-  },
-  {
     id: 'exp-jas',
     org: 'Junior Academy of Sciences',
     role: 'Member & Researcher',
@@ -435,7 +447,69 @@ const allExperienceCards: ExperienceCard[] = [
     description: 'Regional winner in Ukraine’s national research competition. Finalist at ISEF, GENIUS Olympiad, and InventorUA. Focus: non-wood pulp production and plant environmental monitoring systems for micro-farms.'
   },
 
-  // 2. Volunteering & Leadership
+  // 2. Industry & Engineering
+  {
+    id: 'exp-brave1',
+    org: 'Brave1',
+    role: 'Components Intern',
+    title: 'Brave1 — Components Intern',
+    category: 'industry',
+    categoryLabel: 'Industry & Engineering',
+    dateStr: 'Jun – Sep 2026',
+    ongoing: false,
+    overlapNotes: 'Concurrent with CUTE Tokamak research',
+    description: 'Interviewed 10+ hardware companies and component distributors; conducted extensive supply chain analysis across 40+ responses; compiled component databases and organized a defense-tech webinar for 30+ participants.'
+  },
+  {
+    id: 'exp-reunion',
+    org: 'Columbia University',
+    role: 'Student Reunion Worker',
+    title: 'Columbia University — Student Reunion Worker',
+    category: 'industry',
+    categoryLabel: 'Industry & Engineering',
+    dateStr: 'May 2026',
+    ongoing: false,
+    description: 'Campus event logistics, guest relations, and scheduling coordination for Columbia University’s annual alumni reunion.'
+  },
+  {
+    id: 'exp-first',
+    org: 'FIRST Robotics Team 8504',
+    role: 'Mechanical Engineer',
+    title: 'FIRST Robotics Team 8504 — Engineer',
+    category: 'industry',
+    categoryLabel: 'Industry & Engineering',
+    dateStr: 'Oct 2020 – Mar 2022 · Ukraine',
+    ongoing: false,
+    location: 'Ukraine',
+    description: 'Spearheaded engineering for the Rookie Game Changer Award among 10,000+ international squads. Engineered the competition robot’s multi-gear transmission and modeled the primary 650+ part SolidWorks assembly.'
+  },
+
+  // 3. Mentorship & Leadership (Separate rows from other volunteering)
+  {
+    id: 'exp-cmi',
+    org: 'Columbia Mentorship Initiative',
+    role: 'Mentor Chair',
+    title: 'Columbia Mentorship Initiative — Mentor Chair',
+    category: 'volunteering',
+    categoryLabel: 'Mentorship & Leadership',
+    dateStr: 'Sep 2024 – May 2025',
+    ongoing: false,
+    description: 'Coordinated student mentorship pairings, peer study workshops, and orientation circles for incoming engineering students.'
+  },
+  {
+    id: 'exp-ugs',
+    org: 'Ukraine Global Scholars',
+    role: 'Mentor & Admission Officer',
+    title: 'Ukraine Global Scholars — Mentor & Admission Officer',
+    category: 'volunteering',
+    categoryLabel: 'Mentorship & Leadership',
+    dateStr: 'Jul 2021 – Present',
+    ongoing: true,
+    overlapNotes: 'Concurrent with Columbia research and academic commitments',
+    description: 'Screened 90+ applicants across 3 admission stages. Co-led 10-day intensive boot camp for 50+ students. Mentored and advised 15+ applicants through college applications, essays, CV refinement, and mock interviews.'
+  },
+
+  // 4. Volunteering & Leadership (At the very end, newest-first)
   {
     id: 'exp-tfu',
     org: 'Teach For Ukraine',
@@ -448,6 +522,17 @@ const allExperienceCards: ExperienceCard[] = [
     description: 'Taught Mathematics and English to Ukrainian school students.'
   },
   {
+    id: 'exp-pair-2025',
+    org: 'Program on AI and Reasoning',
+    role: 'Junior Counselor (2025)',
+    title: 'Program on AI and Reasoning — Junior Counselor (2025)',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Aug 2025',
+    ongoing: false,
+    description: 'Assisted 10-day workshop studying math, cognition, and AI/ML for 25 participants selected from 1,200+ applicants.'
+  },
+  {
     id: 'exp-ecoreps-lead',
     org: 'Columbia EcoReps',
     role: 'Conscious Consumption Co-Lead',
@@ -456,7 +541,7 @@ const allExperienceCards: ExperienceCard[] = [
     categoryLabel: 'Volunteering & Leadership',
     dateStr: 'Jan 2025 – Dec 2025',
     ongoing: false,
-    description: 'Co-organized weekly meetings and a campus-wide clothing swap event promoting sustainability.'
+    description: 'Coorganized weekly meetings and a campus-wide clothing swap event promoting sustainability.'
   },
   {
     id: 'exp-ewb',
@@ -482,17 +567,6 @@ const allExperienceCards: ExperienceCard[] = [
     description: 'Helped organizing the yearly Green Sale and supported Conscious Consumption environmental initiatives on campus.'
   },
   {
-    id: 'exp-cmi',
-    org: 'Columbia Mentorship Initiative',
-    role: 'Mentor Chair',
-    title: 'Columbia Mentorship Initiative — Mentor Chair',
-    category: 'volunteering',
-    categoryLabel: 'Volunteering & Leadership',
-    dateStr: 'Sep 2024 – May 2025',
-    ongoing: false,
-    description: 'Coordinated student mentorship pairings, peer study workshops, and orientation circles for incoming engineering students.'
-  },
-  {
     id: 'exp-imo',
     org: 'International Mathematical Olympiad',
     role: 'Team Guide',
@@ -503,17 +577,6 @@ const allExperienceCards: ExperienceCard[] = [
     ongoing: false,
     location: 'Bath, UK',
     description: 'Guided a team of 6 participants throughout the event, 30+ hours; organized excursions for 100+ people, 10+ hours; welcomed 80+ teams with total of 500+ members, 20+ hours.'
-  },
-  {
-    id: 'exp-pair-2025',
-    org: 'Program on AI and Reasoning',
-    role: 'Junior Counselor (2025)',
-    title: 'Program on AI and Reasoning — Junior Counselor (2025)',
-    category: 'volunteering',
-    categoryLabel: 'Volunteering & Leadership',
-    dateStr: 'Aug 2025',
-    ongoing: false,
-    description: 'Assisted 10-day workshop studying math, cognition, and AI/ML for 25 participants selected from 1,200+ applicants.'
   },
   {
     id: 'exp-pair-2023',
@@ -570,55 +633,6 @@ const allExperienceCards: ExperienceCard[] = [
     ongoing: false,
     location: 'Dnipro, Ukraine',
     description: 'Helped in organizing several city events (such as celebrations or marathons).'
-  },
-  {
-    id: 'exp-ugs',
-    org: 'Ukraine Global Scholars',
-    role: 'Mentor & Admission Officer',
-    title: 'Ukraine Global Scholars — Mentor & Admission Officer',
-    category: 'volunteering',
-    categoryLabel: 'Volunteering & Leadership',
-    dateStr: 'Jul 2021 – Present',
-    ongoing: true,
-    overlapNotes: 'Concurrent with Columbia research and academic commitments',
-    description: 'Screened 90+ applicants across 3 admission stages. Co-led 10-day intensive boot camp for 50+ students. Mentored and advised 15+ applicants through college applications, essays, CV refinement, and mock interviews.'
-  },
-
-  // 3. Industry & Engineering
-  {
-    id: 'exp-brave1',
-    org: 'Brave1',
-    role: 'Components Intern',
-    title: 'Brave1 — Components Intern',
-    category: 'industry',
-    categoryLabel: 'Industry & Engineering',
-    dateStr: 'Jun – Sep 2026',
-    ongoing: false,
-    overlapNotes: 'Concurrent with CUTE Tokamak research',
-    description: 'Interviewed 10+ hardware companies and component distributors; conducted extensive supply chain analysis across 40+ responses; compiled component databases and organized a defense-tech webinar for 30+ participants.'
-  },
-  {
-    id: 'exp-reunion',
-    org: 'Columbia University',
-    role: 'Student Reunion Worker',
-    title: 'Columbia University — Student Reunion Worker',
-    category: 'industry',
-    categoryLabel: 'Industry & Engineering',
-    dateStr: 'May 2026',
-    ongoing: false,
-    description: 'Campus event logistics, guest relations, and scheduling coordination for Columbia University’s annual alumni reunion.'
-  },
-  {
-    id: 'exp-first',
-    org: 'FIRST Robotics Team 8504',
-    role: 'Mechanical Engineer',
-    title: 'FIRST Robotics Team 8504 — Engineer',
-    category: 'industry',
-    categoryLabel: 'Industry & Engineering',
-    dateStr: 'Oct 2020 – Mar 2022 · Ukraine',
-    ongoing: false,
-    location: 'Ukraine',
-    description: 'Spearheaded engineering for the Rookie Game Changer Award among 10,000+ international squads. Engineered the competition robot’s multi-gear transmission and modeled the primary 650+ part SolidWorks assembly.'
   }
 ];
 ---
@@ -742,11 +756,14 @@ const allExperienceCards: ExperienceCard[] = [
             <span class="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
               <span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Research
             </span>
-            <span class="inline-flex items-center gap-1.5 text-orange-600 dark:text-orange-400">
-              <span class="w-2.5 h-2.5 rounded-sm bg-orange-500"></span> Volunteering & Leadership
-            </span>
             <span class="inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
               <span class="w-2.5 h-2.5 rounded-sm bg-slate-500"></span> Industry
+            </span>
+            <span class="inline-flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
+              <span class="w-2.5 h-2.5 rounded-sm bg-amber-500"></span> Mentorship & Leadership
+            </span>
+            <span class="inline-flex items-center gap-1.5 text-orange-600 dark:text-orange-400">
+              <span class="w-2.5 h-2.5 rounded-sm bg-orange-500"></span> Volunteering
             </span>
           </div>
 
@@ -766,64 +783,112 @@ const allExperienceCards: ExperienceCard[] = [
             Engagement / Role
           </div>
 
-          <!-- Research Rows (Left) -->
-          <div class="divide-y divide-slate-100 dark:divide-slate-800/60">
-            {researchTracks.map(track => (
-              <div class="h-8 px-3.5 flex items-center">
-                <a
-                  href={`#${track.primaryId}`}
-                  data-target={track.primaryId}
-                  class="gantt-label-link text-[11.5px] font-heading font-medium text-slate-700 dark:text-slate-300 hover:text-accent-green dark:hover:text-accent-green transition-colors truncate block w-full"
-                  title={track.label}
+          <!-- 1. Research Rows (Left) -->
+          <div class="gantt-section-container divide-y divide-slate-100 dark:divide-slate-800/60">
+            {researchTracks.map(track => {
+              const { start, end } = getTrackRange(track);
+              return (
+                <div
+                  class="gantt-row-left h-8 px-3.5 flex items-center"
+                  data-track-id={track.id}
+                  data-start={start}
+                  data-end={end}
                 >
-                  {track.label}
-                </a>
-              </div>
-            ))}
+                  <a
+                    href={`#${track.primaryId}`}
+                    data-target={track.primaryId}
+                    class="gantt-label-link text-[11.5px] font-heading font-medium text-slate-700 dark:text-slate-300 hover:text-accent-green dark:hover:text-accent-green transition-colors truncate block w-full"
+                    title={track.label}
+                  >
+                    {track.label}
+                  </a>
+                </div>
+              );
+            })}
           </div>
 
-          <!-- Collapsible Volunteering Header (Left) -->
+          <!-- 2. Industry Rows (Left) -->
+          <div class="gantt-section-container divide-y divide-slate-100 dark:divide-slate-800/60 border-t border-slate-200 dark:border-slate-800">
+            {industryTracks.map(track => {
+              const { start, end } = getTrackRange(track);
+              return (
+                <div
+                  class="gantt-row-left h-8 px-3.5 flex items-center"
+                  data-track-id={track.id}
+                  data-start={start}
+                  data-end={end}
+                >
+                  <a
+                    href={`#${track.primaryId}`}
+                    data-target={track.primaryId}
+                    class="gantt-label-link text-[11.5px] font-heading font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors truncate block w-full"
+                    title={track.label}
+                  >
+                    {track.label}
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+
+          <!-- 3. Mentorship & Leadership Rows (Left: CMI & UGS each on its own separate row) -->
+          <div class="gantt-section-container divide-y divide-slate-100 dark:divide-slate-800/60 border-t border-slate-200 dark:border-slate-800">
+            {mentorshipTracks.map(track => {
+              const { start, end } = getTrackRange(track);
+              return (
+                <div
+                  class="gantt-row-left h-8 px-3.5 flex items-center"
+                  data-track-id={track.id}
+                  data-start={start}
+                  data-end={end}
+                >
+                  <a
+                    href={`#${track.primaryId}`}
+                    data-target={track.primaryId}
+                    class="gantt-label-link text-[11.5px] font-heading font-semibold text-amber-700 dark:text-amber-400 hover:text-amber-500 transition-colors truncate block w-full"
+                    title={track.label}
+                  >
+                    {track.label}
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+
+          <!-- 4. Collapsible Volunteering Header (Left: At the very end) -->
           <div
             id="volunteering-toggle"
-            class="h-8 px-3.5 flex items-center justify-between border-y border-orange-200/70 dark:border-orange-950/70 bg-orange-50/50 dark:bg-orange-950/20 cursor-pointer hover:bg-orange-100/60 dark:hover:bg-orange-900/40 transition-colors"
+            class="h-8 px-3.5 flex items-center justify-between border-t border-orange-200/70 dark:border-orange-950/70 bg-orange-50/50 dark:bg-orange-950/20 cursor-pointer hover:bg-orange-100/60 dark:hover:bg-orange-900/40 transition-colors"
           >
             <div class="flex items-center gap-1.5 min-w-0">
               <span id="vol-chevron" class="text-[10px] text-orange-600 dark:text-orange-400 font-bold transition-transform duration-200">▶</span>
-              <span class="text-[11px] font-heading font-bold text-orange-700 dark:text-orange-300 truncate">Volunteering (13 roles)</span>
+              <span class="text-[11px] font-heading font-bold text-orange-700 dark:text-orange-300 truncate">Volunteering (11 roles)</span>
             </div>
             <span id="vol-toggle-text" class="text-[10px] font-mono font-semibold text-orange-600 dark:text-orange-400 shrink-0">Unfold</span>
           </div>
 
           <!-- Unfolded Volunteering Rows (Left) -->
-          <div id="volunteering-unfolded-left" class="hidden divide-y divide-slate-100 dark:divide-slate-800/60 border-b border-orange-200/50 dark:border-orange-950/50">
-            {volunteeringTracks.map(track => (
-              <div class="h-8 px-3.5 pl-6 flex items-center">
-                <a
-                  href={`#${track.primaryId}`}
-                  data-target={track.primaryId}
-                  class="gantt-label-link text-[11.5px] font-heading font-medium text-slate-700 dark:text-slate-300 hover:text-accent-orange dark:hover:text-accent-orange transition-colors truncate block w-full"
-                  title={track.label}
+          <div id="volunteering-unfolded-left" class="hidden divide-y divide-slate-100 dark:divide-slate-800/60 border-t border-orange-200/50 dark:border-orange-950/50">
+            {volunteeringTracks.map(track => {
+              const { start, end } = getTrackRange(track);
+              return (
+                <div
+                  class="gantt-row-left h-8 px-3.5 pl-6 flex items-center"
+                  data-track-id={track.id}
+                  data-start={start}
+                  data-end={end}
                 >
-                  {track.label}
-                </a>
-              </div>
-            ))}
-          </div>
-
-          <!-- Industry Rows (Left) -->
-          <div class="divide-y divide-slate-100 dark:divide-slate-800/60">
-            {industryTracks.map(track => (
-              <div class="h-8 px-3.5 flex items-center">
-                <a
-                  href={`#${track.primaryId}`}
-                  data-target={track.primaryId}
-                  class="gantt-label-link text-[11.5px] font-heading font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors truncate block w-full"
-                  title={track.label}
-                >
-                  {track.label}
-                </a>
-              </div>
-            ))}
+                  <a
+                    href={`#${track.primaryId}`}
+                    data-target={track.primaryId}
+                    class="gantt-label-link text-[11.5px] font-heading font-medium text-slate-700 dark:text-slate-300 hover:text-accent-orange dark:hover:text-accent-orange transition-colors truncate block w-full"
+                    title={track.label}
+                  >
+                    {track.label}
+                  </a>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -854,34 +919,111 @@ const allExperienceCards: ExperienceCard[] = [
               ))}
             </div>
 
-            <!-- Research Timeline Rows (CSX and CUTE on ONE line, maximum thickness bars) -->
-            <div class="relative z-10 divide-y divide-slate-100 dark:divide-slate-800/60">
-              {researchTracks.map(track => (
-                <div class="relative h-8 flex items-center group/track">
-                  {track.bars.map(bar => {
-                    const left = getPct(bar.start);
-                    const width = getWidthPct(bar.start, bar.end);
+            <!-- 1. Research Timeline Rows (CSX and CUTE on ONE line, maximum thickness bars) -->
+            <div class="gantt-section-container relative z-10 divide-y divide-slate-100 dark:divide-slate-800/60">
+              {researchTracks.map(track => {
+                const { start, end } = getTrackRange(track);
+                return (
+                  <div
+                    class="gantt-row-right relative h-8 flex items-center group/track"
+                    data-track-id={track.id}
+                    data-start={start}
+                    data-end={end}
+                  >
+                    {track.bars.map(bar => {
+                      const left = getPct(bar.start);
+                      const width = getWidthPct(bar.start, bar.end);
 
-                    return (
-                      <a
-                        href={`#${bar.id}`}
-                        data-target={bar.id}
-                        class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-emerald-500 hover:bg-emerald-400 border-emerald-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1.5"
-                        style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
-                        title={`${bar.title} (${bar.dateStr})`}
-                      >
-                        {bar.ongoing && (
-                          <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
-                        )}
-                      </a>
-                    );
-                  })}
-                </div>
-              ))}
+                      return (
+                        <a
+                          href={`#${bar.id}`}
+                          data-target={bar.id}
+                          class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-emerald-500 hover:bg-emerald-400 border-emerald-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1.5"
+                          style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
+                          title={`${bar.title} (${bar.dateStr})`}
+                        >
+                          {bar.ongoing && (
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                          )}
+                        </a>
+                      );
+                    })}
+                  </div>
+                );
+              })}
             </div>
 
-            <!-- Folded Volunteering Row (ALL 13 volunteering blocks on a SINGLE line!) -->
-            <div id="volunteering-folded-row" class="relative z-10 h-8 flex items-center border-y border-orange-200/70 dark:border-orange-950/70 bg-orange-50/20 dark:bg-orange-950/10">
+            <!-- 2. Industry Timeline Rows (Maximum thickness bars) -->
+            <div class="gantt-section-container relative z-10 divide-y divide-slate-100 dark:divide-slate-800/60 border-t border-slate-200 dark:border-slate-800">
+              {industryTracks.map(track => {
+                const { start, end } = getTrackRange(track);
+                return (
+                  <div
+                    class="gantt-row-right relative h-8 flex items-center group/track"
+                    data-track-id={track.id}
+                    data-start={start}
+                    data-end={end}
+                  >
+                    {track.bars.map(bar => {
+                      const left = getPct(bar.start);
+                      const width = getWidthPct(bar.start, bar.end);
+
+                      return (
+                        <a
+                          href={`#${bar.id}`}
+                          data-target={bar.id}
+                          class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-slate-500 hover:bg-slate-400 border-slate-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1"
+                          style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
+                          title={`${bar.title} (${bar.dateStr})`}
+                        >
+                          {bar.ongoing && (
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                          )}
+                        </a>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+
+            <!-- 3. Mentorship & Leadership Timeline Rows (CMI & UGS separate rows) -->
+            <div class="gantt-section-container relative z-10 divide-y divide-slate-100 dark:divide-slate-800/60 border-t border-slate-200 dark:border-slate-800">
+              {mentorshipTracks.map(track => {
+                const { start, end } = getTrackRange(track);
+                return (
+                  <div
+                    class="gantt-row-right relative h-8 flex items-center group/track"
+                    data-track-id={track.id}
+                    data-start={start}
+                    data-end={end}
+                  >
+                    {track.bars.map(bar => {
+                      const left = getPct(bar.start);
+                      const width = getWidthPct(bar.start, bar.end);
+
+                      return (
+                        <a
+                          href={`#${bar.id}`}
+                          data-target={bar.id}
+                          class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-amber-500 hover:bg-amber-400 border-amber-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1.5"
+                          style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
+                          title={`${bar.title} (${bar.dateStr})`}
+                        >
+                          {bar.ongoing && (
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                          )}
+                        </a>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+
+            <!-- 4. Collapsible Volunteering Section (At the very end) -->
+            <!-- Folded Volunteering Row (ALL 11 volunteering blocks on a SINGLE line!) -->
+            <div id="volunteering-folded-row" class="relative z-10 h-8 flex items-center border-t border-orange-200/70 dark:border-orange-950/70 bg-orange-50/20 dark:bg-orange-950/10">
               {allVolunteeringBars.map(bar => {
                 const left = getPct(bar.start);
                 const width = getWidthPct(bar.start, bar.end);
@@ -903,55 +1045,37 @@ const allExperienceCards: ExperienceCard[] = [
             </div>
 
             <!-- Unfolded Volunteering Rows (Each role on its own separate line) -->
-            <div id="volunteering-unfolded-timeline" class="relative z-10 hidden divide-y divide-slate-100 dark:divide-slate-800/60 border-b border-orange-200/50 dark:border-orange-950/50">
-              {volunteeringTracks.map(track => (
-                <div class="relative h-8 flex items-center group/track">
-                  {track.bars.map(bar => {
-                    const left = getPct(bar.start);
-                    const width = getWidthPct(bar.start, bar.end);
+            <div id="volunteering-unfolded-timeline" class="relative z-10 hidden divide-y divide-slate-100 dark:divide-slate-800/60 border-t border-orange-200/50 dark:border-orange-950/50">
+              {volunteeringTracks.map(track => {
+                const { start, end } = getTrackRange(track);
+                return (
+                  <div
+                    class="gantt-row-right relative h-8 flex items-center group/track"
+                    data-track-id={track.id}
+                    data-start={start}
+                    data-end={end}
+                  >
+                    {track.bars.map(bar => {
+                      const left = getPct(bar.start);
+                      const width = getWidthPct(bar.start, bar.end);
 
-                    return (
-                      <a
-                        href={`#${bar.id}`}
-                        data-target={bar.id}
-                        class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-orange-500 hover:bg-orange-400 border-orange-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1"
-                        style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
-                        title={`${bar.title} (${bar.dateStr})`}
-                      >
-                        {bar.ongoing && (
-                          <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
-                        )}
-                      </a>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-
-            <!-- Industry Timeline Rows (Maximum thickness bars) -->
-            <div class="relative z-10 divide-y divide-slate-100 dark:divide-slate-800/60">
-              {industryTracks.map(track => (
-                <div class="relative h-8 flex items-center group/track">
-                  {track.bars.map(bar => {
-                    const left = getPct(bar.start);
-                    const width = getWidthPct(bar.start, bar.end);
-
-                    return (
-                      <a
-                        href={`#${bar.id}`}
-                        data-target={bar.id}
-                        class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-slate-500 hover:bg-slate-400 border-slate-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1"
-                        style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
-                        title={`${bar.title} (${bar.dateStr})`}
-                      >
-                        {bar.ongoing && (
-                          <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
-                        )}
-                      </a>
-                    );
-                  })}
-                </div>
-              ))}
+                      return (
+                        <a
+                          href={`#${bar.id}`}
+                          data-target={bar.id}
+                          class="gantt-bar absolute h-6.5 rounded-md shadow-sm transition-all duration-200 cursor-pointer border bg-orange-500 hover:bg-orange-400 border-orange-400/40 hover:scale-y-110 hover:shadow-md hover:z-20 flex items-center justify-end px-1"
+                          style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
+                          title={`${bar.title} (${bar.dateStr})`}
+                        >
+                          {bar.ongoing && (
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                          )}
+                        </a>
+                      );
+                    })}
+                  </div>
+                );
+              })}
             </div>
 
           </div>
@@ -969,7 +1093,10 @@ const allExperienceCards: ExperienceCard[] = [
       {allExperienceCards.map(item => {
         let badgeColor = "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800";
         let borderAccent = "border-l-accent-green";
-        if (item.category === 'volunteering') {
+        if (item.categoryLabel === 'Mentorship & Leadership') {
+          badgeColor = "bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800";
+          borderAccent = "border-l-amber-500";
+        } else if (item.category === 'volunteering') {
           badgeColor = "bg-orange-100 dark:bg-orange-950/50 text-orange-800 dark:text-orange-300 border-orange-300 dark:border-orange-800";
           borderAccent = "border-l-accent-orange";
         } else if (item.category === 'industry') {
@@ -1169,6 +1296,74 @@ const allExperienceCards: ExperienceCard[] = [
       const volUnfoldedTimeline = document.getElementById('volunteering-unfolded-timeline');
       const volChevron = document.getElementById('vol-chevron');
       const volToggleText = document.getElementById('vol-toggle-text');
+      const scrollContainer = document.getElementById('gantt-timeline-scroll');
+
+      // Dynamic row display based on currently visible/displayed years:
+      // Don't display the rows that are not covered by the displayed years (e.g. don't show FIRST Robotics, unless user scrolls to 2022).
+      function updateVisibleGanttRows() {
+        if (!scrollContainer) return;
+        const scrollLeft = scrollContainer.scrollLeft;
+        const clientWidth = scrollContainer.clientWidth;
+        const scrollWidth = scrollContainer.scrollWidth;
+        if (scrollWidth <= 0) return;
+
+        const START_YEAR = 2020.0;
+        const END_YEAR = 2027.0;
+        const TOTAL_SPAN = END_YEAR - START_YEAR; // 7.0
+
+        // Margin of ~0.04 years (~15 days) so bars entering viewport do not flicker
+        const visibleYearStart = START_YEAR + (scrollLeft / scrollWidth) * TOTAL_SPAN - 0.04;
+        const visibleYearEnd = START_YEAR + ((scrollLeft + clientWidth) / scrollWidth) * TOTAL_SPAN + 0.04;
+
+        const leftRows = document.querySelectorAll<HTMLElement>('.gantt-row-left[data-start]');
+        const rightRows = document.querySelectorAll<HTMLElement>('.gantt-row-right[data-start]');
+
+        const trackCoverage: Record<string, boolean> = {};
+
+        leftRows.forEach(row => {
+          const trackId = row.dataset.trackId;
+          if (!trackId) return;
+          const start = parseFloat(row.dataset.start || '0');
+          const end = parseFloat(row.dataset.end || '0');
+
+          // Track is covered if its interval intersects the displayed years
+          const isCovered = (end >= visibleYearStart && start <= visibleYearEnd);
+          trackCoverage[trackId] = isCovered;
+
+          if (isCovered) {
+            row.style.display = 'flex';
+            row.removeAttribute('hidden');
+          } else {
+            row.style.display = 'none';
+            row.setAttribute('hidden', '');
+          }
+        });
+
+        rightRows.forEach(row => {
+          const trackId = row.dataset.trackId;
+          if (!trackId) return;
+          const isCovered = trackCoverage[trackId] ?? true;
+
+          if (isCovered) {
+            row.style.display = 'flex';
+            row.removeAttribute('hidden');
+          } else {
+            row.style.display = 'none';
+            row.setAttribute('hidden', '');
+          }
+        });
+
+        // Hide section wrappers if all child rows in them are hidden (avoids orphan borders)
+        const sectionContainers = document.querySelectorAll<HTMLElement>('.gantt-section-container');
+        sectionContainers.forEach(section => {
+          const visibleRows = section.querySelectorAll<HTMLElement>('.gantt-row-left:not([hidden]), .gantt-row-right:not([hidden])');
+          if (visibleRows.length === 0) {
+            section.style.display = 'none';
+          } else {
+            section.style.display = '';
+          }
+        });
+      }
 
       if (volToggle && volFoldedRow && volUnfoldedLeft && volUnfoldedTimeline && volChevron && volToggleText) {
         let isFolded = true;
@@ -1187,15 +1382,25 @@ const allExperienceCards: ExperienceCard[] = [
             volChevron.textContent = '▼';
             volToggleText.textContent = 'Fold';
           }
+          updateVisibleGanttRows();
         };
       }
 
       // Initialize timeline scroll to present/recent engagements, allowing user to scroll left for earlier history
-      const scrollContainer = document.getElementById('gantt-timeline-scroll');
       if (scrollContainer) {
+        let rafId: number | null = null;
+        const onTimelineScrollOrResize = () => {
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(updateVisibleGanttRows);
+        };
+
+        scrollContainer.addEventListener('scroll', onTimelineScrollOrResize, { passive: true });
+        window.addEventListener('resize', onTimelineScrollOrResize);
+
         // Small delay to ensure layout computation
         setTimeout(() => {
           scrollContainer.scrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+          updateVisibleGanttRows();
         }, 60);
       }
     }

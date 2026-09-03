@@ -1163,6 +1163,38 @@
       border-color: rgba(52, 211, 153, 0.4);
     }
 
+    .timeline-step-pill {
+      background: none;
+      border: 1px solid rgba(100, 116, 139, 0.3);
+      color: #94a3b8;
+      font-family: inherit;
+      font-size: 9px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 19px;
+      height: 19px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      padding: 0;
+    }
+
+    .timeline-step-pill:hover {
+      color: #34d399;
+      border-color: #34d399;
+      background: rgba(52, 211, 153, 0.15);
+    }
+
+    .timeline-step-pill.active-pill {
+      color: #021a0e;
+      background: #34d399;
+      border-color: #34d399;
+      font-weight: 800;
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.75);
+    }
+
     .timeline-slider {
       flex: 1;
       height: 6px;
@@ -1208,7 +1240,7 @@
     /* VERSION-SPECIFIC OVERRIDES (EVERY 3 COMMITS OF funny.astro)   */
     /* ============================================================= */
 
-    /* --- Version 1: Genesis Era (662a40a • funny) --- */
+    /* --- Version 1: 662a40a • funny (Genesis Orchard) --- */
     body[data-version="v1"] {
       background: linear-gradient(180deg, #1e3a2b 0%, #2e593d 30%, #688a5e 60%, #c49a6c 85%, #784c31 100%) !important;
     }
@@ -1216,12 +1248,8 @@
       background: #fde047 !important;
       box-shadow: 0 0 45px 18px rgba(253, 224, 71, 0.45) !important;
     }
-    body[data-version="v1"] .grass {
-      background: #15803d !important;
-    }
-    body[data-version="v1"] .ground {
-      background: #5c3822 !important;
-    }
+    body[data-version="v1"] .grass { background: #15803d !important; }
+    body[data-version="v1"] .ground { background: #5c3822 !important; }
     body[data-version="v1"] .sky-text {
       font-family: 'Lora', Georgia, serif !important;
       font-size: clamp(1.2rem, 3vw, 2.1rem) !important;
@@ -1238,29 +1266,47 @@
       font-size: clamp(2.8rem, 10vw, 6.5rem) !important;
       top: 35vh !important;
     }
-    body[data-version="v1"] .spotify-widget {
-      width: 175px !important;
-      height: 100px !important;
-    }
-    body[data-version="v1"] .spotify-widget iframe {
-      transform: scale(0.65) !important;
-    }
+    body[data-version="v1"] .spotify-widget { width: 175px !important; height: 100px !important; }
+    body[data-version="v1"] .spotify-widget iframe { transform: scale(0.65) !important; }
 
-    /* --- Version 2: Cyber Bot Era (62e6a18 • bot reports) --- */
+    /* --- Version 2: ff50bb1 • better visuals --- */
     body[data-version="v2"] {
-      background: linear-gradient(180deg, #021a0e 0%, #062b18 30%, #0d4227 60%, #153822 85%, #081a10 100%) !important;
+      background: linear-gradient(180deg, #143224 0%, #224d35 30%, #477950 60%, #b89360 85%, #6a4025 100%) !important;
     }
     body[data-version="v2"] .sun {
+      background: #fef08a !important;
+      box-shadow: 0 0 50px 22px rgba(254, 240, 138, 0.6) !important;
+    }
+    body[data-version="v2"] .grass { background: #16a34a !important; }
+    body[data-version="v2"] .ground { background: #52311c !important; }
+    body[data-version="v2"] .sky-text {
+      font-family: 'Lora', Georgia, serif !important;
+      font-size: clamp(1.25rem, 3.2vw, 2.2rem) !important;
+      font-style: italic !important;
+      color: #ecfdf5 !important;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85), 0 0 25px rgba(52, 211, 153, 0.35) !important;
+    }
+    body[data-version="v2"] .who-gate-title {
+      font-size: clamp(2.8rem, 7vw, 5.2rem) !important;
+    }
+    body[data-version="v2"] .paste-banner {
+      font-size: clamp(3.5rem, 11vw, 7.5rem) !important;
+      top: 34vh !important;
+    }
+    body[data-version="v2"] .spotify-widget { width: 155px !important; height: 90px !important; }
+    body[data-version="v2"] .spotify-widget iframe { transform: scale(0.58) !important; }
+
+    /* --- Version 3: 62e6a18 • bot reports (Cyber Matrix) --- */
+    body[data-version="v3"] {
+      background: linear-gradient(180deg, #021a0e 0%, #062b18 30%, #0d4227 60%, #153822 85%, #081a10 100%) !important;
+    }
+    body[data-version="v3"] .sun {
       background: #34d399 !important;
       box-shadow: 0 0 55px 24px rgba(52, 211, 153, 0.7) !important;
     }
-    body[data-version="v2"] .grass {
-      background: #047857 !important;
-    }
-    body[data-version="v2"] .ground {
-      background: #051b10 !important;
-    }
-    body[data-version="v2"] .sky-text {
+    body[data-version="v3"] .grass { background: #047857 !important; }
+    body[data-version="v3"] .ground { background: #051b10 !important; }
+    body[data-version="v3"] .sky-text {
       font-family: 'JetBrains Mono', monospace !important;
       font-size: clamp(1rem, 2.3vw, 1.65rem) !important;
       font-style: normal !important;
@@ -1268,60 +1314,155 @@
       color: #34d399 !important;
       text-shadow: 0 0 25px rgba(52, 211, 153, 0.85), 0 0 50px rgba(16, 185, 129, 0.5) !important;
     }
-    body[data-version="v2"] .who-gate-title {
+    body[data-version="v3"] .who-gate-title {
       font-size: clamp(3.6rem, 9.5vw, 6.8rem) !important;
       color: #34d399 !important;
       text-shadow: 0 0 35px rgba(52, 211, 153, 0.85) !important;
     }
-    body[data-version="v2"] .paste-banner {
+    body[data-version="v3"] .paste-banner {
       font-size: clamp(4.8rem, 15vw, 10.5rem) !important;
       color: #38bdf8 !important;
       text-shadow: 0 0 45px rgba(56, 189, 248, 0.9) !important;
       top: 30vh !important;
     }
-    body[data-version="v2"] .spotify-widget {
-      width: 125px !important;
-      height: 65px !important;
-    }
-    body[data-version="v2"] .spotify-widget iframe {
-      transform: scale(0.48) !important;
-    }
+    body[data-version="v3"] .spotify-widget { width: 125px !important; height: 65px !important; }
+    body[data-version="v3"] .spotify-widget iframe { transform: scale(0.48) !important; }
 
-    /* --- Version 3: Modern Supercharged (f2962bb • nice font) --- */
-    body[data-version="v3"] {
+    /* --- Version 4: 965de7b • better fading (Twilight Indigo) --- */
+    body[data-version="v4"] {
+      background: linear-gradient(180deg, #091e2b 0%, #10384a 30%, #1e5a5c 60%, #4a6858 85%, #2a382c 100%) !important;
+    }
+    body[data-version="v4"] .sun {
+      background: #818cf8 !important;
+      box-shadow: 0 0 50px 22px rgba(129, 140, 248, 0.6) !important;
+    }
+    body[data-version="v4"] .grass { background: #0f766e !important; }
+    body[data-version="v4"] .ground { background: #162a26 !important; }
+    body[data-version="v4"] .sky-text {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: clamp(1.1rem, 2.5vw, 1.8rem) !important;
+      color: #a5f3fc !important;
+      text-shadow: 0 0 20px rgba(129, 140, 248, 0.6) !important;
+    }
+    body[data-version="v4"] .who-gate-title {
+      font-size: clamp(4rem, 10vw, 7.5rem) !important;
+      color: #a5b4fc !important;
+    }
+    body[data-version="v4"] .paste-banner {
+      font-size: clamp(5.2rem, 16vw, 11rem) !important;
+      top: 29vh !important;
+    }
+    body[data-version="v4"] .spotify-widget { width: 115px !important; height: 60px !important; }
+    body[data-version="v4"] .spotify-widget iframe { transform: scale(0.44) !important; }
+
+    /* --- Version 5: 871bb48 • switching off better (Electric Teal) --- */
+    body[data-version="v5"] {
+      background: linear-gradient(180deg, #052e2b 0%, #0d4a41 30%, #17695a 60%, #508068 85%, #224233 100%) !important;
+    }
+    body[data-version="v5"] .sun {
+      background: #2dd4bf !important;
+      box-shadow: 0 0 52px 24px rgba(45, 212, 191, 0.65) !important;
+    }
+    body[data-version="v5"] .grass { background: #0d9488 !important; }
+    body[data-version="v5"] .ground { background: #133a32 !important; }
+    body[data-version="v5"] .sky-text {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: clamp(1.15rem, 2.7vw, 1.9rem) !important;
+      color: #ccfbf1 !important;
+      text-shadow: 0 0 25px rgba(45, 212, 191, 0.7) !important;
+    }
+    body[data-version="v5"] .who-gate-title {
+      font-size: clamp(4.5rem, 12vw, 8.5rem) !important;
+      color: #2dd4bf !important;
+    }
+    body[data-version="v5"] .paste-banner {
+      font-size: clamp(6rem, 18vw, 13rem) !important;
+      top: 28vh !important;
+    }
+    body[data-version="v5"] .spotify-widget { width: 105px !important; height: 55px !important; }
+    body[data-version="v5"] .spotify-widget iframe { transform: scale(0.4) !important; }
+
+    /* --- Version 6: 80773f1 • everything bigger (3x Gold Mega) --- */
+    body[data-version="v6"] {
+      background: linear-gradient(180deg, #2a2012 0%, #4a3418 30%, #785226 60%, #a67035 85%, #593514 100%) !important;
+    }
+    body[data-version="v6"] .sun {
+      background: #facc15 !important;
+      box-shadow: 0 0 65px 28px rgba(250, 204, 21, 0.75) !important;
+    }
+    body[data-version="v6"] .grass { background: #65a30d !important; }
+    body[data-version="v6"] .ground { background: #451a03 !important; }
+    body[data-version="v6"] .sky-text {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: clamp(1.4rem, 3.5vw, 2.5rem) !important;
+      font-weight: 800 !important;
+      color: #fef08a !important;
+      text-shadow: 0 0 30px rgba(250, 204, 21, 0.7) !important;
+    }
+    body[data-version="v6"] .who-gate-title {
+      font-size: clamp(6rem, 16vw, 12rem) !important;
+      color: #fef08a !important;
+    }
+    body[data-version="v6"] .paste-banner {
+      font-size: clamp(8rem, 26vw, 19rem) !important;
+      top: 24vh !important;
+    }
+    body[data-version="v6"] .spotify-widget { width: 95px !important; height: 48px !important; }
+    body[data-version="v6"] .spotify-widget iframe { transform: scale(0.36) !important; }
+
+    /* --- Version 7: f2962bb • nice font (Restored Italic Serif + Orange) --- */
+    body[data-version="v7"] {
       background: linear-gradient(180deg, #1e3a2b 0%, #2e593d 30%, #688a5e 60%, #c49a6c 85%, #784c31 100%) !important;
     }
-    body[data-version="v3"] .sun {
+    body[data-version="v7"] .sun {
+      background: #fb923c !important;
+      box-shadow: 0 0 55px 22px rgba(251, 146, 60, 0.6) !important;
+    }
+    body[data-version="v7"] .grass { background: #15803d !important; }
+    body[data-version="v7"] .ground { background: #5c3822 !important; }
+    body[data-version="v7"] .sky-text {
+      font-family: 'Lora', Georgia, serif !important;
+      font-size: clamp(1.3rem, 3.2vw, 2.3rem) !important;
+      font-style: italic !important;
+      font-weight: 500 !important;
+      color: #fff7ed !important;
+    }
+    body[data-version="v7"] .who-gate-title {
+      font-size: clamp(5.5rem, 15vw, 11rem) !important;
+    }
+    body[data-version="v7"] .paste-banner {
+      font-size: clamp(7.5rem, 25vw, 18rem) !important;
+      top: 25vh !important;
+    }
+    body[data-version="v7"] .spotify-widget { width: 88px !important; height: 45px !important; }
+    body[data-version="v7"] .spotify-widget iframe { transform: scale(0.333) !important; }
+
+    /* --- Version 8: 3e3f0f5 • careers + slider (Present State) --- */
+    body[data-version="v8"] {
+      background: linear-gradient(180deg, #1e3a2b 0%, #2e593d 30%, #688a5e 60%, #c49a6c 85%, #784c31 100%) !important;
+    }
+    body[data-version="v8"] .sun {
       background: #fde047 !important;
       box-shadow: 0 0 50px 20px rgba(253, 224, 71, 0.5) !important;
     }
-    body[data-version="v3"] .grass {
-      background: #15803d !important;
-    }
-    body[data-version="v3"] .ground {
-      background: #5c3822 !important;
-    }
-    body[data-version="v3"] .sky-text {
+    body[data-version="v8"] .grass { background: #15803d !important; }
+    body[data-version="v8"] .ground { background: #5c3822 !important; }
+    body[data-version="v8"] .sky-text {
       font-family: 'Lora', Georgia, serif !important;
       font-size: clamp(1.2rem, 3vw, 2.1rem) !important;
       font-style: italic !important;
       font-weight: 500 !important;
     }
-    body[data-version="v3"] .who-gate-title {
+    body[data-version="v8"] .who-gate-title {
       font-size: clamp(5.5rem, 15vw, 11rem) !important;
       line-height: 1.05 !important;
     }
-    body[data-version="v3"] .paste-banner {
+    body[data-version="v8"] .paste-banner {
       font-size: clamp(7.5rem, 25vw, 18rem) !important;
       top: 25vh !important;
     }
-    body[data-version="v3"] .spotify-widget {
-      width: 88px !important;
-      height: 45px !important;
-    }
-    body[data-version="v3"] .spotify-widget iframe {
-      transform: scale(0.333) !important;
-    }
+    body[data-version="v8"] .spotify-widget { width: 88px !important; height: 45px !important; }
+    body[data-version="v8"] .spotify-widget iframe { transform: scale(0.333) !important; }
   </style>
 </head>
 <body>
@@ -1751,35 +1892,44 @@
   </div>
 
   <!-- ------------------------------------------------------------- -->
-  <!-- VERSION TIMELINE SLIDER (Every 3 Commits of funny.astro)       -->
+  <!-- VERSION TIMELINE SLIDER (All 8 Commits from funny.astro genesis)-->
   <!-- ------------------------------------------------------------- -->
   <div class="timeline-slider-dock" id="timeline-dock">
     <div class="timeline-dock-header">
       <div class="timeline-dock-left">
         <span class="timeline-dock-tag">COMMIT TIMELINE</span>
       </div>
-      <span class="timeline-version-badge" id="timeline-version-badge">v3 • f2962bb (nice font)</span>
+      <span class="timeline-version-badge" id="timeline-version-badge">v8 • 3e3f0f5 (careers + slider)</span>
     </div>
     <div class="timeline-slider-row">
-      <button type="button" class="timeline-step-btn" data-step="0">v1 (662a40a)</button>
-      <button type="button" class="timeline-step-btn" data-step="1">v2 (62e6a18)</button>
+      <button type="button" class="timeline-step-btn" data-step="0" title="662a40a • funny">v1</button>
       <input
         type="range"
         min="0"
-        max="2"
+        max="7"
         step="1"
-        value="2"
+        value="7"
         id="timeline-slider"
         class="timeline-slider"
-        aria-label="Commit Timeline Slider"
+        aria-label="Commit Timeline Slider (8 versions)"
       />
-      <button type="button" class="timeline-step-btn active-step" data-step="2">v3 (f2962bb)</button>
+      <button type="button" class="timeline-step-btn active-step" data-step="7" title="3e3f0f5 • careers + slider">v8</button>
+    </div>
+    <div class="timeline-steps-indicator" style="display: flex; justify-content: space-between; margin-top: 5px; padding: 0 4px;">
+      <button type="button" class="timeline-step-pill" data-step="0" title="v1: 662a40a • funny">1</button>
+      <button type="button" class="timeline-step-pill" data-step="1" title="v2: ff50bb1 • better visuals">2</button>
+      <button type="button" class="timeline-step-pill" data-step="2" title="v3: 62e6a18 • bot reports">3</button>
+      <button type="button" class="timeline-step-pill" data-step="3" title="v4: 965de7b • better fading">4</button>
+      <button type="button" class="timeline-step-pill" data-step="4" title="v5: 871bb48 • switching off better">5</button>
+      <button type="button" class="timeline-step-pill" data-step="5" title="v6: 80773f1 • everything bigger">6</button>
+      <button type="button" class="timeline-step-pill" data-step="6" title="v7: f2962bb • nice font">7</button>
+      <button type="button" class="timeline-step-pill active-pill" data-step="7" title="v8: 3e3f0f5 • careers + slider">8</button>
     </div>
   </div>
 
   <script>
     // -------------------------------------------------------------
-    // Commit History Timeline Slider Logic (Every 3 Commits)
+    // Commit History Timeline Slider Logic (All 8 Commits)
     // -------------------------------------------------------------
     const versionData = [
       {
@@ -1791,29 +1941,65 @@
       },
       {
         version: 'v2',
+        commit: 'ff50bb1',
+        title: 'better visuals',
+        silkRgb: '110, 231, 183',
+        silkShadow: 'rgba(16, 185, 129, 0.65)'
+      },
+      {
+        version: 'v3',
         commit: '62e6a18',
         title: 'bot reports',
         silkRgb: '56, 189, 248',
         silkShadow: 'rgba(56, 189, 248, 0.7)'
       },
       {
-        version: 'v3',
+        version: 'v4',
+        commit: '965de7b',
+        title: 'better fading',
+        silkRgb: '129, 140, 248',
+        silkShadow: 'rgba(99, 102, 241, 0.7)'
+      },
+      {
+        version: 'v5',
+        commit: '871bb48',
+        title: 'switching off better',
+        silkRgb: '45, 212, 191',
+        silkShadow: 'rgba(20, 184, 166, 0.7)'
+      },
+      {
+        version: 'v6',
+        commit: '80773f1',
+        title: 'everything bigger',
+        silkRgb: '250, 204, 21',
+        silkShadow: 'rgba(234, 179, 8, 0.75)'
+      },
+      {
+        version: 'v7',
         commit: 'f2962bb',
         title: 'nice font',
         silkRgb: '251, 146, 60',
-        silkShadow: 'rgba(249, 115, 22, 0.7)'
+        silkShadow: 'rgba(249, 115, 22, 0.75)'
+      },
+      {
+        version: 'v8',
+        commit: '3e3f0f5',
+        title: 'careers + slider',
+        silkRgb: '244, 63, 94',
+        silkShadow: 'rgba(244, 63, 94, 0.8)'
       }
     ];
 
-    let currentSilkRgb = '251, 146, 60';
-    let currentSilkShadow = 'rgba(249, 115, 22, 0.7)';
+    let currentSilkRgb = '244, 63, 94';
+    let currentSilkShadow = 'rgba(244, 63, 94, 0.8)';
 
     const timelineSlider = document.getElementById('timeline-slider') as HTMLInputElement | null;
     const versionBadge = document.getElementById('timeline-version-badge');
     const stepBtns = document.querySelectorAll('.timeline-step-btn');
+    const stepPills = document.querySelectorAll('.timeline-step-pill');
 
     function applyTimelineVersion(stepIdx: number) {
-      const v = versionData[stepIdx] || versionData[2];
+      const v = versionData[stepIdx] || versionData[7];
       document.body.dataset.version = v.version;
       currentSilkRgb = v.silkRgb;
       currentSilkShadow = v.silkShadow;
@@ -1830,6 +2016,15 @@
           btn.classList.remove('active-step');
         }
       });
+
+      stepPills.forEach((pill) => {
+        const step = parseInt(pill.getAttribute('data-step') || '-1', 10);
+        if (step === stepIdx) {
+          pill.classList.add('active-pill');
+        } else {
+          pill.classList.remove('active-pill');
+        }
+      });
     }
 
     if (timelineSlider) {
@@ -1840,14 +2035,22 @@
 
       stepBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-          const step = parseInt(btn.getAttribute('data-step') || '2', 10);
+          const step = parseInt(btn.getAttribute('data-step') || '7', 10);
           if (timelineSlider) timelineSlider.value = String(step);
           applyTimelineVersion(step);
         });
       });
 
-      // Default to latest version (v3)
-      applyTimelineVersion(2);
+      stepPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          const step = parseInt(pill.getAttribute('data-step') || '7', 10);
+          if (timelineSlider) timelineSlider.value = String(step);
+          applyTimelineVersion(step);
+        });
+      });
+
+      // Default to latest version (v8)
+      applyTimelineVersion(7);
     }
 
     // Dirt particles
