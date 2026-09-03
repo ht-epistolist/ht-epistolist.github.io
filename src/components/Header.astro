@@ -1,21 +1,41 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
 ---
-<header class="w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur sticky top-0 z-40">
-    <div class="container mx-auto px-4 py-4 max-w-4xl flex items-center justify-between">
-        <a href="/" class="font-heading font-bold text-xl tracking-tight text-accent-green dark:text-accent-green-dark hover:text-accent-orange dark:hover:text-accent-orange-dark transition-colors">
+<header class="w-full border-b border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-900/85 backdrop-blur sticky top-0 z-40 transition-colors">
+    <div class="container mx-auto px-3 sm:px-4 py-3 sm:py-4 max-w-4xl flex items-center justify-between gap-2">
+        <a href="/" class="shrink-0 font-heading font-bold text-base sm:text-lg md:text-xl tracking-tight text-accent-green dark:text-accent-green-light hover:text-accent-orange dark:hover:text-accent-orange-light transition-colors">
             Olena Teslia
         </a>
-        <nav class="hidden md:flex gap-6 font-heading font-medium">
-            <a href="/home" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Home</a>
-            <a href="/portfolio" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Portfolio</a>
-            <a href="/career" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Career</a>
-            <a href="/blog" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Blog</a>
-            <a href="/surveys" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Surveys</a>
+
+        <!-- Compressible Navigation (adjusts seamlessly from mobile to desktop without disappearing) -->
+        <nav class="flex items-center gap-2 sm:gap-4 md:gap-6 font-heading text-xs sm:text-sm md:text-base font-medium">
+            <a href="/home" class="hover:text-accent-green dark:hover:text-accent-green-light transition-colors whitespace-nowrap">Home</a>
+            <a href="/portfolio" class="hover:text-accent-green dark:hover:text-accent-green-light transition-colors whitespace-nowrap">Portfolio</a>
+            <a href="/career" class="hover:text-accent-green dark:hover:text-accent-green-light transition-colors whitespace-nowrap">Career</a>
+
+            <!-- Blog with TBD: Under Development tooltip on hover -->
+            <div class="relative group/nav inline-flex items-center">
+                <a href="/blog" class="hover:text-accent-green dark:hover:text-accent-green-light transition-colors whitespace-nowrap" title="TBD: Under Development">
+                    Blog
+                </a>
+                <span class="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap rounded-md bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-2 py-1 text-[11px] font-mono opacity-0 group-hover/nav:opacity-100 transition-opacity duration-150 shadow-md z-50">
+                    TBD: Under Development
+                </span>
+            </div>
+
+            <!-- Surveys with TBD: Under Development tooltip on hover -->
+            <div class="relative group/nav inline-flex items-center">
+                <a href="/surveys" class="hover:text-accent-green dark:hover:text-accent-green-light transition-colors whitespace-nowrap" title="TBD: Under Development">
+                    Surveys
+                </a>
+                <span class="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap rounded-md bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-2 py-1 text-[11px] font-mono opacity-0 group-hover/nav:opacity-100 transition-opacity duration-150 shadow-md z-50">
+                    TBD: Under Development
+                </span>
+            </div>
         </nav>
-        <div class="flex items-center gap-4">
+
+        <div class="flex items-center shrink-0">
             <ThemeToggle />
-            <!-- Mobile menu button can go here -->
         </div>
     </div>
 </header>

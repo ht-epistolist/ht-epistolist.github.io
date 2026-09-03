@@ -1,5 +1,5 @@
 ---
-// Landing page - no Layout wrapper, full custom
+// Landing page - Leucauge venusta colorscheme
 ---
 <!doctype html>
 <html lang="en">
@@ -7,17 +7,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olena Teslia</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
       height: 100%;
       width: 100%;
-      background: #080c10;
-      color: #e2e8f0;
+      background: #080d0a; /* Leucauge venusta deep ebony */
+      color: #e2e8f0;     /* Leucauge venusta metallic pearl silver */
       font-family: 'Work Sans', sans-serif;
       overflow: hidden;
     }
@@ -41,7 +42,7 @@
     .star {
       position: absolute;
       border-radius: 50%;
-      background: white;
+      background: #e2e8f0;
       animation: twinkle var(--d, 3s) ease-in-out infinite alternate;
     }
     @keyframes twinkle {
@@ -61,7 +62,7 @@
       align-items: center;
       justify-content: center;
       width: 180px;
-      height: 60px;
+      height: 56px;
       border-radius: 8px;
       font-family: 'Work Sans', sans-serif;
       font-size: 1rem;
@@ -69,10 +70,11 @@
       letter-spacing: 0.08em;
       text-decoration: none;
       cursor: pointer;
-      border: 2px solid;
+      border: 1.5px solid;
       transition: all 0.25s ease;
       position: relative;
       overflow: hidden;
+      background: transparent;
     }
 
     .btn::before {
@@ -83,32 +85,39 @@
       transition: opacity 0.25s ease;
     }
 
+    /* Leucauge venusta Orchard Emerald */
     .btn-tired {
-      color: #94a3b8;
-      border-color: #334155;
-      background: transparent;
+      color: #34d399;
+      border-color: #059669;
     }
-    .btn-tired::before { background: #1e293b; }
+    .btn-tired::before {
+      background: rgba(5, 150, 105, 0.15);
+    }
     .btn-tired:hover {
-      color: #cbd5e1;
-      border-color: #64748b;
+      color: #6ee7b7;
+      border-color: #10b981;
       transform: translateY(-2px);
     }
-    .btn-tired:hover::before { opacity: 1; }
-
-    .btn-playful {
-      color: #fdba74;
-      border-color: #ea580c;
-      background: transparent;
+    .btn-tired:hover::before {
+      opacity: 1;
     }
-    .btn-playful::before { background: rgba(234,88,12,0.15); }
-    .btn-playful:hover {
-      color: #fff;
+
+    /* Leucauge venusta Ventral Flame Orange - equal visual weight, not highlighted */
+    .btn-funny {
+      color: #fb923c;
+      border-color: #ea580c;
+    }
+    .btn-funny::before {
+      background: rgba(234, 88, 12, 0.15);
+    }
+    .btn-funny:hover {
+      color: #fdba74;
       border-color: #f97316;
       transform: translateY(-2px);
-      box-shadow: 0 0 30px rgba(234,88,12,0.3);
     }
-    .btn-playful:hover::before { opacity: 1; }
+    .btn-funny:hover::before {
+      opacity: 1;
+    }
 
     .btn span { position: relative; z-index: 1; }
 
@@ -123,7 +132,7 @@
   <div class="container">
     <div class="choices">
       <a href="/home" class="btn btn-tired"><span>tired</span></a>
-      <a href="/playful" class="btn btn-playful"><span>playful</span></a>
+      <a href="/playful" class="btn btn-funny"><span>funny</span></a>
     </div>
   </div>
   <script>

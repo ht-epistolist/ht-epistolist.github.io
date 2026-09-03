@@ -444,8 +444,12 @@
     </svg>
   </div>
 
-  <!-- Sweat drops -->
-  <div style="position:fixed;font-size:1.2rem;animation:fadeText 0.6s ease-in-out infinite alternate;bottom:calc(30vh + 80px);left:calc(50% + 25px)">💧</div>
+  <!-- Sweat drops indicator (SVG) -->
+  <div style="position:fixed;animation:fadeText 0.6s ease-in-out infinite alternate;bottom:calc(30vh + 80px);left:calc(50% + 25px)">
+    <svg width="14" height="20" viewBox="0 0 14 20" fill="none">
+      <path d="M7 0C7 0 0 10 0 14C0 17.866 3.13401 21 7 21C10.866 21 14 17.866 14 14C14 10 7 0 7 0Z" fill="#38bdf8"/>
+    </svg>
+  </div>
 
   <p class="progress-text">still going...</p>
 
@@ -484,7 +488,7 @@
     }, 5000);
     setTimeout(() => {
       const msg = document.querySelector('.progress-text');
-      if (msg) msg.textContent = "she's fine 🙂";
+      if (msg) msg.textContent = "she's fine :)";
     }, 10000);
   </script>
 </body>

@@ -62,6 +62,48 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
 
+    <!-- Embedded Curriculum Vitae -->
+    <div class="mb-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div>
+          <h2 class="font-heading font-bold text-xl text-slate-900 dark:text-white">Curriculum Vitae</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Electrical Engineering & Applied Math · Columbia University</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <a
+            href="/OlenaTeslia_CV.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-xs font-bold text-accent-green dark:text-accent-green-dark hover:underline flex items-center gap-1"
+          >
+            Open in new tab ↗
+          </a>
+          <a
+            href="/OlenaTeslia_CV.pdf"
+            download
+            class="px-3.5 py-1.5 bg-accent-green hover:bg-accent-green-dark text-white text-xs font-heading font-semibold rounded-lg transition-colors shadow-sm"
+          >
+            Download PDF
+          </a>
+        </div>
+      </div>
+      <div class="w-full h-[650px] sm:h-[800px] rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950">
+        <object
+          data="/OlenaTeslia_CV.pdf#toolbar=1"
+          type="application/pdf"
+          class="w-full h-full"
+          title="Olena Teslia CV"
+        >
+          <iframe
+            src="/OlenaTeslia_CV.pdf#toolbar=1"
+            class="w-full h-full border-0"
+            title="Olena Teslia CV"
+          >
+          </iframe>
+        </object>
+      </div>
+    </div>
+
     <!-- Timeline -->
     <h2 class="font-heading font-bold text-2xl mb-8">Timeline</h2>
     <div class="relative">
