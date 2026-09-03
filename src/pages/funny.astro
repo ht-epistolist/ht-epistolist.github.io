@@ -12,7 +12,7 @@
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Work+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -23,6 +23,206 @@
       font-family: 'Work Sans', sans-serif;
       overflow: hidden;
       user-select: none;
+    }
+
+    /* Full Screen Gate Question: "Who aRe yoU?" */
+    .who-gate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: radial-gradient(circle at center, #0a1912 0%, #040906 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.65s;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .who-gate-overlay.gate-uncovered {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .who-gate-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      max-width: 90vw;
+    }
+
+    .who-gate-title {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: clamp(2rem, 5.5vw, 4rem);
+      font-weight: 700;
+      font-style: normal;
+      color: #f1f5f9;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+      text-shadow: 0 4px 30px rgba(52, 211, 153, 0.45), 0 0 50px rgba(0, 0, 0, 0.85);
+      user-select: none;
+    }
+
+    .cmd-cursor {
+      display: inline-block;
+      color: #34d399;
+      animation: blinkCmdCursor 0.9s steps(2, start) infinite;
+      margin-left: 4px;
+    }
+
+    @keyframes blinkCmdCursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .who-gate-form {
+      display: flex;
+      align-items: center;
+      position: relative;
+      width: min(85vw, 420px);
+    }
+
+    .who-gate-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid rgba(52, 211, 153, 0.5);
+      border-radius: 9999px;
+      padding: 13px 48px 13px 22px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 1.1rem;
+      color: #f8fafc;
+      outline: none;
+      box-shadow: 0 0 25px rgba(52, 211, 153, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.4);
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .who-gate-input:focus {
+      border-color: #34d399;
+      box-shadow: 0 0 35px rgba(52, 211, 153, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .who-gate-submit {
+      position: absolute;
+      right: 7px;
+      width: 36px;
+      height: 36px;
+      background: #059669;
+      color: #ffffff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .who-gate-submit:hover {
+      background: #10b981;
+      transform: scale(1.08);
+    }
+
+    /* Completely Full Screen "WRU ~°°~" for 1 second */
+    .wru-flash-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.08s ease;
+    }
+
+    .wru-flash-overlay.wru-active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .wru-flash-text {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-weight: 900;
+      font-style: normal;
+      font-size: clamp(3.5rem, 14vw, 8.5rem);
+      color: #facc15;
+      text-shadow: 0 0 45px rgba(250, 204, 21, 0.85), 0 0 90px rgba(249, 115, 22, 0.65);
+      letter-spacing: 0.05em;
+      user-select: none;
+      animation: wruJitter 0.12s infinite alternate;
+    }
+
+    /* Exit Screen: "Come to NYC [answer to WRU]!" */
+    .exit-gate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: radial-gradient(circle at center, #0a1912 0%, #020503 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .exit-gate-overlay.exit-active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .exit-gate-text {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-weight: 800;
+      font-style: normal;
+      font-size: clamp(2rem, 6.5vw, 4.5rem);
+      color: #34d399;
+      text-shadow: 0 0 35px rgba(52, 211, 153, 0.75), 0 0 70px rgba(16, 185, 129, 0.5);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      max-width: 90vw;
+    }
+
+    @keyframes wruJitter {
+      0% { transform: scale(1) rotate(-1.5deg); }
+      100% { transform: scale(1.05) rotate(1.5deg); }
+    }
+
+    /* "nahhh typeee" paste prevention banner */
+    .paste-banner {
+      position: fixed;
+      top: 35vh;
+      left: 110vw;
+      z-index: 9999;
+      pointer-events: none;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 9vw, 6rem);
+      color: #f97316;
+      text-shadow: 0 0 30px rgba(249, 115, 22, 0.9), 0 0 60px rgba(234, 88, 12, 0.7);
+      white-space: nowrap;
+      letter-spacing: -0.02em;
+      opacity: 0;
+    }
+
+    .paste-banner.paste-fly {
+      animation: pasteFlyThrough 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes pasteFlyThrough {
+      0%   { transform: translateX(0);       opacity: 0; }
+      12%  { transform: translateX(-40vw);   opacity: 1; }
+      50%  { transform: translateX(-110vw);  opacity: 1; }
+      85%  { transform: translateX(-175vw);  opacity: 0.8; }
+      100% { transform: translateX(-220vw);  opacity: 0; }
     }
 
     /* Sun */
@@ -337,18 +537,24 @@
       z-index: 3;
       pointer-events: none;
       animation: gentleSkyDrift 8s ease-in-out infinite alternate;
+      transition: opacity 3s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 1;
+    }
+
+    .sky-contemplation.banner-idle-fade {
+      opacity: 0.25 !important;
     }
 
     .sky-text {
       display: inline-block;
-      font-family: 'Lora', Georgia, serif;
-      font-size: clamp(1.2rem, 3vw, 2.1rem);
-      font-weight: 500;
-      font-style: italic;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: clamp(1rem, 2.3vw, 1.65rem);
+      font-weight: 600;
+      font-style: normal;
       color: rgba(241, 245, 249, 0.92);
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85), 0 0 30px rgba(52, 211, 153, 0.25);
-      line-height: 1.35;
-      letter-spacing: 0.01em;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85), 0 0 30px rgba(52, 211, 153, 0.3);
+      line-height: 1.4;
+      letter-spacing: -0.01em;
       transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
       opacity: 1;
       transform: translateY(0);
@@ -440,7 +646,7 @@
     }
 
     /* ------------------------------------------------------------- */
-    /* SPOTIFY PROFILE WIDGET */
+    /* SPOTIFY PROFILE WIDGET (2x smaller footprint, 3x smaller content) */
     /* ------------------------------------------------------------- */
     .spotify-widget {
       position: fixed;
@@ -449,10 +655,10 @@
       z-index: 20;
       background: rgba(8, 13, 10, 0.92);
       border: 1px solid rgba(52, 211, 153, 0.4);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
-      border-radius: 10px;
-      padding: 6px 8px;
-      width: 175px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.75);
+      border-radius: 6px;
+      padding: 3px 4px;
+      width: 88px;
       backdrop-filter: blur(12px);
       transition: width 0.3s ease, padding 0.3s ease, border-radius 0.3s ease;
       will-change: transform;
@@ -460,17 +666,17 @@
 
     .spotify-taste-bubble {
       position: absolute;
-      bottom: calc(100% + 8px);
+      bottom: calc(100% + 5px);
       left: 50%;
-      transform: translateX(-50%) translateY(4px);
+      transform: translateX(-50%) translateY(3px);
       background: #10b981;
       color: #022c19;
       font-family: 'Work Sans', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.58rem;
       font-weight: 800;
       letter-spacing: 0.02em;
-      padding: 4px 10px;
-      border-radius: 10px;
+      padding: 2px 6px;
+      border-radius: 6px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       white-space: nowrap;
       pointer-events: none;
@@ -484,7 +690,7 @@
       top: 100%;
       left: 50%;
       transform: translateX(-50%);
-      border-width: 5px;
+      border-width: 4px;
       border-style: solid;
       border-color: #10b981 transparent transparent transparent;
     }
@@ -523,25 +729,26 @@
 
     .spotify-widget.collapsed {
       width: auto;
-      padding: 6px 12px;
-      border-radius: 20px;
+      padding: 3px 6px;
+      border-radius: 12px;
     }
 
     .spotify-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 3px;
     }
 
     .spotify-brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 3px;
       color: #ffffff;
       text-decoration: none;
-      font-size: 0.82rem;
+      font-size: 0.28rem;
       font-weight: 700;
+      letter-spacing: 0.01em;
     }
     .spotify-brand:hover {
       color: #1ed760;
@@ -551,10 +758,11 @@
       background: rgba(255,255,255,0.1);
       border: none;
       color: #cbd5e1;
-      padding: 2px 8px;
-      border-radius: 6px;
+      padding: 1px 3px;
+      border-radius: 2px;
       cursor: pointer;
-      font-size: 0.75rem;
+      font-size: 0.25rem;
+      line-height: 1;
       font-family: inherit;
     }
     .toggle-btn:hover {
@@ -563,31 +771,26 @@
     }
 
     .spotify-body {
-      margin-top: 10px;
+      margin-top: 3px;
+      height: 27px;
+      overflow: hidden;
+      border-radius: 4px;
     }
     .spotify-widget.collapsed .spotify-body {
       display: none;
     }
+    .spotify-body iframe {
+      width: 300% !important;
+      height: 81px !important;
+      transform: scale(0.3333);
+      transform-origin: top left;
+      border-radius: 6px;
+      margin-top: 0 !important;
+      border: none;
+    }
 
     .playlist-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 8px;
-    }
-    .playlist-pill {
-      font-size: 0.68rem;
-      padding: 2px 7px;
-      border-radius: 10px;
-      background: rgba(16, 185, 129, 0.15);
-      color: #6ee7b7;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      text-decoration: none;
-      transition: all 0.15s;
-    }
-    .playlist-pill:hover {
-      background: rgba(16, 185, 129, 0.35);
-      color: #fff;
+      display: none;
     }
 
     /* Building Cars & Bricks */
@@ -840,6 +1043,41 @@
   </style>
 </head>
 <body>
+
+  <!-- Full Screen Gate Question: "Who aRe yoU?" -->
+  <div class="who-gate-overlay" id="who-gate">
+    <div class="who-gate-content">
+      <h1 class="who-gate-title">Who aRe yoU?<span class="cmd-cursor">_</span></h1>
+      <form id="who-gate-form" class="who-gate-form" novalidate>
+        <input
+          type="text"
+          id="who-gate-input"
+          class="who-gate-input"
+          autocomplete="off"
+          autofocus
+        />
+        <button type="submit" class="who-gate-submit" aria-label="Enter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 10 4 15 9 20"></polyline>
+            <path d="M20 4v7a4 4 0 0 1-4 4H4"></path>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Full Screen Empty Input Warning: "WRU ~°°~" for 1 second -->
+  <div class="wru-flash-overlay" id="wru-flash" aria-hidden="true">
+    <div class="wru-flash-text">WRU ~°°~</div>
+  </div>
+
+  <!-- Full Screen Exit Display: "Come to NYC [answer to WRU]!" -->
+  <div class="exit-gate-overlay" id="exit-gate" aria-hidden="true">
+    <div class="exit-gate-text" id="exit-gate-text">Come to NYC!</div>
+  </div>
+
+  <!-- Paste Prevention Banner: "nahhh typeee" -->
+  <div class="paste-banner" id="paste-banner" aria-hidden="true">nahhh typeee</div>
 
   <!-- Interactive Silk Canvas for Click-to-Spin web threads -->
   <canvas id="silk-canvas"></canvas>
@@ -1199,8 +1437,8 @@
 
     <div class="spotify-header">
       <a href="https://open.spotify.com/user/31eggmwgwd6b5f4672kiiveoehya" target="_blank" rel="noopener noreferrer" class="spotify-brand" title="Open Spotify Profile">
-        <!-- Spotify Icon SVG (no emojis) -->
-        <svg class="w-5 h-5" width="18" height="18" viewBox="0 0 24 24" fill="#1ed760">
+        <!-- Spotify Icon SVG (no emojis, 3x smaller) -->
+        <svg width="6" height="6" viewBox="0 0 24 24" fill="#1ed760">
           <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.516 17.307c-.217.355-.678.47-1.033.253-2.83-1.73-6.393-2.12-10.59-1.163-.404.093-.807-.16-.9-.564-.093-.404.16-.807.564-.9 4.582-1.047 8.528-.607 11.706 1.341.355.217.47.678.253 1.033zm1.472-3.268c-.273.443-.853.585-1.296.312-3.238-1.99-8.175-2.566-12.006-1.402-.498.151-1.026-.135-1.177-.633-.151-.498.135-1.026.633-1.177 4.382-1.33 9.824-.69 13.534 1.594.443.273.585.853.312 1.306zm.126-3.41c-3.883-2.306-10.287-2.518-13.992-1.393-.596.18-1.229-.158-1.41-.754-.18-.596.158-1.229.754-1.41 4.256-1.292 11.317-1.043 15.792 1.614.536.318.712 1.01.394 1.546-.318.536-1.01.712-1.538.397z"/>
         </svg>
         <span>Olena's Spotify</span>
@@ -1547,8 +1785,8 @@
             const winW = window.innerWidth;
             const winH = window.innerHeight;
             const rect = spotWidget.getBoundingClientRect();
-            const wWidth = rect.width || 175;
-            const wHeight = rect.height || 100;
+            const wWidth = rect.width || 88;
+            const wHeight = rect.height || 45;
 
             // Safe boundaries so it jumps anywhere on the page without clipping off-screen
             const minScreenX = 16;
@@ -1676,44 +1914,176 @@
     }
 
     // -------------------------------------------------------------
-    // Telegram Dispatch Transmission (Bot: @heli_ot_bot)
+    // Session State (shared across all handlers)
     // -------------------------------------------------------------
     const TELEGRAM_BOT_TOKEN = '8948025496:AAFGid7HZaYX2NJ08ifN4E8L28qn5nInTZQ';
     const TELEGRAM_CHAT_ID = '649892453';
 
+    let sessionName = '';           // filled once Who aRe yoU? is answered
+    let sessionStartTime = 0;       // set when gate is passed
+    const sessionMessages: string[] = []; // all dispatch messages collected during session
+
+    // Format ms duration to human-readable string
+    function formatDuration(ms: number): string {
+      const totalSec = Math.floor(ms / 1000);
+      const mins = Math.floor(totalSec / 60);
+      const secs = totalSec % 60;
+      if (mins === 0) return `${secs}s`;
+      return `${mins}m ${secs}s`;
+    }
+
+    // Send the full session report
+    async function sendSessionReport() {
+      if (!sessionName) return; // never passed gate, nothing to send
+      const elapsed = sessionStartTime ? formatDuration(Date.now() - sessionStartTime) : 'unknown';
+      const activityLine = sessionMessages.length > 0
+        ? `Activity:\n${sessionMessages.join('\n')}`
+        : 'Activity: none';
+      const reportText = `${sessionName} entered for ${elapsed}!\n${activityLine}`;
+      try {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: reportText })
+        });
+      } catch {
+        // silent
+      }
+    }
+
+    // Send on page close/navigate
+    window.addEventListener('pagehide', () => { sendSessionReport(); });
+    window.addEventListener('beforeunload', () => { sendSessionReport(); });
+
+    // -------------------------------------------------------------
+    // Dispatch Billboard (collect messages, send on exit)
+    // -------------------------------------------------------------
     const dispatchForm = document.getElementById('dispatch-form') as HTMLFormElement | null;
     const dispatchInput = document.getElementById('dispatch-input') as HTMLInputElement | null;
     const dispatchBtn = document.getElementById('dispatch-btn') as HTMLButtonElement | null;
 
     if (dispatchForm && dispatchInput && dispatchBtn) {
-      dispatchForm.addEventListener('submit', async (e) => {
+      dispatchForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const text = dispatchInput.value.trim();
         if (!text) return;
-
-        dispatchBtn.disabled = true;
-
-        try {
-          const timeStr = new Date().toLocaleString();
-          const payload = {
-            chat_id: TELEGRAM_CHAT_ID,
-            text: `[Excavation Site Dispatch]\n\nNote:\n${text}\n\nTimestamp: ${timeStr}\nSource: funny page`
-          };
-
-          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          // Quietly clear input on send without any confirmation message per request
-          dispatchInput.value = '';
-        } catch {
-          // Silent catch
-        } finally {
-          dispatchBtn.disabled = false;
-        }
+        // Collect messages for session report — don't send immediately
+        sessionMessages.push(text);
+        dispatchInput.value = '';
       });
+    }
+
+    // -------------------------------------------------------------
+    // Gate Question: "Who aRe yoU?" + "WRU ~°°~" + Exit Gate
+    // -------------------------------------------------------------
+    const whoGate = document.getElementById('who-gate');
+    const whoGateForm = document.getElementById('who-gate-form') as HTMLFormElement | null;
+    const whoGateInput = document.getElementById('who-gate-input') as HTMLInputElement | null;
+    const wruFlash = document.getElementById('wru-flash');
+    const exitGate = document.getElementById('exit-gate');
+    const exitGateText = document.getElementById('exit-gate-text');
+
+    if (whoGate && whoGateForm && whoGateInput && wruFlash) {
+      let isWruActive = false;
+
+      whoGateForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (isWruActive) return;
+
+        const enteredName = whoGateInput.value.trim();
+
+        if (!enteredName) {
+          // Trigger "WRU ~°°~" for 1 second
+          isWruActive = true;
+          wruFlash.classList.add('wru-active');
+          setTimeout(() => {
+            wruFlash.classList.remove('wru-active');
+            isWruActive = false;
+            whoGateInput.focus();
+          }, 1000);
+          return;
+        }
+
+        // Store name and start session timer
+        sessionName = enteredName;
+        sessionStartTime = Date.now();
+
+        // Set exit gate text
+        if (exitGateText) {
+          exitGateText.textContent = `Come to NYC ${enteredName}!`;
+        }
+
+        // Show exit gate briefly on beforeunload via visibilitychange
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden' && exitGate) {
+            exitGate.classList.add('exit-active');
+          }
+        });
+
+        // Uncover the funny page
+        whoGate.classList.add('gate-uncovered');
+      });
+    }
+
+    // -------------------------------------------------------------
+    // Paste Prevention: block paste in all inputs, show "nahhh typeee"
+    // -------------------------------------------------------------
+    const pasteBanner = document.getElementById('paste-banner');
+
+    function triggerPasteBanner() {
+      if (!pasteBanner) return;
+      pasteBanner.classList.remove('paste-fly');
+      // Force reflow so animation re-triggers
+      void (pasteBanner as HTMLElement).offsetWidth;
+      pasteBanner.classList.add('paste-fly');
+      setTimeout(() => { pasteBanner.classList.remove('paste-fly'); }, 550);
+    }
+
+    document.addEventListener('paste', (e) => {
+      const target = e.target as HTMLElement;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
+        e.preventDefault();
+        triggerPasteBanner();
+      }
+    }, true);
+
+    // Also block paste via keyboard shortcut inside inputs
+    document.addEventListener('keydown', (e) => {
+      const target = e.target as HTMLElement;
+      if (
+        target &&
+        (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') &&
+        (e.ctrlKey || e.metaKey) &&
+        e.key.toLowerCase() === 'v'
+      ) {
+        e.preventDefault();
+        triggerPasteBanner();
+      }
+    }, true);
+
+    // -------------------------------------------------------------
+    // Idle Fade for Sky Banner (25% when idle, 100% when mouse moved)
+    // -------------------------------------------------------------
+    const skyBanner = document.getElementById('sky-contemplation');
+    if (skyBanner) {
+      const bannerEl = skyBanner;
+      let idleTimer: ReturnType<typeof setTimeout> | undefined;
+
+      function onActivity() {
+        bannerEl.classList.remove('banner-idle-fade');
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          bannerEl.classList.add('banner-idle-fade');
+        }, 3500);
+      }
+
+      window.addEventListener('mousemove', onActivity);
+      window.addEventListener('pointermove', onActivity);
+      window.addEventListener('keydown', onActivity);
+      window.addEventListener('touchstart', onActivity);
+      window.addEventListener('wheel', onActivity);
+
+      onActivity();
     }
   </script>
 </body>
