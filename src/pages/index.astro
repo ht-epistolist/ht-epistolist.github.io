@@ -55,7 +55,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: 2rem;
+      gap: 3rem;
       z-index: 10;
       margin: 0;
       padding: 0;
@@ -65,16 +65,16 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 180px;
-      height: 56px;
-      border-radius: 8px;
+      width: 360px;
+      height: 112px;
+      border-radius: 16px;
       font-family: 'Work Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-decoration: none;
       cursor: pointer;
-      border: 1.5px solid;
+      border: 3px solid;
       transition: all 0.25s ease;
       position: relative;
       overflow: hidden;
@@ -100,7 +100,7 @@
     .btn-tired:hover {
       color: #6ee7b7;
       border-color: #10b981;
-      transform: translateY(-2px);
+      transform: translateY(-4px);
     }
     .btn-tired:hover::before {
       opacity: 1;
@@ -117,7 +117,7 @@
     .btn-funny:hover {
       color: #fdba74;
       border-color: #f97316;
-      transform: translateY(-2px);
+      transform: translateY(-4px);
     }
     .btn-funny:hover::before {
       opacity: 1;
@@ -125,13 +125,15 @@
 
     .btn span { position: relative; z-index: 1; }
 
-    @media (max-width: 480px) {
+    @media (max-width: 820px) {
       .landing-container {
         flex-direction: column;
-        gap: 1.25rem;
+        gap: 2rem;
       }
       .btn {
-        width: 220px;
+        width: min(85vw, 360px);
+        height: 96px;
+        font-size: 1.7rem;
       }
     }
 
