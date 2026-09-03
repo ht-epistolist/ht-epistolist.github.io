@@ -4,7 +4,6 @@ import Layout from '../layouts/Layout.astro';
 interface TimelineBar {
   id: string;
   title: string;
-  shortTitle: string;
   start: number;
   end: number;
   ongoing?: boolean;
@@ -13,6 +12,8 @@ interface TimelineBar {
 
 interface TimelineTrack {
   id: string;
+  label: string;
+  primaryId: string;
   category: 'research' | 'volunteering' | 'industry';
   categoryLabel: string;
   bars: TimelineBar[];
@@ -33,44 +34,47 @@ interface ExperienceCard {
 }
 
 // -------------------------------------------------------------
-// Zoomed Time Axis: 2023 to 2026 (4-year high-resolution view)
+// Time Axis: 2020 to 2027 (7-year span, allows scrolling left to see past history)
 // -------------------------------------------------------------
-const minTime = 2023.0;
+const minTime = 2020.0;
 const maxTime = 2027.0;
-const totalSpan = maxTime - minTime; // 4.0 years span
-const years = [2023, 2024, 2025, 2026, 2027];
+const totalSpan = maxTime - minTime; // 7.0 years span
+const years = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027];
 
 const getPct = (time: number) => Math.max(0, Math.min(100, ((time - minTime) / totalSpan) * 100));
 const getWidthPct = (start: number, end: number) => {
   const s = Math.max(start, minTime);
   const e = Math.min(end, maxTime);
-  return (Math.max(0.08, e - s) / totalSpan) * 100;
+  return (Math.max(0.09, e - s) / totalSpan) * 100;
 };
 
 // -------------------------------------------------------------
-// Timeline Tracks (Condensed Gantt rows — Education removed, Research only)
+// Timeline Tracks
+// - Engagement names aligned on the left (never cropped)
+// - Only colored blocks on the timeline
+// - CSX and CUTE on ONE line, everything else separately
 // -------------------------------------------------------------
 const timelineTracks: TimelineTrack[] = [
-  // 1. Research: Both Columbia Fusion Center positions on ONE single horizontal line!
+  // 1. Research
   {
     id: 'track-fusion',
+    label: 'Columbia Fusion Center (CSX & CUTE)',
+    primaryId: 'exp-cute',
     category: 'research',
     categoryLabel: 'Research',
     bars: [
       {
         id: 'exp-csx',
-        shortTitle: 'CSX Stellarator Magnetics',
-        title: 'Columbia Fusion Research Center — CSX Stellarator',
+        title: 'CSX Stellarator Magnetics',
         start: 2025.67,
         end: 2026.37,
         dateStr: 'Sep 2025 – May 2026'
       },
       {
         id: 'exp-cute',
-        shortTitle: 'CUTE Tokamak (Power & Control)',
-        title: 'Columbia Fusion Research Center — CUTE Tokamak',
+        title: 'CUTE Tokamak (Power & Control)',
         start: 2026.42,
-        end: 2026.75,
+        end: 2026.85,
         ongoing: true,
         dateStr: 'Jun 2026 – Present'
       }
@@ -78,78 +82,82 @@ const timelineTracks: TimelineTrack[] = [
   },
   {
     id: 'track-columbia-lab',
+    label: 'Columbia Engineering — Lab Assistant',
+    primaryId: 'exp-columbia-lab',
     category: 'research',
     categoryLabel: 'Research',
     bars: [
       {
         id: 'exp-columbia-lab',
-        shortTitle: 'Signals & Systems Lab Assistant',
-        title: 'Columbia Engineering — Laboratory Assistant',
+        title: 'Signals & Systems Lab Assistant',
         start: 2026.67,
-        end: 2026.75,
+        end: 2026.85,
         ongoing: true,
         dateStr: 'Sep 2026 – Present'
       }
     ]
   },
+  {
+    id: 'track-jas',
+    label: 'Junior Academy of Sciences — Researcher',
+    primaryId: 'exp-jas',
+    category: 'research',
+    categoryLabel: 'Research',
+    bars: [
+      {
+        id: 'exp-jas',
+        title: 'Junior Academy of Sciences',
+        start: 2020.42,
+        end: 2022.88,
+        dateStr: 'Jun 2020 – Nov 2022'
+      }
+    ]
+  },
 
-  // 2. Volunteering & Leadership
+  // 2. Volunteering & Leadership (From LinkedIn + active engagements)
   {
-    id: 'track-ugs',
+    id: 'track-tfu',
+    label: 'Teach For Ukraine — StudMentor',
+    primaryId: 'exp-tfu',
     category: 'volunteering',
     categoryLabel: 'Volunteering & Leadership',
     bars: [
       {
-        id: 'exp-ugs',
-        shortTitle: '◀ UGS Mentorship & Admissions (Since 2021)',
-        title: 'Ukraine Global Scholars — Mentor & Admission Officer',
-        start: 2021.50,
-        end: 2026.75,
+        id: 'exp-tfu',
+        title: 'Teach For Ukraine — StudMentor',
+        start: 2025.42,
+        end: 2026.85,
         ongoing: true,
-        dateStr: 'Jul 2021 – Present'
+        dateStr: 'Jun 2025 – Present'
       }
     ]
   },
   {
-    id: 'track-pair',
+    id: 'track-ecoreps-lead',
+    label: 'Columbia EcoReps — Consumption Lead',
+    primaryId: 'exp-ecoreps-lead',
     category: 'volunteering',
     categoryLabel: 'Volunteering & Leadership',
     bars: [
       {
-        id: 'exp-pair',
-        shortTitle: 'AI & Reasoning Counselor (2023)',
-        title: 'Program on AI and Reasoning — Junior Counselor',
-        start: 2023.60,
-        end: 2023.70,
-        dateStr: 'Aug 2023'
-      },
-      {
-        id: 'exp-pair-2025',
-        shortTitle: 'AI & Reasoning Counselor (2025)',
-        title: 'Program on AI and Reasoning — Junior Counselor',
-        start: 2025.60,
-        end: 2025.70,
-        dateStr: 'Aug 2025'
+        id: 'exp-ecoreps-lead',
+        title: 'Columbia EcoReps — Conscious Consumption Co-Lead',
+        start: 2025.0,
+        end: 2025.95,
+        dateStr: 'Jan 2025 – Dec 2025'
       }
     ]
   },
   {
-    id: 'track-imo-ewb',
+    id: 'track-ewb',
+    label: 'Engineers Without Borders — Fundraising Lead',
+    primaryId: 'exp-ewb',
     category: 'volunteering',
     categoryLabel: 'Volunteering & Leadership',
     bars: [
-      {
-        id: 'exp-imo',
-        shortTitle: 'IMO 2024 Guide',
-        title: 'International Mathematics Olympiad — Volunteer & Guide',
-        start: 2024.50,
-        end: 2024.58,
-        dateStr: 'Jul 2024'
-      },
       {
         id: 'exp-ewb',
-        shortTitle: 'Engineers Without Borders Co-Lead',
-        title: 'Engineering Without Borders — Fundraising Co-Lead',
+        title: 'Engineers Without Borders — Grants & Fundraising Co-Lead',
         start: 2024.67,
         end: 2026.04,
         dateStr: 'Sep 2024 – Jan 2026'
@@ -157,42 +165,214 @@ const timelineTracks: TimelineTrack[] = [
     ]
   },
   {
+    id: 'track-ecoreps-mem',
+    label: 'Columbia EcoReps — Member',
+    primaryId: 'exp-ecoreps-mem',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-ecoreps-mem',
+        title: 'Columbia EcoReps — General Member',
+        start: 2024.67,
+        end: 2026.85,
+        ongoing: true,
+        dateStr: 'Sep 2024 – Present'
+      }
+    ]
+  },
+  {
     id: 'track-cmi',
+    label: 'Columbia Mentorship Initiative — Chair',
+    primaryId: 'exp-cmi',
     category: 'volunteering',
     categoryLabel: 'Volunteering & Leadership',
     bars: [
       {
         id: 'exp-cmi',
-        shortTitle: 'Columbia Mentorship Chair',
         title: 'Columbia Mentorship Initiative — Mentor Chair',
         start: 2024.75,
-        end: 2025.75,
+        end: 2025.42,
         dateStr: 'Sep 2024 – May 2025'
+      }
+    ]
+  },
+  {
+    id: 'track-imo',
+    label: 'International Math Olympiad — Team Guide',
+    primaryId: 'exp-imo',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-imo',
+        title: 'International Mathematical Olympiad — Team Guide',
+        start: 2024.50,
+        end: 2024.58,
+        dateStr: 'Jul 2024'
+      }
+    ]
+  },
+  {
+    id: 'track-pair-2025',
+    label: 'Program on AI & Reasoning — Counselor (2025)',
+    primaryId: 'exp-pair-2025',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-pair-2025',
+        title: 'Program on AI & Reasoning — Junior Counselor (2025)',
+        start: 2025.60,
+        end: 2025.68,
+        dateStr: 'Aug 2025'
+      }
+    ]
+  },
+  {
+    id: 'track-pair-2023',
+    label: 'Program on AI & Reasoning — Counselor (2023)',
+    primaryId: 'exp-pair-2023',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-pair-2023',
+        title: 'Program on AI & Reasoning — Junior Counselor (2023)',
+        start: 2023.60,
+        end: 2023.68,
+        dateStr: 'Aug 2023'
+      }
+    ]
+  },
+  {
+    id: 'track-esmu',
+    label: 'ЕСМУ (ESMU) — Graphic Designer',
+    primaryId: 'exp-esmu-vol',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-esmu-vol',
+        title: 'ЕСМУ (ESMU) — Graphic Designer',
+        start: 2022.12,
+        end: 2022.67,
+        dateStr: 'Feb 2022 – Aug 2022'
+      }
+    ]
+  },
+  {
+    id: 'track-rada',
+    label: 'Verkhovna Rada of Ukraine — Translator',
+    primaryId: 'exp-rada',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-rada',
+        title: 'Verkhovna Rada of Ukraine — Translator',
+        start: 2022.12,
+        end: 2022.25,
+        dateStr: 'Feb 2022 – Mar 2022'
+      }
+    ]
+  },
+  {
+    id: 'track-uts',
+    label: 'UkrTeenScience — Science Mentor',
+    primaryId: 'exp-uts',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-uts',
+        title: 'UkrTeenScience — Science Mentor',
+        start: 2021.83,
+        end: 2022.12,
+        dateStr: 'Nov 2021 – Feb 2022'
+      }
+    ]
+  },
+  {
+    id: 'track-helperu',
+    label: 'HELPeru Dnipra — Event Assistant',
+    primaryId: 'exp-helperu',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-helperu',
+        title: 'HELPeru Dnipra — Event Assistant',
+        start: 2021.67,
+        end: 2021.83,
+        dateStr: 'Sep 2021 – Oct 2021'
+      }
+    ]
+  },
+  {
+    id: 'track-ugs',
+    label: 'Ukraine Global Scholars — Mentor & Admissions',
+    primaryId: 'exp-ugs',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    bars: [
+      {
+        id: 'exp-ugs',
+        title: 'Ukraine Global Scholars — Mentor & Admission Officer',
+        start: 2021.50,
+        end: 2026.85,
+        ongoing: true,
+        dateStr: 'Jul 2021 – Present'
       }
     ]
   },
 
   // 3. Industry & Engineering
   {
-    id: 'track-industry',
+    id: 'track-brave1',
+    label: 'Brave1 — Components Intern',
+    primaryId: 'exp-brave1',
+    category: 'industry',
+    categoryLabel: 'Industry & Engineering',
+    bars: [
+      {
+        id: 'exp-brave1',
+        title: 'Brave1 — Components Intern',
+        start: 2026.42,
+        end: 2026.67,
+        dateStr: 'Jun – Sep 2026'
+      }
+    ]
+  },
+  {
+    id: 'track-reunion',
+    label: 'Columbia University — Reunion Staff',
+    primaryId: 'exp-reunion',
     category: 'industry',
     categoryLabel: 'Industry & Engineering',
     bars: [
       {
         id: 'exp-reunion',
-        shortTitle: 'Columbia Reunion Staff',
         title: 'Columbia University — Student Reunion Worker',
         start: 2026.33,
         end: 2026.42,
         dateStr: 'May 2026'
-      },
+      }
+    ]
+  },
+  {
+    id: 'track-first',
+    label: 'FIRST Robotics Team 8504 — Engineer',
+    primaryId: 'exp-first',
+    category: 'industry',
+    categoryLabel: 'Industry & Engineering',
+    bars: [
       {
-        id: 'exp-brave1',
-        shortTitle: 'Brave1 Supply Chain Intern',
-        title: 'Brave1 — Components Intern',
-        start: 2026.42,
-        end: 2026.67,
-        dateStr: 'Jun – Sep 2026'
+        id: 'exp-first',
+        title: 'FIRST Robotics Team 8504 — Mechanical Engineer',
+        start: 2020.75,
+        end: 2022.17,
+        dateStr: 'Oct 2020 – Mar 2022'
       }
     ]
   }
@@ -254,51 +434,49 @@ const allExperienceCards: ExperienceCard[] = [
 
   // 2. Volunteering & Leadership
   {
-    id: 'exp-ugs',
-    org: 'Ukraine Global Scholars',
-    role: 'Mentor & Admission Officer',
-    title: 'Ukraine Global Scholars — Mentor & Admission Officer',
+    id: 'exp-tfu',
+    org: 'Teach For Ukraine',
+    role: 'Mentor at StudMentor',
+    title: 'Teach For Ukraine — Mentor at StudMentor',
     category: 'volunteering',
     categoryLabel: 'Volunteering & Leadership',
-    dateStr: 'Jul 2021 – Present',
+    dateStr: 'Jun 2025 – Present',
     ongoing: true,
-    overlapNotes: 'Concurrent with Columbia research and academic commitments',
-    description: 'Screened 90+ applicants across 3 admission stages. Co-led 10-day intensive boot camp for 50+ students. Mentored and advised 15+ applicants through college applications, essays, CV refinement, and mock interviews.'
+    description: 'Taught Mathematics and English to Ukrainian school students.'
+  },
+  {
+    id: 'exp-ecoreps-lead',
+    org: 'Columbia EcoReps',
+    role: 'Conscious Consumption Co-Lead',
+    title: 'Columbia EcoReps — Conscious Consumption Co-Lead',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Jan 2025 – Dec 2025',
+    ongoing: false,
+    description: 'Co-organized weekly meetings and a campus-wide clothing swap event promoting sustainability.'
   },
   {
     id: 'exp-ewb',
-    org: 'Engineering Without Borders',
-    role: 'Fundraising Co-Lead',
-    title: 'Engineering Without Borders — Fundraising Co-Lead',
+    org: 'Engineers Without Borders USA',
+    role: 'Grants & Fundraising Co-Lead',
+    title: 'Engineers Without Borders USA — Grants & Fundraising Co-Lead',
     category: 'volunteering',
     categoryLabel: 'Volunteering & Leadership',
-    dateStr: 'Sep 2024 – Jan 2026',
+    dateStr: 'Jan 2025 – Dec 2025 (Sep 2024 – Jan 2026)',
     ongoing: false,
     overlapNotes: 'Concurrent with CSX Stellarator research and coursework',
-    description: 'Reached out to corporate partners, co-organized fundraisers, applied for development grants, and directed weekly operational meetings.'
+    description: 'Reached out to companies, co-organized fundraisers, applied for development grants, and conducted weekly meetings.'
   },
   {
-    id: 'exp-pair',
-    org: 'Program on AI and Reasoning',
-    role: 'Junior Counselor',
-    title: 'Program on AI and Reasoning — Junior Counselor',
+    id: 'exp-ecoreps-mem',
+    org: 'Columbia EcoReps',
+    role: 'Member',
+    title: 'Columbia EcoReps — Member',
     category: 'volunteering',
     categoryLabel: 'Volunteering & Leadership',
-    dateStr: 'Aug 2023 & Aug 2025',
-    ongoing: false,
-    description: 'Assisted 10-day workshop studying math, cognition, and AI/ML for 25 participants selected from 1,200+ applicants. Delivered an interactive lecture on neural architecture and led 7+ cognitive activities in a 15-person team.'
-  },
-  {
-    id: 'exp-imo',
-    org: 'International Mathematics Olympiad',
-    role: 'Volunteer & Guide',
-    title: 'International Mathematics Olympiad — Volunteer & Guide',
-    category: 'volunteering',
-    categoryLabel: 'Volunteering & Leadership',
-    dateStr: 'Jul 2024 · Bath, UK',
-    ongoing: false,
-    location: 'Bath, UK',
-    description: 'Guided a delegation of 6 international contestants throughout the 10-day competition. Organized excursions for 100+ attendees and assisted reception for 80+ national teams totaling 500+ participants.'
+    dateStr: 'Sep 2024 – Present',
+    ongoing: true,
+    description: 'Helped organizing the yearly Green Sale and supported Conscious Consumption environmental initiatives on campus.'
   },
   {
     id: 'exp-cmi',
@@ -310,6 +488,97 @@ const allExperienceCards: ExperienceCard[] = [
     dateStr: 'Sep 2024 – May 2025',
     ongoing: false,
     description: 'Coordinated student mentorship pairings, peer study workshops, and orientation circles for incoming engineering students.'
+  },
+  {
+    id: 'exp-imo',
+    org: 'International Mathematical Olympiad',
+    role: 'Team Guide',
+    title: 'International Mathematical Olympiad — Team Guide',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Jul 2024 · Bath, UK',
+    ongoing: false,
+    location: 'Bath, UK',
+    description: 'Guided a team of 6 participants throughout the event, 30+ hours; organized excursions for 100+ people, 10+ hours; welcomed 80+ teams with total of 500+ members, 20+ hours.'
+  },
+  {
+    id: 'exp-pair-2025',
+    org: 'Program on AI and Reasoning',
+    role: 'Junior Counselor (2025)',
+    title: 'Program on AI and Reasoning — Junior Counselor (2025)',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Aug 2025',
+    ongoing: false,
+    description: 'Assisted 10-day workshop studying math, cognition, and AI/ML for 25 participants selected from 1,200+ applicants.'
+  },
+  {
+    id: 'exp-pair-2023',
+    org: 'Program on AI and Reasoning',
+    role: 'Junior Counselor (2023)',
+    title: 'Program on AI and Reasoning — Junior Counselor (2023)',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Aug 2023',
+    ongoing: false,
+    description: 'Delivered an interactive lecture on neural architecture and led 7+ cognitive activities in a 15-person team.'
+  },
+  {
+    id: 'exp-esmu-vol',
+    org: 'ЕСМУ (ESMU)',
+    role: 'Graphic Designer',
+    title: 'ЕСМУ (ESMU) — Graphic Designer',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Feb 2022 – Aug 2022 · 7 mos',
+    ongoing: false,
+    description: 'Created graphics for SMM posts for ESMU (an organization that raises awareness on environmental problems and cruelty free products).'
+  },
+  {
+    id: 'exp-rada',
+    org: 'Verkhovna Rada of Ukraine',
+    role: 'Translator',
+    title: 'Verkhovna Rada of Ukraine — Official Translator',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Feb 2022 – Mar 2022 · 2 mos',
+    ongoing: false,
+    description: 'Translated and wrote transcripts for the official telegram channel for the first days of the full-scale invasion of Ukraine.'
+  },
+  {
+    id: 'exp-uts',
+    org: 'UkrTeenScience',
+    role: 'Science Mentor',
+    title: 'UkrTeenScience — Science Mentor',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Nov 2021 – Feb 2022 · 4 mos',
+    ongoing: false,
+    description: 'Mentored a student, advising them in writing a research paper and the development of a device for measuring the quality and pollution of drinking water and larger bodies of water.'
+  },
+  {
+    id: 'exp-helperu',
+    org: 'HELPeru Dnipra',
+    role: 'Event Assistant',
+    title: 'HELPeru Dnipra — Event Assistant',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Sep 2021 – Oct 2021 · 2 mos',
+    ongoing: false,
+    location: 'Dnipro, Ukraine',
+    description: 'Helped in organizing several city events (such as celebrations or marathons).'
+  },
+  {
+    id: 'exp-ugs',
+    org: 'Ukraine Global Scholars',
+    role: 'Mentor & Admission Officer',
+    title: 'Ukraine Global Scholars — Mentor & Admission Officer',
+    category: 'volunteering',
+    categoryLabel: 'Volunteering & Leadership',
+    dateStr: 'Jul 2021 – Present',
+    ongoing: true,
+    overlapNotes: 'Concurrent with Columbia research and academic commitments',
+    description: 'Screened 90+ applicants across 3 admission stages. Co-led 10-day intensive boot camp for 50+ students. Mentored and advised 15+ applicants through college applications, essays, CV refinement, and mock interviews.'
   },
 
   // 3. Industry & Engineering
@@ -456,110 +725,125 @@ const allExperienceCards: ExperienceCard[] = [
     </div>
 
     <!-- ------------------------------------------------------------- -->
-    <!-- INTERACTIVE GANTT-STYLE CHRONOLOGICAL TIMELINE (2023–2026)   -->
+    <!-- INTERACTIVE GANTT-STYLE CHRONOLOGICAL TIMELINE (2020–2027)   -->
     <!-- ------------------------------------------------------------- -->
     <div class="mb-14">
       <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
         <div>
-          <h2 class="font-heading font-bold text-2xl text-slate-900 dark:text-white">Commitments Timeline (2023–2026)</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Zoomed high-resolution view of concurrent research, volunteering, and industry engagements.
-          </p>
+          <h2 class="font-heading font-bold text-2xl text-slate-900 dark:text-white">Commitments Timeline</h2>
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
           <!-- Category Legend -->
           <div class="flex flex-wrap items-center gap-3 text-xs font-medium">
             <span class="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-              <span class="w-2.5 h-2.5 rounded-sm bg-emerald-600"></span> Research
+              <span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Research
             </span>
             <span class="inline-flex items-center gap-1.5 text-orange-600 dark:text-orange-400">
-              <span class="w-2.5 h-2.5 rounded-sm bg-orange-600"></span> Volunteering & Leadership
+              <span class="w-2.5 h-2.5 rounded-sm bg-orange-500"></span> Volunteering & Leadership
             </span>
             <span class="inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
               <span class="w-2.5 h-2.5 rounded-sm bg-slate-500"></span> Industry
             </span>
           </div>
 
-          <!-- Height Toggle Button -->
-          <button
-            id="toggle-timeline-height"
-            type="button"
-            class="text-[11px] font-mono font-medium px-2.5 py-1 rounded-md border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors flex items-center gap-1 cursor-pointer"
-            title="Expand or condense vertical timeline height"
-          >
-            <span id="toggle-timeline-label">Expand Rows ↕</span>
-          </button>
+          <span class="text-[11px] text-slate-400 dark:text-slate-500 font-mono select-none">
+            ◂ Scroll left for earlier history
+          </span>
         </div>
       </div>
 
-      <!-- Gantt Chart Container (Condensed rows, zoomed 2023-2026, scrollable with expandable height) -->
-      <div
-        id="gantt-scroll-container"
-        class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm overflow-x-auto overflow-y-auto max-h-[290px] transition-[max-height] duration-300"
-      >
-        <div class="min-w-[720px] relative">
-          
-          <!-- Year Axis Header -->
-          <div class="relative h-6 border-b border-slate-200 dark:border-slate-800 mb-3 text-xs font-mono text-slate-400 font-bold select-none">
-            {years.map(y => (
-              <div
-                class="absolute -translate-x-1/2 flex flex-col items-center"
-                style={`left: ${getPct(y)}%;`}
-              >
-                <span>{y}</span>
-                <span class="w-px h-1.5 bg-slate-300 dark:bg-slate-700 mt-0.5"></span>
+      <!-- Gantt Chart Wrapper (Left uncropped labels + Right horizontally scrollable timeline) -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex">
+        
+        <!-- Left Column: Engagement Names (Pinned/Aligned on the left, uncropped!) -->
+        <div class="w-56 sm:w-64 md:w-72 shrink-0 border-r border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/90 z-20 flex flex-col select-none">
+          <!-- Column Header matching timeline Year Axis Header height -->
+          <div class="h-8 border-b border-slate-200 dark:border-slate-800 px-3.5 flex items-center text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+            Engagement / Role
+          </div>
+          <!-- Rows with uncropped, clean labels -->
+          <div class="divide-y divide-slate-100 dark:divide-slate-800/60 py-1">
+            {timelineTracks.map(track => (
+              <div class="h-7 px-3.5 flex items-center">
+                <a
+                  href={`#${track.primaryId}`}
+                  data-target={track.primaryId}
+                  class="gantt-label-link text-[11.5px] font-heading font-medium text-slate-700 dark:text-slate-300 hover:text-accent-green dark:hover:text-accent-green transition-colors truncate block w-full"
+                  title={track.label}
+                >
+                  {track.label}
+                </a>
               </div>
             ))}
           </div>
-
-          <!-- Vertical Year Grid Lines (Background) -->
-          <div class="absolute inset-0 top-6 pointer-events-none z-0">
-            {years.map(y => (
-              <div
-                class="absolute top-0 bottom-0 w-px border-r border-dashed border-slate-100 dark:border-slate-800/80"
-                style={`left: ${getPct(y)}%;`}
-              />
-            ))}
-          </div>
-
-          <!-- Timeline Condensed Tracks Section -->
-          <div class="relative z-10 space-y-1.5 pt-0.5 pb-1.5">
-            {timelineTracks.map(track => {
-              let defaultStyle = "bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-400/30";
-              if (track.category === 'volunteering') {
-                defaultStyle = "bg-orange-600 hover:bg-orange-500 text-white border-orange-400/30";
-              } else if (track.category === 'industry') {
-                defaultStyle = "bg-slate-600 hover:bg-slate-500 text-white border-slate-400/30";
-              }
-
-              return (
-                <div class="relative h-6 flex items-center group/track">
-                  {track.bars.map(bar => {
-                    const left = getPct(bar.start);
-                    const width = getWidthPct(bar.start, bar.end);
-
-                    return (
-                      <a
-                        href={`#${bar.id}`}
-                        data-target={bar.id}
-                        class={`gantt-bar absolute h-5.5 rounded px-2 flex items-center justify-between text-[11px] font-heading font-semibold shadow-sm transition-all duration-200 cursor-pointer overflow-hidden border ${defaultStyle} hover:scale-[1.01] hover:shadow-md hover:z-20`}
-                        style={`left: ${left}%; width: ${width}%; min-width: 52px;`}
-                        title={`${bar.title} (${bar.dateStr})`}
-                      >
-                        <span class="truncate font-medium">{bar.shortTitle}</span>
-                        {bar.ongoing && (
-                          <span class="shrink-0 ml-1 w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
-                        )}
-                      </a>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
-
         </div>
+
+        <!-- Right Column: Horizontally Scrollable Timeline with ONLY Colored Blocks -->
+        <div id="gantt-timeline-scroll" class="flex-1 overflow-x-auto">
+          <div class="min-w-[760px] relative">
+            
+            <!-- Year Axis Header -->
+            <div class="relative h-8 border-b border-slate-200 dark:border-slate-800 text-[11px] font-mono text-slate-400 font-bold select-none">
+              {years.map(y => (
+                <div
+                  class="absolute -translate-x-1/2 flex flex-col items-center h-full justify-between pt-1.5 pb-0.5"
+                  style={`left: ${getPct(y)}%;`}
+                >
+                  <span>{y}</span>
+                  <span class="w-px h-1.5 bg-slate-300 dark:bg-slate-700"></span>
+                </div>
+              ))}
+            </div>
+
+            <!-- Vertical Year Grid Lines (Background) -->
+            <div class="absolute inset-0 top-8 pointer-events-none z-0">
+              {years.map(y => (
+                <div
+                  class="absolute top-0 bottom-0 w-px border-r border-dashed border-slate-100 dark:border-slate-800/80"
+                  style={`left: ${getPct(y)}%;`}
+                />
+              ))}
+            </div>
+
+            <!-- Timeline Rows: Only Colored Blocks! -->
+            <div class="relative z-10 divide-y divide-slate-100 dark:divide-slate-800/60 py-1">
+              {timelineTracks.map(track => {
+                let blockColor = "bg-emerald-500 hover:bg-emerald-400 border-emerald-400/40 shadow-emerald-500/20";
+                if (track.category === 'volunteering') {
+                  blockColor = "bg-orange-500 hover:bg-orange-400 border-orange-400/40 shadow-orange-500/20";
+                } else if (track.category === 'industry') {
+                  blockColor = "bg-slate-500 hover:bg-slate-400 border-slate-400/40 shadow-slate-500/20";
+                }
+
+                return (
+                  <div class="relative h-7 flex items-center group/track">
+                    {track.bars.map(bar => {
+                      const left = getPct(bar.start);
+                      const width = getWidthPct(bar.start, bar.end);
+
+                      return (
+                        <a
+                          href={`#${bar.id}`}
+                          data-target={bar.id}
+                          class={`gantt-bar absolute h-4.5 rounded-sm shadow-sm transition-all duration-200 cursor-pointer border ${blockColor} hover:scale-y-125 hover:shadow-md hover:z-20 flex items-center justify-end px-1`}
+                          style={`left: ${left}%; width: ${width}%; min-width: 14px;`}
+                          title={`${bar.title} (${bar.dateStr})`}
+                        >
+                          {bar.ongoing && (
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" title="Ongoing Active Commitment"></span>
+                          )}
+                        </a>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -744,12 +1028,12 @@ const allExperienceCards: ExperienceCard[] = [
   <!-- Smooth Scroll and Interactive Highlight Script -->
   <script>
     function initCareerTimeline() {
-      // Gantt bar click to card jump & highlight
-      const bars = document.querySelectorAll('.gantt-bar');
-      bars.forEach(bar => {
-        bar.addEventListener('click', (e) => {
+      // Gantt bar or left label click to card jump & highlight
+      const clickableElements = document.querySelectorAll('.gantt-bar, .gantt-label-link');
+      clickableElements.forEach(el => {
+        el.addEventListener('click', (e) => {
           e.preventDefault();
-          const targetId = bar.getAttribute('data-target');
+          const targetId = el.getAttribute('data-target');
           if (!targetId) return;
 
           const targetCard = document.getElementById(targetId);
@@ -765,21 +1049,13 @@ const allExperienceCards: ExperienceCard[] = [
         });
       });
 
-      // Expand / Collapse height toggle
-      const toggleBtn = document.getElementById('toggle-timeline-height');
-      const ganttContainer = document.getElementById('gantt-scroll-container');
-      const toggleLabel = document.getElementById('toggle-timeline-label');
-
-      if (toggleBtn && ganttContainer && toggleLabel) {
-        toggleBtn.addEventListener('click', () => {
-          if (ganttContainer.classList.contains('max-h-[290px]')) {
-            ganttContainer.classList.remove('max-h-[290px]');
-            toggleLabel.textContent = 'Collapse Rows ↕';
-          } else {
-            ganttContainer.classList.add('max-h-[290px]');
-            toggleLabel.textContent = 'Expand Rows ↕';
-          }
-        });
+      // Initialize timeline scroll to present/recent engagements, allowing user to scroll left for earlier history
+      const scrollContainer = document.getElementById('gantt-timeline-scroll');
+      if (scrollContainer) {
+        // Small delay to ensure layout computation
+        setTimeout(() => {
+          scrollContainer.scrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+        }, 60);
       }
     }
 
