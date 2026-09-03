@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Layout title={`${entry.data.title} | Heliot`}>
+    <article class="prose dark:prose-invert prose-slate max-w-none prose-headings:font-heading prose-a:text-accent-green hover:prose-a:text-accent-green-dark">
+        <div class="mb-8 pb-8 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex gap-2 mb-4">
+                {entry.data.tags?.map(tag => (
+                    <span class="text-[10px] px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded uppercase font-bold tracking-wider">{tag}</span>
+                ))}
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 !mt-0">{entry.data.title}</h1>
+            <time class="text-sm text-slate-500 block">
+                {entry.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+        </div>
+        <Content />
+    </article>
+</Layout>

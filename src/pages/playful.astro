@@ -1,0 +1,491 @@
+---
+// Playful page - standalone, no Layout
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playful — Olena Teslia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: #fef9f0;
+      font-family: 'Work Sans', sans-serif;
+      overflow: hidden;
+    }
+
+    .scene {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 0;
+    }
+
+    /* Sky gradient */
+    body {
+      background: linear-gradient(180deg, #87ceeb 0%, #c8e6f5 40%, #f0e6cc 70%, #d4a96a 85%, #8b6347 100%);
+    }
+
+    .sun {
+      position: fixed;
+      top: 8vh;
+      right: 12vw;
+      width: 70px;
+      height: 70px;
+      background: #ffd700;
+      border-radius: 50%;
+      box-shadow: 0 0 40px 15px rgba(255,215,0,0.4);
+      animation: sunPulse 4s ease-in-out infinite alternate;
+    }
+    @keyframes sunPulse {
+      from { box-shadow: 0 0 40px 15px rgba(255,215,0,0.4); }
+      to   { box-shadow: 0 0 60px 25px rgba(255,200,0,0.6); }
+    }
+
+    /* Ground */
+    .ground {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 30vh;
+      background: #8b6347;
+      border-radius: 50% 50% 0 0 / 10% 10% 0 0;
+    }
+    .grass {
+      position: fixed;
+      bottom: 28vh;
+      left: 0;
+      right: 0;
+      height: 5vh;
+      background: #5a8a3c;
+      border-radius: 50% 50% 0 0 / 40% 40% 0 0;
+    }
+
+    /* The hole */
+    .hole-wrapper {
+      position: fixed;
+      bottom: 26vh;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hole {
+      width: 80px;
+      height: 0;
+      background: #1a0a00;
+      border-radius: 50%;
+      animation: digHole 3s ease-in forwards;
+      animation-delay: 0.5s;
+      box-shadow: inset 0 10px 20px rgba(0,0,0,0.8);
+    }
+    @keyframes digHole {
+      0%   { width: 30px; height: 0px; }
+      30%  { width: 70px; height: 20px; }
+      60%  { width: 85px; height: 50px; }
+      100% { width: 90px; height: 90px; }
+    }
+
+    /* Dirt pile to the right of the hole */
+    .dirt-pile {
+      position: fixed;
+      bottom: 27vh;
+      left: calc(50% + 55px);
+      width: 0;
+      height: 0;
+      animation: growPile 3s ease-in forwards;
+      animation-delay: 0.5s;
+    }
+    @keyframes growPile {
+      0%   { width: 0;   height: 0; }
+      100% { width: 60px; height: 35px; }
+    }
+    .dirt-pile::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #6b4423;
+      border-radius: 50% 50% 30% 30% / 60% 60% 40% 40%;
+    }
+
+    /* Stickman */
+    .stickman {
+      position: fixed;
+      bottom: calc(26vh + 5px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 110px;
+      animation: sinkDown 3s ease-in forwards;
+      animation-delay: 0.5s;
+    }
+    @keyframes sinkDown {
+      0%   { bottom: calc(26vh + 5px); }
+      100% { bottom: calc(26vh - 60px); }
+    }
+
+    .stickman svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Head bob */
+    .head {
+      animation: headBob 0.5s ease-in-out infinite alternate;
+      transform-origin: 30px 15px;
+    }
+    @keyframes headBob {
+      from { transform: rotate(-5deg); }
+      to   { transform: rotate(5deg); }
+    }
+
+    /* Body lean */
+    .body-group {
+      animation: bodyLean 0.5s ease-in-out infinite alternate;
+      transform-origin: 30px 40px;
+    }
+    @keyframes bodyLean {
+      from { transform: rotate(-8deg); }
+      to   { transform: rotate(8deg); }
+    }
+
+    /* Arms digging */
+    .arm-right {
+      animation: armDig 0.5s ease-in-out infinite alternate;
+      transform-origin: 30px 42px;
+    }
+    @keyframes armDig {
+      from { transform: rotate(-60deg); }
+      to   { transform: rotate(30deg); }
+    }
+    .arm-left {
+      animation: armDig2 0.5s ease-in-out infinite alternate;
+      transform-origin: 30px 42px;
+    }
+    @keyframes armDig2 {
+      from { transform: rotate(30deg); }
+      to   { transform: rotate(-60deg); }
+    }
+
+    /* Legs */
+    .leg-right {
+      animation: legR 0.5s ease-in-out infinite alternate;
+      transform-origin: 30px 70px;
+    }
+    @keyframes legR {
+      from { transform: rotate(10deg); }
+      to   { transform: rotate(-10deg); }
+    }
+    .leg-left {
+      animation: legL 0.5s ease-in-out infinite alternate;
+      transform-origin: 30px 70px;
+    }
+    @keyframes legL {
+      from { transform: rotate(-10deg); }
+      to   { transform: rotate(10deg); }
+    }
+
+    /* Dirt particles */
+    .particles {
+      position: fixed;
+      bottom: 30vh;
+      left: 50%;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #8b6347;
+      border-radius: 50%;
+      animation: flyDirt var(--dur) ease-out infinite;
+      animation-delay: var(--delay);
+      opacity: 0;
+    }
+    @keyframes flyDirt {
+      0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; }
+    }
+
+    /* Back button */
+    .back {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      z-index: 40;
+    }
+    .back:hover { color: white; }
+
+    /* Caption */
+    .caption {
+      position: fixed;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      white-space: nowrap;
+    }
+
+    /* Progress text */
+    .progress-text {
+      position: fixed;
+      bottom: 4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.15em;
+      animation: fadeText 0.5s ease-in-out infinite alternate;
+    }
+    @keyframes fadeText {
+      from { opacity: 0.4; }
+      to   { opacity: 0.9; }
+    }
+
+    /* Construction Tape Strips */
+    .construction-tape {
+      position: fixed;
+      width: 140vw;
+      left: -20vw;
+      background: #ffcc00;
+      color: #000;
+      font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      white-space: nowrap;
+      user-select: none;
+      pointer-events: none;
+      z-index: 25;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+      border-top: 4px solid #111;
+      border-bottom: 4px solid #111;
+    }
+
+    .construction-tape::before,
+    .construction-tape::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #000 0px,
+        #000 10px,
+        #ffcc00 10px,
+        #ffcc00 20px
+      );
+      z-index: 2;
+    }
+
+    .construction-tape::before {
+      top: 0;
+    }
+
+    .construction-tape::after {
+      bottom: 0;
+    }
+
+    .tape-top {
+      top: 18%;
+      transform: rotate(-4.5deg);
+      padding: 14px 0;
+      font-size: clamp(1.4rem, 3.8vw, 2.8rem);
+      letter-spacing: 0.08em;
+    }
+
+    .tape-bottom {
+      bottom: 12%;
+      transform: rotate(3.5deg);
+      padding: 12px 0;
+      font-size: clamp(0.95rem, 2.2vw, 1.6rem);
+      letter-spacing: 0.05em;
+    }
+
+    .tape-track {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      padding: 4px 0;
+    }
+
+    .hazard {
+      color: #111;
+      opacity: 0.6;
+      letter-spacing: 0.25em;
+      font-weight: 900;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Construction Tape Strips -->
+  <div class="construction-tape tape-top" aria-hidden="true">
+    <div class="tape-track">
+      <span>[under development...]</span>
+      <span class="hazard">///</span>
+      <span>[under development...]</span>
+      <span class="hazard">///</span>
+      <span>[under development...]</span>
+      <span class="hazard">///</span>
+      <span>[under development...]</span>
+      <span class="hazard">///</span>
+      <span>[under development...]</span>
+    </div>
+  </div>
+
+  <div class="construction-tape tape-bottom" aria-hidden="true">
+    <div class="tape-track">
+      <span>currently some AI slope .^.</span>
+      <span class="hazard">///</span>
+      <span>currently some AI slope .^.</span>
+      <span class="hazard">///</span>
+      <span>currently some AI slope .^.</span>
+      <span class="hazard">///</span>
+      <span>currently some AI slope .^.</span>
+      <span class="hazard">///</span>
+      <span>currently some AI slope .^.</span>
+    </div>
+  </div>
+
+  <a href="/" class="back">← back</a>
+  <span class="caption">digging a hole</span>
+
+  <div class="sun"></div>
+  <div class="grass"></div>
+  <div class="ground"></div>
+
+  <!-- Hole -->
+  <div class="hole-wrapper">
+    <div class="hole"></div>
+  </div>
+
+  <!-- Dirt pile -->
+  <div class="dirt-pile"></div>
+
+  <!-- Dirt particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Stickman SVG -->
+  <div class="stickman">
+    <svg viewBox="0 0 60 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Head -->
+      <g class="head">
+        <circle cx="30" cy="13" r="10" stroke="#1a1a1a" stroke-width="3" fill="none"/>
+        <!-- Eyes -->
+        <circle cx="26" cy="11" r="1.5" fill="#1a1a1a"/>
+        <circle cx="34" cy="11" r="1.5" fill="#1a1a1a"/>
+        <!-- Mouth (determined) -->
+        <line x1="26" y1="16" x2="34" y2="16" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      </g>
+
+      <!-- Body + limbs group -->
+      <g class="body-group">
+        <!-- Neck/body -->
+        <line x1="30" y1="23" x2="30" y2="70" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Shovel (right arm holding it) -->
+        <g class="arm-right">
+          <!-- Right arm -->
+          <line x1="30" y1="42" x2="50" y2="58" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+          <!-- Shovel handle -->
+          <line x1="50" y1="58" x2="52" y2="80" stroke="#8b6347" stroke-width="3" stroke-linecap="round"/>
+          <!-- Shovel blade -->
+          <rect x="44" y="78" width="16" height="10" rx="2" fill="#888" stroke="#555" stroke-width="1.5"/>
+        </g>
+
+        <!-- Left arm (braced) -->
+        <g class="arm-left">
+          <line x1="30" y1="42" x2="12" y2="55" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+          <line x1="12" y1="55" x2="18" y2="72" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+        </g>
+
+        <!-- Right leg -->
+        <g class="leg-right">
+          <line x1="30" y1="70" x2="42" y2="95" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+          <line x1="42" y1="95" x2="50" y2="95" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+        </g>
+
+        <!-- Left leg -->
+        <g class="leg-left">
+          <line x1="30" y1="70" x2="18" y2="95" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+          <line x1="18" y1="95" x2="10" y2="95" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Sweat drops -->
+  <div style="position:fixed;font-size:1.2rem;animation:fadeText 0.6s ease-in-out infinite alternate;bottom:calc(30vh + 80px);left:calc(50% + 25px)">💧</div>
+
+  <p class="progress-text">still going...</p>
+
+  <script>
+    // Generate dirt particles
+    const container = document.getElementById('particles');
+    const configs = [
+      { tx: '-60px', ty: '-80px', delay: '0s',    dur: '0.8s' },
+      { tx:  '70px', ty: '-60px', delay: '0.15s', dur: '0.7s' },
+      { tx: '-40px', ty: '-90px', delay: '0.3s',  dur: '0.9s' },
+      { tx:  '50px', ty: '-75px', delay: '0.1s',  dur: '0.75s' },
+      { tx: '-80px', ty: '-50px', delay: '0.25s', dur: '0.85s' },
+      { tx:  '30px', ty: '-95px', delay: '0.4s',  dur: '0.65s' },
+      { tx: '-20px', ty: '-70px', delay: '0.05s', dur: '0.95s' },
+      { tx:  '80px', ty: '-40px', delay: '0.35s', dur: '0.7s'  },
+    ];
+    if (container) {
+      configs.forEach(({ tx, ty, delay, dur }) => {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.setProperty('--tx', tx);
+        p.style.setProperty('--ty', ty);
+        p.style.setProperty('--delay', delay);
+        p.style.setProperty('--dur', dur);
+        // random tint of brown
+        const shade = Math.floor(Math.random() * 40 + 80);
+        p.style.background = `rgb(${shade + 20}, ${shade - 20}, 0)`;
+        container.appendChild(p);
+      });
+    }
+
+    // After digging for a while, show a little message
+    setTimeout(() => {
+      const msg = document.querySelector('.progress-text');
+      if (msg) msg.textContent = "almost there...";
+    }, 5000);
+    setTimeout(() => {
+      const msg = document.querySelector('.progress-text');
+      if (msg) msg.textContent = "she's fine 🙂";
+    }, 10000);
+  </script>
+</body>
+</html>

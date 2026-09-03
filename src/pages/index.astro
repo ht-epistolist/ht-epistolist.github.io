@@ -1,0 +1,142 @@
+---
+// Landing page - no Layout wrapper, full custom
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Olena Teslia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: #080c10;
+      color: #e2e8f0;
+      font-family: 'Work Sans', sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      animation: twinkle var(--d, 3s) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.1; }
+      to   { opacity: 0.7; }
+    }
+
+    .choices {
+      display: flex;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 180px;
+      height: 60px;
+      border-radius: 8px;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      cursor: pointer;
+      border: 2px solid;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .btn-tired {
+      color: #94a3b8;
+      border-color: #334155;
+      background: transparent;
+    }
+    .btn-tired::before { background: #1e293b; }
+    .btn-tired:hover {
+      color: #cbd5e1;
+      border-color: #64748b;
+      transform: translateY(-2px);
+    }
+    .btn-tired:hover::before { opacity: 1; }
+
+    .btn-playful {
+      color: #fdba74;
+      border-color: #ea580c;
+      background: transparent;
+    }
+    .btn-playful::before { background: rgba(234,88,12,0.15); }
+    .btn-playful:hover {
+      color: #fff;
+      border-color: #f97316;
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(234,88,12,0.3);
+    }
+    .btn-playful:hover::before { opacity: 1; }
+
+    .btn span { position: relative; z-index: 1; }
+
+    @media (max-width: 480px) {
+      .choices { flex-direction: column; gap: 1rem; }
+      .btn { width: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="container">
+    <div class="choices">
+      <a href="/home" class="btn btn-tired"><span>tired</span></a>
+      <a href="/playful" class="btn btn-playful"><span>playful</span></a>
+    </div>
+  </div>
+  <script>
+    const container = document.getElementById('stars');
+    if (container) {
+      for (let i = 0; i < 120; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 2 + 0.5;
+        star.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+2).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s;opacity:${Math.random()*0.4};`;
+        container.appendChild(star);
+      }
+    }
+  </script>
+</body>
+</html>

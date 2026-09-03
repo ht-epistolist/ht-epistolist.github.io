@@ -1,0 +1,37 @@
+{
+  "user": {
+    "name": "Heliot",
+    "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80"
+  },
+  "recentlyPlayed": [
+    {
+      "name": "Midnight City",
+      "artist": "M83",
+      "url": "https://open.spotify.com/track/placeholder1"
+    },
+    {
+      "name": "Lofi Study",
+      "artist": "ChilledCow",
+      "url": "https://open.spotify.com/track/placeholder2"
+    },
+    {
+      "name": "Starboy",
+      "artist": "The Weeknd",
+      "url": "https://open.spotify.com/track/placeholder3"
+    }
+  ],
+  "playlists": [
+    {
+      "name": "Coding Focus",
+      "url": "https://open.spotify.com/playlist/placeholder1"
+    },
+    {
+      "name": "Late Night Drives",
+      "url": "https://open.spotify.com/playlist/placeholder2"
+    },
+    {
+      "name": "Synthwave 2025",
+      "url": "https://open.spotify.com/playlist/placeholder3"
+    }
+  ]
+}

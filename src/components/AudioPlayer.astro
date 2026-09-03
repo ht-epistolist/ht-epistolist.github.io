@@ -1,0 +1,77 @@
+---
+---
+<div transition:persist="audio-player" class="fixed bottom-4 right-4 bg-white dark:bg-slate-800 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 p-2 flex items-center gap-3 z-50">
+    <button id="audio-play-btn" class="w-10 h-10 flex items-center justify-center bg-accent-green hover:bg-accent-green-dark text-white rounded-full transition-colors">
+        <svg id="icon-play" class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
+        <svg id="icon-pause" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M6 4h2v12H6zm6 0h2v12h-2z"></path></svg>
+    </button>
+    
+    <div class="flex flex-col mr-2 max-w-[120px] overflow-hidden">
+        <span class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">Lofi Study</span>
+        <span class="text-[10px] text-slate-500 dark:text-slate-400">Background</span>
+    </div>
+
+    <button id="audio-mute-btn" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
+        <svg id="icon-vol" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2.586l3.707 3.707A1 1 0 0015 19V5a1 1 0 00-1.707-.707L9.586 8H7a2 2 0 00-2 2z"></path></svg>
+        <svg id="icon-mute" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
+    </button>
+    
+    <audio id="global-audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop preload="none"></audio>
+</div>
+
+<script>
+    const audio = document.getElementById('global-audio') as HTMLAudioElement;
+    const playBtn = document.getElementById('audio-play-btn');
+    const muteBtn = document.getElementById('audio-mute-btn');
+    const iconPlay = document.getElementById('icon-play');
+    const iconPause = document.getElementById('icon-pause');
+    const iconVol = document.getElementById('icon-vol');
+    const iconMute = document.getElementById('icon-mute');
+
+    if (audio && playBtn && muteBtn && iconPlay && iconPause && iconVol && iconMute) {
+        const isPlaying = sessionStorage.getItem('audioPlaying') === 'true';
+        const isMuted = sessionStorage.getItem('audioMuted') === 'true';
+
+        if (isMuted) {
+            audio.muted = true;
+            iconVol.classList.add('hidden');
+            iconMute.classList.remove('hidden');
+        }
+
+        if (isPlaying) {
+            audio.play().then(() => {
+                iconPlay.classList.add('hidden');
+                iconPause.classList.remove('hidden');
+            }).catch(() => {
+                sessionStorage.setItem('audioPlaying', 'false');
+            });
+        }
+
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                iconPlay.classList.add('hidden');
+                iconPause.classList.remove('hidden');
+                sessionStorage.setItem('audioPlaying', 'true');
+            } else {
+                audio.pause();
+                iconPlay.classList.remove('hidden');
+                iconPause.classList.add('hidden');
+                sessionStorage.setItem('audioPlaying', 'false');
+            }
+        });
+
+        muteBtn.addEventListener('click', () => {
+            audio.muted = !audio.muted;
+            if (audio.muted) {
+                iconVol.classList.add('hidden');
+                iconMute.classList.remove('hidden');
+                sessionStorage.setItem('audioMuted', 'true');
+            } else {
+                iconVol.classList.remove('hidden');
+                iconMute.classList.add('hidden');
+                sessionStorage.setItem('audioMuted', 'false');
+            }
+        });
+    }
+</script>

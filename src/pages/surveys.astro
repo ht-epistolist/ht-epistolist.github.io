@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PollComponent from '../components/PollComponent.astro';
+---
+
+<Layout title="Surveys & Contact | Heliot">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        
+        <div>
+            <h1 class="text-4xl font-heading font-bold mb-4">Get In Touch</h1>
+            <p class="mb-8 text-slate-600 dark:text-slate-300">
+                Whether you want to request a cover letter, collaborate on a project, or just say hi, feel free to reach out using the form below.
+            </p>
+            
+            <form action="https://api.web3forms.com/submit" method="POST" class="space-y-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-6 rounded-xl shadow-sm">
+                <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY_PLACEHOLDER">
+                <input type="hidden" name="redirect" value="https://heliot.github.io/surveys?success=true">
+                
+                <div>
+                    <label for="name" class="block text-sm font-bold mb-1">Name</label>
+                    <input type="text" id="name" name="name" required class="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-accent-green">
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-bold mb-1">Email</label>
+                    <input type="email" id="email" name="email" required class="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-accent-green">
+                </div>
+                <div>
+                    <label for="message" class="block text-sm font-bold mb-1">Message</label>
+                    <textarea id="message" name="message" rows="5" required class="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-accent-green"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-lg hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors">
+                    Send Message
+                </button>
+            </form>
+        </div>
+
+        <div>
+            <h2 class="text-3xl font-heading font-bold mb-4">Community Polls</h2>
+            <p class="mb-6 text-slate-600 dark:text-slate-300">
+                I'm always curious about what others think regarding the future of tech and design. Vote below!
+            </p>
+            
+            <PollComponent 
+                id="poll-ai-creative" 
+                question="How do you think AI will affect creative work in 5 years?" 
+                options={["Mostly Enhance It", "Mostly Replace It", "No Major Change", "I'm Not Sure"]} 
+            />
+            
+            <PollComponent 
+                id="poll-hci" 
+                question="What matters most in human-computer interaction?" 
+                options={["Speed & Efficiency", "Intuitiveness", "Accessibility", "Emotional Design"]} 
+            />
+        </div>
+        
+    </div>
+</Layout>

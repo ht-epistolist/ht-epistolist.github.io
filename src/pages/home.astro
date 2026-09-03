@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+import spotifyData from '../data/spotify.json';
+---
+
+<Layout title="Olena Teslia | Home">
+    <div class="flex flex-col md:flex-row gap-8 items-start mt-8">
+        <div class="w-full md:w-2/3">
+            <h1 class="text-4xl md:text-5xl font-heading font-bold mb-4">
+                Hi, I'm <span class="text-accent-green dark:text-accent-green-dark">Olena Teslia</span>.
+            </h1>
+            <p class="text-lg mb-2 font-heading text-slate-500 dark:text-slate-400 tracking-wide">
+                Engineering. Research. Art. Volunteering.
+            </p>
+            <div class="prose dark:prose-invert prose-slate mb-6 max-w-none">
+                <p>
+                    I'm doing Electrical Engineering at Columbia University, interested in <strong>bioelectronics</strong>, <strong>robotics</strong>, and <strong>weird innovations</strong>, advancing in <strong>Math</strong>, <strong>Physics</strong>, and <strong>CS</strong>, as well as circuits and signals processing — and doing research at the Columbia Stellarator eXperiment.
+                </p>
+                <p>
+                    I also practice Photography, <strong>Graphic Design</strong>, <strong>Drawing</strong>, and <strong>Creative Writing</strong>.
+                </p>
+            </div>
+            <div class="prose dark:prose-invert prose-slate mb-8 max-w-none border-l-4 border-accent-orange pl-4">
+                <p class="italic text-slate-600 dark:text-slate-400">
+                    I'm open for a project to challenge my skills and views — ready to dedicate myself fully to extraordinary ideas through Engineering, Product Design, Product Management, Research, or other positions.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-4 items-center">
+                <a href="mailto:ht.epistolist@gmail.com" class="font-heading text-accent-green dark:text-accent-green-dark hover:underline font-semibold transition-colors">
+                    ht.epistolist@gmail.com
+                </a>
+                <a href="/portfolio" class="px-6 py-2 border border-slate-300 dark:border-slate-700 rounded-lg font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    View Portfolio
+                </a>
+                <a href="/career" class="px-6 py-2 bg-accent-orange hover:bg-accent-orange-dark text-white rounded-lg font-bold transition-colors">
+                    Open to Work
+                </a>
+            </div>
+        </div>
+        
+        <div class="w-full md:w-1/3 flex flex-col items-center">
+            <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-accent-green dark:border-accent-green-dark mb-6 shadow-xl">
+                <img src={spotifyData.user.avatar} alt="Olena Teslia Profile" class="w-full h-full object-cover" />
+            </div>
+            
+            <!-- Spotify Widget -->
+            <div class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm">
+                <div class="flex items-center gap-2 mb-4">
+                    <svg class="w-6 h-6 text-[#1DB954]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.24 1.021zM19.32 14.1c-.3.42-.84.54-1.26.24-3.36-2.04-8.52-2.64-12.54-1.44-.48.12-1.02-.12-1.14-.6-.12-.48.12-1.02.6-1.14 4.56-1.32 10.32-.66 14.1 1.62.42.3.54.9.24 1.32zM19.56 10.62C15.24 8.04 8.82 7.8 5.1 8.94c-.6.18-1.2-.18-1.38-.72-.18-.6.18-1.2.72-1.38 4.2-1.26 11.28-1.02 16.14 1.86.54.3.72 1.02.42 1.56-.3.54-1.02.72-1.56.42z"/></svg>
+                    <h2 class="font-heading font-bold text-sm">Recently Played</h2>
+                </div>
+                <ul class="space-y-3 mb-4">
+                    {spotifyData.recentlyPlayed.map((track) => (
+                        <li class="flex items-center gap-3">
+                            <a href={track.url} target="_blank" rel="noopener noreferrer" class="text-sm truncate hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">
+                                <span class="font-bold">{track.name}</span> <span class="text-slate-500 dark:text-slate-400 text-xs">- {track.artist}</span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+                <div class="border-t border-slate-200 dark:border-slate-700 pt-3">
+                    <h3 class="font-heading font-bold text-xs mb-2 text-slate-500 dark:text-slate-400 uppercase tracking-wider">Playlists</h3>
+                    <div class="flex flex-wrap gap-2">
+                        {spotifyData.playlists.map((pl) => (
+                            <a href={pl.url} target="_blank" rel="noopener noreferrer" class="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                {pl.name}
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>

@@ -1,0 +1,21 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+---
+<header class="w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur sticky top-0 z-40">
+    <div class="container mx-auto px-4 py-4 max-w-4xl flex items-center justify-between">
+        <a href="/" class="font-heading font-bold text-xl tracking-tight text-accent-green dark:text-accent-green-dark hover:text-accent-orange dark:hover:text-accent-orange-dark transition-colors">
+            Olena Teslia
+        </a>
+        <nav class="hidden md:flex gap-6 font-heading font-medium">
+            <a href="/home" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Home</a>
+            <a href="/portfolio" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Portfolio</a>
+            <a href="/career" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Career</a>
+            <a href="/blog" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Blog</a>
+            <a href="/surveys" class="hover:text-accent-green dark:hover:text-accent-green-dark transition-colors">Surveys</a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <ThemeToggle />
+            <!-- Mobile menu button can go here -->
+        </div>
+    </div>
+</header>

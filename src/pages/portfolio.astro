@@ -1,0 +1,149 @@
+---
+import Layout from '../layouts/Layout.astro';
+import pubData from '../data/publications.json';
+import artData from '../data/art.json';
+
+type ArtItem = typeof artData[number] & { content?: string };
+const typedArtData = artData as ArtItem[];
+
+const featuredTech = pubData.filter(p => p.featured).slice(0, 3);
+const archiveTech = pubData.filter(p => !p.featured || !featuredTech.includes(p));
+
+const featuredArt = typedArtData.filter(a => a.featured).slice(0, 3);
+const archiveArt = typedArtData.filter(a => !a.featured || !featuredArt.includes(a));
+---
+
+<Layout title="Portfolio | Olena Teslia">
+    <div class="mb-8 border-b border-slate-200 dark:border-slate-800">
+        <h1 class="text-4xl font-heading font-bold mb-6">Portfolio</h1>
+        
+        <div class="flex gap-6">
+            <button id="tab-tech" class="pb-3 text-lg font-bold border-b-2 border-accent-green dark:border-accent-green-dark text-slate-900 dark:text-white transition-colors">
+                Tech
+            </button>
+            <button id="tab-art" class="pb-3 text-lg font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
+                Art
+            </button>
+        </div>
+    </div>
+
+    <!-- Tech Tab -->
+    <div id="content-tech" class="space-y-8 block">
+        <h2 class="text-2xl font-heading font-bold mb-4 text-accent-green dark:text-accent-green-dark">Featured Tech</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {featuredTech.map(p => (
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex gap-2 mb-2">
+                        {p.tags.slice(0,2).map(tag => (
+                            <span class="text-[10px] px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded uppercase font-bold tracking-wider">{tag}</span>
+                        ))}
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">{p.title}</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">{p.authors} - {p.venue} ({p.year})</p>
+                    <p class="text-sm mb-4 line-clamp-3">{p.abstract}</p>
+                    <div class="flex gap-3 text-sm font-bold">
+                        {p.pdfUrl && <a href={p.pdfUrl} class="text-accent-green dark:text-accent-green-dark hover:underline">PDF</a>}
+                        {p.codeUrl && <a href={p.codeUrl} class="text-accent-green dark:text-accent-green-dark hover:underline">Code</a>}
+                    </div>
+                </div>
+            ))}
+        </div>
+        
+        <details class="group bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+            <summary class="p-4 font-bold cursor-pointer bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex justify-between items-center">
+                Archive ({archiveTech.length})
+                <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </summary>
+            <div class="p-6 space-y-4">
+                {archiveTech.map(p => (
+                    <div class="border-b border-slate-200 dark:border-slate-700 pb-4 last:border-0 last:pb-0">
+                        <h4 class="font-bold">{p.title}</h4>
+                        <p class="text-xs text-slate-500 mb-2">{p.authors} - {p.year}</p>
+                    </div>
+                ))}
+            </div>
+        </details>
+    </div>
+
+    <!-- Art Tab -->
+    <div id="content-art" class="space-y-8 hidden">
+        <h2 class="text-2xl font-heading font-bold mb-4 text-accent-orange dark:text-accent-orange-dark">Featured Art</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {featuredArt.map(a => (
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    <span class="text-[10px] px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded uppercase font-bold tracking-wider mb-3 inline-block">{a.category}</span>
+                    <h3 class="text-xl font-bold mb-3">{a.title}</h3>
+                    {a.imageUrl && (
+                        <div class="w-full h-48 mb-4 rounded overflow-hidden">
+                            <img src={a.imageUrl} alt={a.title} class="w-full h-full object-cover" />
+                        </div>
+                    )}
+                    {a.content && (
+                        <div class="mb-4 text-sm whitespace-pre-wrap font-body italic border-l-2 border-slate-200 dark:border-slate-700 pl-4">{a.content}</div>
+                    )}
+                    <p class="text-sm">{a.description}</p>
+                </div>
+            ))}
+        </div>
+        
+        <details class="group bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+            <summary class="p-4 font-bold cursor-pointer bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex justify-between items-center">
+                Archive ({archiveArt.length})
+                <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </summary>
+            <div class="p-6 space-y-4">
+                {archiveArt.map(a => (
+                    <div class="border-b border-slate-200 dark:border-slate-700 pb-4 last:border-0 last:pb-0 flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold">{a.title}</h4>
+                            <p class="text-xs text-slate-500 capitalize">{a.category}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </details>
+    </div>
+
+<script>
+    function initTabs() {
+        const tabTech = document.getElementById('tab-tech');
+        const tabArt = document.getElementById('tab-art');
+        const contentTech = document.getElementById('content-tech');
+        const contentArt = document.getElementById('content-art');
+
+        if (!tabTech || !tabArt || !contentTech || !contentArt) return;
+
+        const setTechActive = () => {
+            tabTech.classList.add('border-accent-green', 'dark:border-accent-green-dark', 'text-slate-900', 'dark:text-white');
+            tabTech.classList.remove('border-transparent', 'text-slate-500');
+            
+            tabArt.classList.remove('border-accent-orange', 'dark:border-accent-orange-dark', 'text-slate-900', 'dark:text-white');
+            tabArt.classList.add('border-transparent', 'text-slate-500');
+            
+            contentTech.classList.remove('hidden');
+            contentTech.classList.add('block');
+            contentArt.classList.add('hidden');
+            contentArt.classList.remove('block');
+        };
+
+        const setArtActive = () => {
+            tabArt.classList.add('border-accent-orange', 'dark:border-accent-orange-dark', 'text-slate-900', 'dark:text-white');
+            tabArt.classList.remove('border-transparent', 'text-slate-500');
+            
+            tabTech.classList.remove('border-accent-green', 'dark:border-accent-green-dark', 'text-slate-900', 'dark:text-white');
+            tabTech.classList.add('border-transparent', 'text-slate-500');
+            
+            contentArt.classList.remove('hidden');
+            contentArt.classList.add('block');
+            contentTech.classList.add('hidden');
+            contentTech.classList.remove('block');
+        };
+
+        tabTech.addEventListener('click', setTechActive);
+        tabArt.addEventListener('click', setArtActive);
+    }
+
+    initTabs();
+    document.addEventListener('astro:page-load', initTabs);
+</script>
+</Layout>

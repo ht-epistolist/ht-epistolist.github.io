@@ -1,0 +1,106 @@
+---
+export interface Props {
+  id: string;
+  question: string;
+  options: string[];
+}
+
+const { id, question, options } = Astro.props;
+---
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-6 shadow-sm my-6 poll-container" data-poll-id={id}>
+  <h3 class="text-lg font-heading font-bold mb-4">{question}</h3>
+  
+  <div class="poll-options space-y-3">
+    {options.map((option, index) => (
+      <button 
+        class="poll-option w-full text-left px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-accent-orange dark:hover:border-accent-orange hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-colors"
+        data-option={option}
+      >
+        <div class="flex justify-between items-center relative z-10">
+            <span>{option}</span>
+            <span class="poll-percentage hidden text-sm font-bold text-accent-orange dark:text-accent-orange-dark">0%</span>
+        </div>
+        <div class="poll-bar absolute top-0 left-0 h-full bg-orange-100 dark:bg-orange-900/40 rounded-lg w-0 transition-all duration-500 -z-0"></div>
+      </button>
+    ))}
+  </div>
+  
+  <div class="mt-4 text-sm text-slate-500 dark:text-slate-400 poll-status">
+    Loading results...
+  </div>
+</div>
+
+<script>
+  // Placeholder logic for polls since we are not connecting real Supabase yet.
+  // In a real implementation, this would fetch from Supabase.
+  const API_URL = "https://placeholder.supabase.co/rest/v1/poll_votes";
+  const ANON_KEY = "placeholder-anon-key";
+
+  function initPolls() {
+    const containers = document.querySelectorAll('.poll-container');
+    
+    containers.forEach(container => {
+      const pollId = container.getAttribute('data-poll-id');
+      const statusEl = container.querySelector('.poll-status');
+      const options = container.querySelectorAll('.poll-option');
+      
+      // Check if voted
+      const hasVoted = localStorage.getItem(`voted_${pollId}`);
+      
+      // Fake initial data
+      let votes: Record<string, number> = {};
+      options.forEach(opt => {
+        const optionName = opt.getAttribute('data-option')!;
+        votes[optionName] = Math.floor(Math.random() * 5); // Fake starting votes
+      });
+      let totalVotes = Object.values(votes).reduce((a, b) => a + b, 0);
+
+      const updateUI = () => {
+        if (totalVotes < 10 && !hasVoted) {
+           if(statusEl) statusEl.textContent = `Results hidden until 10 votes (Current: ${totalVotes})`;
+        } else {
+           if(statusEl) statusEl.textContent = `Total votes: ${totalVotes}`;
+           options.forEach(opt => {
+             const optionName = opt.getAttribute('data-option')!;
+             const count = votes[optionName] || 0;
+             const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+             
+             const percentEl = opt.querySelector('.poll-percentage');
+             if(percentEl) {
+                 percentEl.textContent = `${percent}%`;
+                 percentEl.classList.remove('hidden');
+             }
+             
+             const barEl = opt.querySelector('.poll-bar') as HTMLElement;
+             if(barEl) {
+                 barEl.style.width = `${percent}%`;
+             }
+             
+             opt.classList.add('cursor-default', 'relative', 'overflow-hidden');
+             opt.classList.remove('hover:border-accent-orange', 'hover:bg-orange-50', 'dark:hover:border-accent-orange', 'dark:hover:bg-orange-950/30');
+             (opt as HTMLButtonElement).disabled = true;
+           });
+        }
+      };
+
+      updateUI();
+
+      options.forEach(opt => {
+        opt.addEventListener('click', () => {
+          if (localStorage.getItem(`voted_${pollId}`)) return;
+          
+          const optionName = opt.getAttribute('data-option')!;
+          votes[optionName] = (votes[optionName] || 0) + 1;
+          totalVotes++;
+          localStorage.setItem(`voted_${pollId}`, 'true');
+          updateUI();
+          
+          // In real app, make POST request to Supabase here
+        });
+      });
+    });
+  }
+
+  initPolls();
+  document.addEventListener('astro:page-load', initPolls);
+</script>

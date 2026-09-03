@@ -1,0 +1,206 @@
+[
+  {
+    "id": "poetry-untitled-2024",
+    "category": "poetry",
+    "title": "Untitled",
+    "date": "2024-07-17",
+    "content": "I made a stap, I made a few,\nAnd coming to concerning view,\nI took the point, made a move\nAnd backed a bit from squeaking roof\n\nI'm still confused if it's mistake\nBut that's a chance I can't not take\nBeing stuck a long undefined way\nI'm lacking time to change and pay\n\nThe sky is bright. And stars are clean.\nI would obtain this only thing\nI see the world I was so keen",
+    "imageUrl": "",
+    "description": "July 2024",
+    "featured": true
+  },
+  {
+    "id": "poetry-superiority-complex-2026",
+    "category": "poetry",
+    "title": "Superiority Complex",
+    "date": "2026-03-20",
+    "content": "To all those ants who have invented rules.\nTo bugs who have invented limitations.\n\nI'm better than the first percentile of the world.\nThe coackroaches won't handle my support.\nNeither I would allow myself to be assessed by ratty standards.\n\nYou're mumbling we are only at one place at once\nYou're screaming the day ends after 24 hours\nWhy are you so covinced we can't read every book by glance?\nWhy are you yapping we can't create a thousand floors tours?\n\nYou can't? Then kneel, then praise, then serve the others\nWE ARE the tigers who can split the world.\nWhat are you squiking? Really, you possess desires?\n\nOh, jester, crying outloud, the seconds can't be faster than one hertz?\nWE WILL have more, pardon our glamour froud.\nAnd shrink the universe to ultimate unlimited resorts.\n\nAND... dd... W... we....\n\nFrom cyborgs, aliens, vampires\nThey roam this world",
+    "imageUrl": "",
+    "description": "March 2026",
+    "featured": true
+  },
+  {
+    "id": "visual-composition",
+    "category": "visual",
+    "title": "Composition",
+    "imageUrl": "/images/art/Composition.PNG",
+    "description": "Mixed media composition in watercolor and pastel.",
+    "featured": true
+  },
+  {
+    "id": "visual-microgami",
+    "category": "visual",
+    "title": "Microgami",
+    "imageUrl": "/images/art/Microgami.PNG",
+    "description": "Graphic art exploration of micro-scale patterns and organic geometry.",
+    "featured": true
+  },
+  {
+    "id": "visual-pastel",
+    "category": "visual",
+    "title": "Pastel Still Life",
+    "imageUrl": "/images/art/PastelStillLife.PNG",
+    "description": "Traditional pastel still life study.",
+    "featured": true
+  },
+  {
+    "id": "visual-shkriabanky",
+    "category": "visual",
+    "title": "Shkriabanky",
+    "imageUrl": "/images/art/Shkriabanky.PNG",
+    "description": "Detailed graphic work.",
+    "featured": false
+  },
+  {
+    "id": "photo-1",
+    "category": "photo",
+    "title": "Threshold Light (for-fun-Gemini-generated placeholder)",
+    "imageUrl": "/images/art/photo_5240371206983197027_w.jpg",
+    "description": "",
+    "featured": true
+  },
+  {
+    "id": "photo-2",
+    "category": "photo",
+    "title": "Between Frames (for-fun-Gemini-generated placeholder)",
+    "imageUrl": "/images/art/photo_5240371206983197028_w.jpg",
+    "description": "",
+    "featured": true
+  },
+  {
+    "id": "photo-3",
+    "category": "photo",
+    "title": "Urban Quiet (for-fun-Gemini-generated placeholder)",
+    "imageUrl": "/images/art/photo_5240371206983197029_w.jpg",
+    "description": "",
+    "featured": true
+  },
+  {
+    "id": "photo-4",
+    "category": "photo",
+    "title": "The Patient Hour (for-fun-Gemini-generated placeholder)",
+    "imageUrl": "/images/art/photo_5240371206983197030_w.jpg",
+    "description": "",
+    "featured": false
+  },
+  {
+    "id": "photo-5",
+    "category": "photo",
+    "title": "Soft Geometry (for-fun-Gemini-generated placeholder)",
+    "imageUrl": "/images/art/photo_5240371206983197031_w.jpg",
+    "description": "",
+    "featured": false
+  },
+  {
+    "id": "graphic-asortidance",
+    "category": "graphic",
+    "title": "AsortiDance Theatre Logo",
+    "imageUrl": "/images/graphic/AsortiDance.png",
+    "description": "Logo designed for AsortiDance, a dance theatre with 200+ participants.",
+    "featured": true
+  },
+  {
+    "id": "graphic-esmu1",
+    "category": "graphic",
+    "title": "ESMU Project — Identity",
+    "imageUrl": "/images/graphic/ESMU1.png",
+    "description": "Brand identity design for the ESMU project.",
+    "featured": true
+  },
+  {
+    "id": "graphic-esmu2",
+    "category": "graphic",
+    "title": "ESMU Project — Layout",
+    "imageUrl": "/images/graphic/ESMU2.png",
+    "description": "Layout design for the ESMU project.",
+    "featured": true
+  },
+  {
+    "id": "graphic-esmu3",
+    "category": "graphic",
+    "title": "ESMU Project — Detail",
+    "imageUrl": "/images/graphic/ESMU3.png",
+    "description": "Detailed design spread for the ESMU project.",
+    "featured": false
+  },
+  {
+    "id": "graphic-guitar",
+    "category": "graphic",
+    "title": "Guitar Learning App UI",
+    "imageUrl": "/images/graphic/GuitarLearning.jpg",
+    "description": "UI/UX design for the Guitar Learning Android application.",
+    "featured": false
+  },
+  {
+    "id": "graphic-ideshare",
+    "category": "graphic",
+    "title": "IdeShare",
+    "imageUrl": "/images/graphic/IdeShare.jpg",
+    "description": "Visual design for the IdeShare project.",
+    "featured": false
+  },
+  {
+    "id": "graphic-mechatronics",
+    "category": "graphic",
+    "title": "Mechatronics",
+    "imageUrl": "/images/graphic/Mechatronics.png",
+    "description": "Technical graphic for Mechatronics coursework.",
+    "featured": false
+  },
+  {
+    "id": "graphic-pebble",
+    "category": "graphic",
+    "title": "PebblePals",
+    "imageUrl": "/images/graphic/PebblePals.jpg",
+    "description": "Character design and branding for the PebblePals project.",
+    "featured": false
+  },
+  {
+    "id": "graphic-teenclub1",
+    "category": "graphic",
+    "title": "Teenager Club V1",
+    "imageUrl": "/images/graphic/TeenagerClubV1.png",
+    "description": "First iteration of the Teenager Club visual identity.",
+    "featured": false
+  },
+  {
+    "id": "graphic-teenclub2",
+    "category": "graphic",
+    "title": "Teenager Club V2",
+    "imageUrl": "/images/graphic/TeenagerClubV2.png",
+    "description": "Refined version of the Teenager Club visual identity.",
+    "featured": false
+  },
+  {
+    "id": "cad-main",
+    "category": "cad",
+    "title": "Main Assembly — Stellarator Winding Stand",
+    "imageUrl": "/images/cad/MainAssembly.PNG",
+    "description": "CAD model of the rotating stand assembly for winding full-scale interlocked coils at the Columbia Stellarator eXperiment.",
+    "featured": true
+  },
+  {
+    "id": "cad-components",
+    "category": "cad",
+    "title": "Components of the Main Assembly",
+    "imageUrl": "/images/cad/ComponentsOfTheMainAssembly.PNG",
+    "description": "Exploded view of the winding stand assembly components.",
+    "featured": false
+  },
+  {
+    "id": "cad-loudspeakers",
+    "category": "cad",
+    "title": "Loudspeakers — CAD Design",
+    "imageUrl": "/images/cad/Loudspeakers.PNG",
+    "description": "3D CAD model of loudspeaker components.",
+    "featured": false
+  },
+  {
+    "id": "cad-automation",
+    "category": "cad",
+    "title": "Automation System",
+    "imageUrl": "/images/cad/Automatization.PNG",
+    "description": "CAD design of an automated system component.",
+    "featured": false
+  }
+]
